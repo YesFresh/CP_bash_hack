@@ -1058,7 +1058,7 @@
     <!-- Live Courier Status -->
     <div class="courier-box">
       <div class="courier-header">
-        <span><i class="fa-solid fa-truck-fast"></i> Логист (Formula-1 Drift)</span>
+        <span><i class="fa-solid fa-car-side"></i> Tesla Roadster (летающий курьер)</span>
         <span id="courier-state-badge">Дрифт</span>
       </div>
       <div><strong>Груз:</strong> <span id="courier-cargo-count">0/1 шт</span></div>
@@ -2368,6 +2368,7 @@
         const finishedItems = courierState.carryingCargo.filter(i => i.to === 'CLIENT');
         if (finishedItems.length > 0) {
           goodUnitsCount += finishedItems.length;
+          triggerStickmanBackflip(tableMeshes['CLIENT'] && tableMeshes['CLIENT'].userData.stickman);
           courierState.carryingCargo = courierState.carryingCargo.filter(i => i.to !== 'CLIENT');
           soundSale();
           spawnConfetti();
@@ -3239,6 +3240,9 @@
     const tableMeshes = {};
     let spaghettiLine = null;
     let courierMesh = null;
+    let courierOutline = null;
+    let teslaTrucks = [];
+    let nextTeslaTruckAt = 0;
     let discoBall = null;
     let discoLights = [];
     let confettiParticles = [];
@@ -3286,7 +3290,7 @@
 
       buildWorkshop();
       buildWorkbenches();
-      buildCourierCart();
+      buildTeslaRoadster();
       rebuildSpaghettiLine();
 
       window.addEventListener('resize', onWindowResize);
@@ -3347,8 +3351,8 @@
         beacon.position.set(0, 0.95, 0);
         group.add(beacon);
 
-        // Dancing operator stickman
-        if (!isSpecial) {
+        // Operators and the client celebrate deliveries.
+        if (!isSpecial || node.id === 'CLIENT') {
           const stickman = buildStickman();
           stickman.position.set(0, 0.82, -0.22);
           group.add(stickman);
@@ -3368,6 +3372,7 @@
 
     function buildStickman() {
       const man = new THREE.Group();
+      man.userData.flipProgress = null;
       const head = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), new THREE.MeshStandardMaterial({ color: 0xfbbf24 }));
       head.position.y = 0.35;
       man.add(head);
@@ -3382,21 +3387,46 @@
       return man;
     }
 
-    function buildCourierCart() {
+    function triggerStickmanBackflip(stickman) {
+      if (!stickman) return;
+      stickman.userData.flipProgress = 0;
+      stickman.userData.flipDirection = Math.random() < 0.5 ? -1 : 1;
+    }
+
+    function buildTeslaRoadster() {
       const group = new THREE.Group();
+      const bodyGeometry = new THREE.BoxGeometry(0.7, 0.2, 1.05);
       const bodyMesh = new THREE.Mesh(
-        new THREE.BoxGeometry(0.55, 0.25, 0.38),
-        new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.3, metalness: 0.7 })
+        bodyGeometry,
+        new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.22, metalness: 0.82, emissive: 0x102030 })
       );
-      bodyMesh.position.y = 0.2;
+      bodyMesh.position.y = 0.3;
       group.add(bodyMesh);
 
-      [-0.18, 0.18].forEach(x => {
-        [-0.18, 0.18].forEach(z => {
-          const w = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.05), new THREE.MeshBasicMaterial({ color: 0x111827 }));
-          w.rotation.x = Math.PI / 2;
-          w.position.set(x, 0.07, z);
-          group.add(w);
+      const cabin = new THREE.Mesh(
+        new THREE.BoxGeometry(0.48, 0.24, 0.48),
+        new THREE.MeshStandardMaterial({ color: 0x164e63, roughness: 0.18, metalness: 0.5, transparent: true, opacity: 0.88 })
+      );
+      cabin.position.set(0, 0.5, -0.04);
+      group.add(cabin);
+
+      const contour = new THREE.LineSegments(
+        new THREE.EdgesGeometry(bodyGeometry),
+        new THREE.LineBasicMaterial({ color: 0xff00cc, transparent: true, opacity: 0.95 })
+      );
+      contour.position.copy(bodyMesh.position);
+      group.add(contour);
+      courierOutline = contour;
+
+      [-0.34, 0.34].forEach(x => {
+        [-0.34, 0.34].forEach(z => {
+          const wheel = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.105, 0.105, 0.07, 12),
+            new THREE.MeshStandardMaterial({ color: 0x020617, metalness: 0.5, roughness: 0.4 })
+          );
+          wheel.rotation.z = Math.PI / 2;
+          wheel.position.set(x, 0.16, z);
+          group.add(wheel);
         });
       });
 
@@ -3404,11 +3434,104 @@
       flameGeo.rotateX(Math.PI / 2);
       const flameMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.85 });
       jetFlame = new THREE.Mesh(flameGeo, flameMat);
-      jetFlame.position.set(0, 0.2, -0.32);
+      jetFlame.position.set(0, 0.3, -0.68);
       group.add(jetFlame);
 
       scene.add(group);
       courierMesh = group;
+    }
+
+    function buildTeslaTruck() {
+      const truck = new THREE.Group();
+      const metal = new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.85, roughness: 0.28 });
+      const darkGlass = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.4, roughness: 0.16 });
+      const chassis = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.36, 1.25), metal);
+      chassis.position.y = 0.43;
+      truck.add(chassis);
+
+      const cab = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.4, 0.48), metal);
+      cab.position.set(0, 0.8, 0.22);
+      truck.add(cab);
+      const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.67, 0.22, 0.025), darkGlass);
+      windshield.position.set(0, 0.84, 0.47);
+      truck.add(windshield);
+
+      const cargo = new THREE.Mesh(new THREE.BoxGeometry(0.74, 0.32, 0.5), darkGlass);
+      cargo.position.set(0, 0.76, -0.32);
+      truck.add(cargo);
+
+      [-0.4, 0.4].forEach(x => {
+        [-0.39, 0.39].forEach(z => {
+          const wheel = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.18, 0.18, 0.1, 12),
+            new THREE.MeshStandardMaterial({ color: 0x020617, metalness: 0.35, roughness: 0.55 })
+          );
+          wheel.rotation.z = Math.PI / 2;
+          wheel.position.set(x, 0.2, z);
+          truck.add(wheel);
+        });
+      });
+
+      const lightBar = new THREE.Mesh(
+        new THREE.BoxGeometry(0.56, 0.06, 0.035),
+        new THREE.MeshBasicMaterial({ color: 0x22d3ee })
+      );
+      lightBar.position.set(0, 0.48, 0.64);
+      truck.add(lightBar);
+
+      const teslaBadgeMaterial = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+      const badgeTop = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.025, 0.025), teslaBadgeMaterial);
+      badgeTop.position.set(0, 0.62, 0.66);
+      truck.add(badgeTop);
+      const badgeStem = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.08, 0.025), teslaBadgeMaterial);
+      badgeStem.position.set(0, 0.57, 0.66);
+      truck.add(badgeStem);
+
+      truck.userData.hitTargets = new Set();
+      scene.add(truck);
+      return truck;
+    }
+
+    function spawnTeslaTruck(now) {
+      const candidates = Object.values(tableMeshes).filter(mesh => mesh.userData.stickman && mesh.userData.id.startsWith('OP-'));
+      if (!candidates.length) return;
+
+      const target = candidates[Math.floor(Math.random() * candidates.length)];
+      const direction = Math.random() < 0.5 ? 1 : -1;
+      const truck = buildTeslaTruck();
+      truck.position.set(direction > 0 ? -3.8 : 3.8, 0, target.position.z + target.userData.stickman.position.z);
+      truck.rotation.y = direction > 0 ? Math.PI / 2 : -Math.PI / 2;
+      truck.userData.speed = direction * (2.1 + Math.random() * 0.7);
+      truck.userData.spawnedAt = now;
+      teslaTrucks.push(truck);
+    }
+
+    function updateTeslaTrucks(dt, now) {
+      if (now >= nextTeslaTruckAt) {
+        spawnTeslaTruck(now);
+        nextTeslaTruckAt = now + 9000 + Math.random() * 7000;
+      }
+
+      for (let i = teslaTrucks.length - 1; i >= 0; i--) {
+        const truck = teslaTrucks[i];
+        truck.position.x += truck.userData.speed * dt;
+
+        Object.values(tableMeshes).forEach(mesh => {
+          const stickman = mesh.userData.stickman;
+          if (!stickman || truck.userData.hitTargets.has(mesh.userData.id)) return;
+          const personX = mesh.position.x + stickman.position.x;
+          const personZ = mesh.position.z + stickman.position.z;
+          if (Math.abs(truck.position.x - personX) < 0.62 && Math.abs(truck.position.z - personZ) < 0.62) {
+            truck.userData.hitTargets.add(mesh.userData.id);
+            triggerStickmanBackflip(stickman);
+          }
+        });
+
+        if (Math.abs(truck.position.x) > 4.3 || now - truck.userData.spawnedAt > 7000) {
+          scene.remove(truck);
+          teslaTrucks.splice(i, 1);
+        }
+      }
     }
 
     function rebuildSpaghettiLine() {
@@ -3661,11 +3784,17 @@
       if (courierMesh) {
         courierMesh.position.x = courierState.x;
         courierMesh.position.z = courierState.z;
-        courierMesh.position.y = antiGravityActive ? Math.sin(now * 0.003) * 0.4 : 0;
+        courierMesh.position.y = 0.62 + (antiGravityActive ? Math.sin(now * 0.003) * 0.2 : Math.sin(now * 0.005) * 0.08);
+        const headingX = courierState.targetX - courierState.x;
+        const headingZ = courierState.targetZ - courierState.z;
+        if (Math.hypot(headingX, headingZ) > 0.05) courierMesh.rotation.y = Math.atan2(headingX, headingZ);
+        if (courierOutline) courierOutline.material.color.setHSL((now % 3600) / 3600, 1, 0.6);
         if (jetFlame) {
           jetFlame.scale.z = 0.8 + Math.random() * 0.6;
         }
       }
+
+      updateTeslaTrucks(dt, now);
 
       // Disco Ball & Spotlights
       if (discoBall) {
@@ -3683,8 +3812,18 @@
       const time = now * 0.009;
       Object.values(tableMeshes).forEach(m => {
         if (m.userData.stickman) {
-          m.userData.stickman.position.y = 0.82 + Math.abs(Math.sin(time)) * 0.08;
-          m.userData.stickman.rotation.y = Math.sin(time * 0.5) * 0.3;
+          const stickman = m.userData.stickman;
+          const flipProgress = stickman.userData.flipProgress;
+          let flipBounce = 0;
+          if (flipProgress !== null) {
+            const progress = Math.min(1, flipProgress + dt / 0.85);
+            stickman.userData.flipProgress = progress >= 1 ? null : progress;
+            stickman.rotation.x = progress * Math.PI * 2 * stickman.userData.flipDirection;
+            flipBounce = Math.sin(progress * Math.PI) * 0.45;
+            if (progress >= 1) stickman.rotation.x = 0;
+          }
+          stickman.position.y = 0.82 + Math.abs(Math.sin(time)) * 0.08 + flipBounce;
+          stickman.rotation.y = Math.sin(time * 0.5) * 0.3;
         }
         if (antiGravityActive) {
           m.position.y = Math.sin(time + m.position.x) * 0.5;
