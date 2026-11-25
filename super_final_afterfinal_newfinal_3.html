@@ -1,0 +1,3782 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>⚡ СДВГ-ФАБРИКА 2077 [BRAINROT HYPER-EDITION x2] 🔥</title>
+
+  <!-- Google Fonts & Font Awesome 6 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Three.js + OrbitControls CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #05050d;
+      --panel-bg: rgba(10, 15, 30, 0.90);
+      --border-color: rgba(236, 72, 153, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #ec4899;
+      --accent-glow: rgba(236, 72, 153, 0.6);
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --cyan: #06b6d4;
+      --purple: #a855f7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body, html {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--bg-dark);
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: var(--text-main);
+    }
+
+    /* Screen Shake Animation */
+    .screen-shake {
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-4px, -3px, 0) rotate(-0.8deg); }
+      20%, 80% { transform: translate3d(5px, 4px, 0) rotate(1.0deg); }
+      30%, 50%, 70% { transform: translate3d(-8px, -5px, 0) rotate(-1.2deg); }
+      40%, 60% { transform: translate3d(8px, 5px, 0) rotate(1.2deg); }
+    }
+
+    /* Rainbow Animated Border around Viewport */
+    #viewport {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1;
+      border: 5px solid transparent;
+      animation: rainbowBorder 3s linear infinite;
+    }
+    @keyframes rainbowBorder {
+      0% { border-color: #ef4444; box-shadow: inset 0 0 35px rgba(239,68,68,0.4); }
+      20% { border-color: #eab308; box-shadow: inset 0 0 35px rgba(234,179,8,0.4); }
+      40% { border-color: #22c55e; box-shadow: inset 0 0 35px rgba(34,197,94,0.4); }
+      60% { border-color: #06b6d4; box-shadow: inset 0 0 35px rgba(6,182,212,0.4); }
+      80% { border-color: #a855f7; box-shadow: inset 0 0 35px rgba(168,85,247,0.4); }
+      100% { border-color: #ec4899; box-shadow: inset 0 0 35px rgba(236,72,153,0.4); }
+    }
+
+    /* Top Marquee News Ticker */
+    .brainrot-ticker {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 26px;
+      background: linear-gradient(90deg, #ff007f, #7928ca, #0070f3, #00dfd8);
+      background-size: 300% 300%;
+      animation: gradientShift 5s ease infinite;
+      z-index: 200;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 26px;
+      letter-spacing: 0.5px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Header */
+    .top-header {
+      position: fixed;
+      top: 26px; left: 0; width: 100%; height: 56px;
+      background: rgba(8, 12, 26, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      z-index: 100;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #f43f5e, #fbbf24, #10b981, #06b6d4, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: discoText 2s linear infinite;
+    }
+    @keyframes discoText {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .brand-badge {
+      background: #ec4899;
+      color: #fff;
+      -webkit-text-fill-color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      animation: pulseBadge 0.5s infinite alternate;
+    }
+    @keyframes pulseBadge {
+      from { transform: scale(1); }
+      to { transform: scale(1.2); box-shadow: 0 0 16px #ec4899; }
+    }
+
+    .header-info-tags {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .status-tag {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 5px 10px;
+      border-radius: 6px;
+      color: #38bdf8;
+    }
+
+    /* MORPHING SIDE PANELS (Width & Height & Shape Constantly Changing!) */
+    .side-panel {
+      position: fixed;
+      top: 86px;
+      max-height: calc(100vh - 100px);
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      border: 2px solid var(--border-color);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 50;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      transition: border-radius 0.3s ease;
+    }
+    .left-controls {
+      left: 14px;
+      animation: morphLeftPanel 5.8s ease-in-out infinite alternate, wobbleSkew 6.5s ease-in-out infinite alternate;
+    }
+    .right-infocenter {
+      right: 14px;
+      animation: morphRightPanel 5.2s ease-in-out infinite alternate, wobbleSkewRight 5.9s ease-in-out infinite alternate;
+    }
+
+    @keyframes morphLeftPanel {
+      0% {
+        width: 290px;
+        height: 60vh;
+        border-radius: 14px 45px 18px 50px;
+        box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
+        border-color: #ec4899;
+      }
+      25% {
+        width: 375px;
+        height: 82vh;
+        border-radius: 48px 18px 45px 22px;
+        box-shadow: 0 0 35px rgba(6, 182, 212, 0.6);
+        border-color: #06b6d4;
+      }
+      50% {
+        width: 310px;
+        height: 65vh;
+        border-radius: 20px 50px 16px 40px;
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+        border-color: #22c55e;
+      }
+      75% {
+        width: 390px;
+        height: 85vh;
+        border-radius: 45px 22px 38px 50px;
+        box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+        border-color: #a855f7;
+      }
+      100% {
+        width: 295px;
+        height: 70vh;
+        border-radius: 35px 42px 22px 36px;
+        box-shadow: 0 0 40px rgba(234, 179, 8, 0.6);
+        border-color: #eab308;
+      }
+    }
+
+    @keyframes morphRightPanel {
+      0% {
+        width: 385px;
+        height: 85vh;
+        border-radius: 45px 20px 38px 24px;
+        box-shadow: 0 0 32px rgba(6, 182, 212, 0.6);
+        border-color: #06b6d4;
+      }
+      25% {
+        width: 295px;
+        height: 62vh;
+        border-radius: 18px 48px 24px 42px;
+        box-shadow: 0 0 40px rgba(234, 179, 8, 0.6);
+        border-color: #eab308;
+      }
+      50% {
+        width: 395px;
+        height: 86vh;
+        border-radius: 50px 24px 42px 18px;
+        box-shadow: 0 0 36px rgba(236, 72, 153, 0.5);
+        border-color: #ec4899;
+      }
+      75% {
+        width: 310px;
+        height: 67vh;
+        border-radius: 22px 42px 28px 48px;
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.5);
+        border-color: #22c55e;
+      }
+      100% {
+        width: 370px;
+        height: 78vh;
+        border-radius: 40px 26px 46px 22px;
+        box-shadow: 0 0 40px rgba(168, 85, 247, 0.6);
+        border-color: #a855f7;
+      }
+    }
+
+    @keyframes wobbleSkew {
+      0% { transform: rotate(0deg) skew(0deg, 0deg); }
+      33% { transform: rotate(-0.8deg) skew(0.6deg, -0.5deg); }
+      66% { transform: rotate(0.7deg) skew(-0.5deg, 0.6deg); }
+      100% { transform: rotate(-0.6deg) skew(0.4deg, -0.4deg); }
+    }
+
+    @keyframes wobbleSkewRight {
+      0% { transform: rotate(0deg) skew(0deg, 0deg); }
+      33% { transform: rotate(0.8deg) skew(-0.6deg, 0.5deg); }
+      66% { transform: rotate(-0.7deg) skew(0.5deg, -0.6deg); }
+      100% { transform: rotate(0.6deg) skew(-0.4deg, 0.4deg); }
+    }
+
+    .panel-section-title {
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Sim Controls Bar */
+    .sim-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.7);
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .sim-timer {
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 900;
+      color: #38bdf8;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+    }
+    .speed-badge {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px #ec4899;
+    }
+
+    /* Courier Status Box */
+    .courier-box {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(236,72,153,0.3);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .courier-header {
+      display: flex;
+      justify-content: space-between;
+      color: #fbbf24;
+      font-weight: 800;
+    }
+    .courier-cargo-pill {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.25);
+      border: 1px solid #38bdf8;
+      color: #e0f2fe;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    /* Kaizen List */
+    .kaizen-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .kaizen-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 7px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .kaizen-title { font-size: 11px; font-weight: 800; color: #f1f5f9; }
+    .kaizen-desc { font-size: 9.5px; color: var(--text-muted); line-height: 1.25; }
+
+    /* Cash Flow Banner */
+    .cashflow-banner {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .cashflow-label { font-size: 10px; font-weight: 700; color: var(--text-muted); }
+    .cashflow-amount { font-size: 18px; font-weight: 900; font-family: monospace; text-shadow: 0 0 10px rgba(34,197,94,0.6); }
+
+    /* Infocenter Cards */
+    .info-card {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 8px;
+      padding: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 11px;
+    }
+    .info-card-header {
+      font-weight: 800;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    .metric-val { font-weight: 800; }
+
+    /* Cycle Bar Chart */
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 10px;
+    }
+    .bar-label { width: 38px; font-weight: 700; }
+    .bar-track {
+      flex: 1;
+      height: 7px;
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+    .bar-num { width: 110px; font-family: monospace; font-size: 9.5px; }
+
+    /* Floating Toast */
+    .toast-popup {
+      position: fixed;
+      top: 92px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 900;
+      z-index: 300;
+      display: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, 0) scale(1); opacity: 1; }
+    }
+    .toast-success { background: linear-gradient(135deg, #10b981, #06b6d4); color: #fff; }
+    .toast-danger { background: linear-gradient(135deg, #ef4444, #f43f5e); color: #fff; }
+
+
+
+    /* ENLARGED SUBWAY SURFERS PIP WIDGET + YOUTUBE IFRAME */
+    .adhd-pip {
+      position: fixed;
+      bottom: 56px;
+      left: 360px; /* positioned right next to left panel */
+      width: 380px;
+      height: 240px;
+      background: #000;
+      border: 3px solid #06b6d4;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(6, 182, 212, 0.6);
+      overflow: hidden;
+      z-index: 120;
+      display: flex;
+      flex-direction: column;
+      animation: borderPulsate 2s infinite alternate;
+    }
+    @keyframes borderPulsate {
+      from { border-color: #06b6d4; }
+      to { border-color: #ec4899; box-shadow: 0 0 30px rgba(236,72,153,0.7); }
+    }
+    .adhd-pip-header {
+      height: 26px;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 0 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .adhd-pip-body {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100% - 46px);
+      background: #000;
+    }
+    .adhd-pip-body iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    #subway-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: none; /* fallback if iframe fails */
+    }
+    .adhd-pip-score {
+      height: 20px;
+      line-height: 20px;
+      padding: 0 8px;
+      font-size: 10px;
+      font-weight: 800;
+      font-family: monospace;
+      color: #38bdf8;
+      background: rgba(2, 6, 23, 0.95);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Bouncing DVD Logo */
+    #dvd-logo {
+      position: fixed;
+      width: 65px;
+      height: 34px;
+      line-height: 34px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 900;
+      font-family: 'Press Start 2P', monospace;
+      border-radius: 6px;
+      pointer-events: none;
+      z-index: 99;
+      box-shadow: 0 0 15px currentColor;
+    }
+
+    /* Chaotic Event Banner */
+    .event-banner {
+      position: fixed;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(236, 72, 153, 0.95));
+      border: 4px solid #fff;
+      box-shadow: 0 0 50px rgba(239, 68, 68, 0.8), 0 0 100px rgba(236, 72, 153, 0.6);
+      padding: 18px 34px;
+      border-radius: 18px;
+      text-align: center;
+      z-index: 400;
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .event-banner.show {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .event-banner-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .event-banner-desc {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fef08a;
+      margin-top: 6px;
+    }
+
+    /* Floating Money Text Container */
+    #float-container {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 140;
+    }
+    .floating-text {
+      position: absolute;
+      font-weight: 900;
+      font-size: 20px;
+      font-family: 'Inter', sans-serif;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      animation: floatUp 1.6s ease-out forwards;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(0.6); opacity: 1; }
+      50% { transform: translateY(-40px) scale(1.3); opacity: 1; }
+      100% { transform: translateY(-90px) scale(1); opacity: 0; }
+    }
+
+    /* ============================================================
+       CONTROL PANEL (transferred from index.html, brainrot skin)
+       ============================================================ */
+    .ctrl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .ctrl-btn:hover {
+      border-color: var(--accent);
+      background: rgba(236, 72, 153, 0.25);
+    }
+    .ctrl-btn.active-mode {
+      background: #ec4899;
+      border-color: #f9a8d4;
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+
+    .scenario-toggle {
+      display: flex;
+      gap: 3px;
+      padding: 3px;
+      border-radius: 7px;
+      background: rgba(0, 0, 0, 0.45);
+    }
+    .scenario-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 4px 9px;
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .scenario-btn.active-as-is {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+    .scenario-btn.active-to-be {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+    }
+
+    /* Simulation controls */
+    .sim-bar {
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .sim-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      background: #334155;
+      color: #fff;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .sim-btn:hover { background: #475569; }
+    .sim-btn.btn-running {
+      background: var(--yellow);
+      color: #0f172a;
+    }
+    .sim-timer {
+      font-size: 12px;
+      color: #38bdf8;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+      white-space: nowrap;
+    }
+    .speed-selector {
+      display: flex;
+      gap: 2px;
+      padding: 2px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.35);
+    }
+    .speed-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .speed-btn.active-speed {
+      background: var(--accent);
+      color: #0f172a;
+    }
+
+    /* Kaizen checkboxes */
+    .kaizen-item { cursor: pointer; transition: all 0.2s; }
+    .kaizen-item:hover {
+      background: rgba(236, 72, 153, 0.12);
+      border-color: rgba(236, 72, 153, 0.5);
+    }
+    .kaizen-item input[type="checkbox"] {
+      margin-top: 2px;
+      flex: 0 0 auto;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    /* Panels stop morphing while you aim at a control */
+    .side-panel:hover { animation-play-state: paused; }
+
+    /* Drag helper */
+    .drag-helper-banner {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 160;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      border-radius: 20px;
+      background: rgba(236, 72, 153, 0.92);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Contextual workbench card */
+    .poi-drawer {
+      position: fixed;
+      z-index: 150;
+      display: none;
+      width: 400px;
+      max-width: 92vw;
+      padding: 14px 16px;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 24px var(--accent-glow);
+      animation: poiPop 0.18s ease-out;
+    }
+    @keyframes poiPop {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .poi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .poi-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--accent);
+    }
+    .close-btn {
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .close-btn:hover { color: #fff; }
+    .poi-content { font-size: 12px; line-height: 1.45; color: #cbd5e1; }
+    .poi-buffers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin: 8px 0;
+      padding: 6px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+    .poi-buf-col { padding: 4px; border-radius: 4px; font-size: 10px; }
+    .poi-buf-in { background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.4); color: #67e8f9; }
+    .poi-buf-work { background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.4); color: #fde047; }
+    .poi-buf-out { background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(34, 197, 94, 0.4); color: #86efac; }
+    .slot-pill {
+      display: inline-block;
+      margin: 2px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-family: monospace;
+    }
+    .slot-pill-ok { background: rgba(34, 197, 94, 0.2); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.4); }
+    .slot-pill-miss { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+    /* ============================================================
+       INFINITE MODE + ACID FLASH
+       ============================================================ */
+    .ctrl-btn.active-inf {
+      background: #39ff14;
+      border-color: #39ff14;
+      color: #05050d;
+      box-shadow: 0 0 16px rgba(57, 255, 20, 0.8);
+    }
+
+    .brainrot-actions {
+      display: flex;
+      gap: 6px;
+      margin: 6px 0 2px;
+    }
+    .brainrot-action {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .brainrot-action.acid:hover,
+    .brainrot-action.acid:active {
+      background: #39ff14;
+      border-color: #39ff14;
+      color: #05050d;
+      box-shadow: 0 0 14px rgba(57, 255, 20, 0.85);
+    }
+    .brainrot-action.chaos:hover,
+    .brainrot-action.chaos:active {
+      background: #ec4899;
+      border-color: #f9a8d4;
+      color: #fff;
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+
+    #acid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: #39ff14;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      mix-blend-mode: screen;
+    }
+    body.acid-mode #acid-overlay { opacity: 0.24; }
+    body.acid-mode #viewport {
+      animation: none;
+      border-color: #39ff14;
+      box-shadow: inset 0 0 90px rgba(57, 255, 20, 0.9);
+    }
+    body.acid-mode .brainrot-ticker {
+      background: linear-gradient(90deg, #39ff14, #05ffa1, #39ff14);
+      color: #05050d;
+    }
+
+    /* ============================================================
+       PHONK LAB (piano roll + drums + metronome)
+       ============================================================ */
+    .phonk-lab {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(6px);
+    }
+    .phonk-lab.show { display: flex; }
+
+    .phonk-lab-panel {
+      width: min(980px, 96vw);
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 14px 16px 16px;
+      border: 2px solid var(--accent);
+      border-radius: 14px;
+      background: rgba(8, 12, 26, 0.98);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 30px var(--accent-glow);
+    }
+
+    .phonk-lab-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .phonk-lab-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .lab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 9px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(15, 23, 42, 0.95);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lab-btn:hover { border-color: var(--accent); background: rgba(236, 72, 153, 0.2); }
+    .lab-btn.on {
+      background: #39ff14;
+      border-color: #39ff14;
+      color: #05050d;
+      box-shadow: 0 0 12px rgba(57, 255, 20, 0.7);
+    }
+
+    .lab-step {
+      margin-left: auto;
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: 800;
+      color: #38bdf8;
+      white-space: nowrap;
+    }
+
+    .lab-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .lab-row {
+      display: grid;
+      grid-template-columns: 52px repeat(16, 1fr);
+      gap: 3px;
+    }
+    .lab-row-drum { margin-top: 4px; }
+    .lab-label {
+      padding: 0;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      color: #cbd5e1;
+      font-family: inherit;
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lab-label:hover { border-color: var(--accent); color: #fff; }
+    .lab-cell {
+      height: 20px;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: background 0.08s, box-shadow 0.08s;
+    }
+    .lab-cell.beat { background: rgba(255, 255, 255, 0.09); }
+    .lab-cell.on {
+      background: var(--lane-color, var(--accent));
+      box-shadow: 0 0 9px var(--lane-color, var(--accent));
+    }
+    .lab-cell.playing {
+      outline: 2px solid #fff;
+      outline-offset: -1px;
+    }
+
+    .lab-hint {
+      margin-top: 10px;
+      font-size: 10px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+    .lab-hint b { color: #38bdf8; }
+
+    .metro-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #334155;
+      display: inline-block;
+      transition: background 0.1s, box-shadow 0.1s;
+    }
+    .metro-dot.beat-on {
+      background: #39ff14;
+      box-shadow: 0 0 12px #39ff14;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Marquee News Ticker -->
+  <div class="brainrot-ticker">
+    <marquee scrollamount="14">
+      🚨 СРОЧНО: Логист навалил угла вокруг ОП-4 под жесткий фонк 🏎️💨 | 🦆 500 резиновых уточек захватили главный склад | 💰 Прибыль завода пробила стратосферу (TO THE MOON 🚀) | 📢 Директор объявил ОП-8 зоной свободного брейк-данса | ⚡ Шаблон 25 мм продан на аукционе за 1,000,000 $ | 🕺 Оператор ОП-2 выпил 4 банки Monster Energy и обогнал время такта | 🗿 БРАТВА ОЦЕНИЛА СБОРКУ РДГ 10/10 | 🌪️ ВНИМАНИЕ: ОП-7 перешел в режим гиперзвука | 👑 ШУРУПОВЕРТ BOSCH ПРИЗНАН ЛУЧШИМ ДРУГОМ ЧЕЛОВЕКА...
+    </marquee>
+  </div>
+
+  <!-- Header (NO BACK BUTTON, NO TOGGLES!) -->
+  <header class="top-header">
+    <div class="brand-title">
+      <i class="fa-solid fa-fire" style="color: #f43f5e;"></i>
+      <span>СДВГ-ФАБРИКА 2077</span>
+      <span class="brand-badge">BRAINROT x2</span>
+    </div>
+
+    <div class="header-info-tags">
+      <button id="btn-drag-mode" class="ctrl-btn" onclick="toggleDragMode()" title="Режим расстановки столов">
+        <i class="fa-solid fa-hand"></i> Расстановка
+      </button>
+
+      <div class="scenario-toggle">
+        <button id="btn-as-is" class="scenario-btn" onclick="setScenario('AS_IS')">
+          <i class="fa-solid fa-triangle-exclamation"></i> AS-IS
+        </button>
+        <button id="btn-to-be" class="scenario-btn active-to-be" onclick="setScenario('TO_BE')">
+          <i class="fa-solid fa-rocket"></i> TO-BE
+        </button>
+      </div>
+
+      <button id="btn-sound" class="ctrl-btn" onclick="toggleSound()" title="Вкл/Выкл звук">
+        <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+      </button>
+
+      <button id="btn-infinite" class="ctrl-btn" onclick="toggleInfinite()" title="Бесконечный режим: смена никогда не кончается">∞ БЕСК</button>
+
+      <button id="btn-phonk-lab" class="ctrl-btn" onclick="openPhonkLab()" title="Фонк-лаборатория: пианино, кики, хэты, метроном 143 BPM">🎹 ФОНК</button>
+
+      <button id="phonk-toggle-btn" onclick="togglePhonk()" class="status-tag" style="cursor: pointer; background: rgba(236,72,153,0.3); border: 1px solid #ec4899; color: #fff; font-weight: 800; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
+        <i class="fa-solid fa-volume-high"></i> <span id="phonk-btn-text">ФОНК: 143 BPM [ВКЛ] 🔥</span>
+      </button>
+      <span class="status-tag" id="hdr-speed" style="color: #22c55e;">🚀 СКОРОСТЬ: 20x TURBO</span>
+    </div>
+  </header>
+
+  <!-- Left Sidebar: Hyper Controls & Kaizen -->
+  <aside class="side-panel left-controls" id="left-panel">
+    <div class="panel-section-title">
+      <i class="fa-solid fa-gauge-high"></i> Гипер-симуляция СДВГ
+    </div>
+
+    <!-- Sim Controls & Speed -->
+    <div class="sim-bar">
+      <button id="sim-play-btn" class="sim-btn btn-running" onclick="toggleSim()">
+        <i id="sim-icon" class="fa-solid fa-pause"></i> <span id="sim-text">Пауза</span>
+      </button>
+      <div class="sim-timer" id="sim-clock">00:00 / 20:00</div>
+      <div class="speed-selector">
+        <button class="speed-btn" onclick="setSpeed(1, this)">1x</button>
+        <button class="speed-btn" onclick="setSpeed(5, this)">5x</button>
+        <button class="speed-btn active-speed" onclick="setSpeed(20, this)">20x</button>
+      </div>
+      <button class="sim-btn" onclick="resetSim()" title="Сбросить смену">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+    </div>
+
+    <!-- Live Courier Status -->
+    <div class="courier-box">
+      <div class="courier-header">
+        <span><i class="fa-solid fa-truck-fast"></i> Логист (Formula-1 Drift)</span>
+        <span id="courier-state-badge">Дрифт</span>
+      </div>
+      <div><strong>Груз:</strong> <span id="courier-cargo-count">0/1 шт</span></div>
+      <div id="courier-cargo-details" style="min-height: 18px;">
+        <span style="color: var(--text-muted); font-style: italic;">Тележка пуста</span>
+      </div>
+      <div><strong>Миссия:</strong> <span id="courier-task-desc" style="color: #cbd5e1;">Непрерывный поштучный поток</span></div>
+      <div><strong>Турбо-режим:</strong> <span style="color: #22c55e; font-weight: bold;">Nitro x2 Active 🔥</span></div>
+    </div>
+
+    <!-- Brainrot quick actions -->
+    <div class="brainrot-actions">
+      <button class="brainrot-action acid" onclick="triggerAcidFlash(3200)" title="Залить всё кислотно-зелёным">
+        ☢️ КИСЛОТА
+      </button>
+      <button class="brainrot-action chaos" onclick="triggerRandomEvent()" title="Случайный brainrot-ивент">
+        🎲 ХАОС
+      </button>
+    </div>
+
+    <div class="panel-section-title" style="margin-top: 4px;">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Кайдзен (переключай рычаги)
+    </div>
+
+    <!-- Kaizen Levers (all ON by default = TO-BE) -->
+    <div class="kaizen-list">
+      <label class="kaizen-item">
+        <input type="checkbox" id="k-tool-op8" checked onchange="applyCustomKaizen()">
+        <div>
+          <div class="kaizen-title">🚀 Шуруповёрт Bosch TURBO 3000</div>
+          <div class="kaizen-desc">Цикл 171с ➔ 86с! Крутит болты со скоростью звука.</div>
+        </div>
+      </label>
+
+      <label class="kaizen-item">
+        <input type="checkbox" id="k-cell-356" checked onchange="applyCustomKaizen()">
+        <div>
+          <div class="kaizen-title">🧠 Ячейка CELL-356 Мегамозг</div>
+          <div class="kaizen-desc">Объединение ОП-3, ОП-5, ОП-6 на 1 оператора: −30к ₽ ФОТ.</div>
+        </div>
+      </label>
+
+      <label class="kaizen-item">
+        <input type="checkbox" id="k-batch-1" checked onchange="applyCustomKaizen()">
+        <div>
+          <div class="kaizen-title">⚡ Поштучный поток (Партия = 1 шт)</div>
+          <div class="kaizen-desc">Курьер дрифтует за каждой деталью без ожидания пары.</div>
+        </div>
+      </label>
+
+      <label class="kaizen-item">
+        <input type="checkbox" id="k-clean-5s" checked onchange="applyCustomKaizen()">
+        <div>
+          <div class="kaizen-title">🧹 5S Ультраклининг Dyson</div>
+          <div class="kaizen-desc">Лишний инструмент выброшен. −2 секунды на операцию!</div>
+        </div>
+      </label>
+
+      <label class="kaizen-item">
+        <input type="checkbox" id="k-quality-zero" checked onchange="applyCustomKaizen()">
+        <div>
+          <div class="kaizen-title">💎 Нано-калибр «3 НЕ» (Ноль брака)</div>
+          <div class="kaizen-desc">Шаблон 25 мм благословлен технологом. Брак равен 0%!</div>
+        </div>
+      </label>
+
+      <label class="kaizen-item">
+        <input type="checkbox" id="k-initial-wip" checked onchange="applyCustomKaizen()">
+        <div>
+          <div class="kaizen-title">📦 Штатный задел НЗП (36к ₽, ФЦК)</div>
+          <div class="kaizen-desc">Линия наполнена заготовками! Поток выдает 10 изделий.</div>
+        </div>
+      </label>
+    </div>
+
+    <!-- Live Cash Flow Status -->
+    <div class="cashflow-banner">
+      <div>
+        <div class="cashflow-label">P&L STONKS СЧЕТЧИК:</div>
+        <div id="live-cash-diff" style="font-size: 10px; color: var(--text-muted);">Капает кэш...</div>
+      </div>
+      <div class="cashflow-amount" id="live-cashflow-val" style="color: var(--green);">+0 ₽</div>
+    </div>
+  </aside>
+
+  <!-- Right Sidebar: Infocenter Dashboard -->
+  <aside class="side-panel right-infocenter" id="right-panel">
+    <div class="panel-section-title">
+      <i class="fa-solid fa-chart-pie"></i> Инфоцентр 2077 (5 блоков)
+    </div>
+
+    <!-- 1. Безопасность -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span style="color: var(--red);"><i class="fa-solid fa-shield-halved"></i> 1. Безопасность</span>
+        <span style="color: var(--green); font-weight: bold;">0 инцидентов</span>
+      </div>
+      <div class="metric-row">
+        <span>СИЗ и каскетка логиста:</span>
+        <span class="metric-val" style="color: var(--green);">100% ФЛЕКС 🔥</span>
+      </div>
+    </div>
+
+    <!-- 2. Качество -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span style="color: #38bdf8;"><i class="fa-solid fa-check-double"></i> 2. Качество</span>
+        <span id="badge-defects" style="font-size: 10px; padding: 2px 6px; border-radius: 4px; background: rgba(34,197,94,0.2); color: var(--green);">Брак: 0 шт</span>
+      </div>
+      <div class="metric-row">
+        <span>Принято годных:</span>
+        <span class="metric-val" id="val-good-units" style="color: var(--green);">0 / 10 шт</span>
+      </div>
+      <div class="metric-row">
+        <span>Забраковано:</span>
+        <span class="metric-val" id="val-scrap-units" style="color: var(--red);">0 шт</span>
+      </div>
+    </div>
+
+    <!-- 3. Производство -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span style="color: #fbbf24;"><i class="fa-solid fa-industry"></i> 3. Производство</span>
+        <span id="badge-bottleneck" style="font-size: 10px; font-weight: bold; color: var(--green);">Узкое: ОП-7 (102с)</span>
+      </div>
+      <div class="metric-row">
+        <span>Время такта:</span>
+        <span class="metric-val">120 сек / шт</span>
+      </div>
+      <div class="metric-row">
+        <span>НЗП на столах:</span>
+        <span class="metric-val" id="val-wip-total">10 шт (~36 тыс. ₽)</span>
+      </div>
+      <div class="metric-row">
+        <span>Маршрут Спагетти:</span>
+        <span class="metric-val" id="val-spaghetti" style="color: #38bdf8;">12.3 м</span>
+      </div>
+      <div class="metric-row">
+        <span>Lead Time (ВПП):</span>
+        <span class="metric-val" id="val-vpp">523 с (8.7 мин)</span>
+      </div>
+
+      <!-- Cycle Bars -->
+      <div style="margin-top: 8px; font-size: 10px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Загрузка такта (120 с):</div>
+      <div id="ops-bars"></div>
+    </div>
+
+    <!-- 4. Финансы & Результат -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span style="color: #10b981;"><i class="fa-solid fa-ruble-sign"></i> 4. Финансы (P&L)</span>
+        <span id="val-profit" style="font-size: 14px; font-weight: 900; color: var(--green);">+67.0 тыс. ₽</span>
+      </div>
+      <div class="metric-row">
+        <span>Выручка (70к × N):</span>
+        <span class="metric-val" id="val-revenue" style="color: var(--green);">700.0 тыс. ₽</span>
+      </div>
+      <div class="metric-row">
+        <span>ФОТ персонала:</span>
+        <span class="metric-val" id="val-fot">130.0 тыс. ₽</span>
+      </div>
+      <div class="metric-row">
+        <span>Оборудование / Аренда:</span>
+        <span class="metric-val" id="val-fixed-costs">353.0 тыс. ₽</span>
+      </div>
+      <div class="metric-row">
+        <span>Затраты на сырьё:</span>
+        <span class="metric-val" id="val-mat">150.0 тыс. ₽</span>
+      </div>
+      <div class="metric-row">
+        <span>Себестоимость изделия:</span>
+        <span class="metric-val" id="val-unit-cost">63.3 тыс. ₽</span>
+      </div>
+    </div>
+
+    <!-- 5. Персонал -->
+    <div class="info-card">
+      <div class="info-card-header">
+        <span style="color: #a855f7;"><i class="fa-solid fa-users"></i> 5. Персонал и Кайдзен</span>
+      </div>
+      <div class="metric-row">
+        <span>Штат смены:</span>
+        <span class="metric-val" id="val-staff-count">9 чел</span>
+      </div>
+      <div class="metric-row">
+        <span>Внедрено улучшений:</span>
+        <span class="metric-val" id="val-kaizen-count" style="color: var(--cyan);">6 / 6</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ENLARGED SUBWAY SURFERS PIP WIDGET WITH YOUTUBE IFRAME + 3D CANVAS FALLBACK -->
+  <div class="adhd-pip" id="adhd-pip">
+    <div class="adhd-pip-header">
+      <span id="pip-title">📱 SUBWAY SURFERS HD</span>
+      <div style="display:flex;gap:4px;align-items:center;">
+        <button id="toggle-source-btn" onclick="toggleVideoSource()" style="background:rgba(236,72,153,0.35);border:1px solid #ec4899;color:#fff;border-radius:4px;padding:2px 7px;font-size:9px;cursor:pointer;font-weight:700;">🎮 3D Runner</button>
+        <button onclick="changeYoutubeUrl()" title="Сменить YouTube URL" style="background:rgba(255,255,255,0.15);border:none;color:#fff;border-radius:4px;padding:2px 6px;font-size:9px;cursor:pointer;">🔗 URL</button>
+      </div>
+    </div>
+    <div class="adhd-pip-body">
+      <!-- High Quality Loopable Subway Surfers Gameplay Embed -->
+      <iframe id="subway-iframe" 
+        src="https://www.youtube-nocookie.com/embed/zZ7AimPACzc?autoplay=1&mute=1&loop=1&playlist=zZ7AimPACzc&controls=0&modestbranding=1&rel=0" 
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+      <canvas id="subway-canvas" width="380" height="194"></canvas>
+    </div>
+    <div class="adhd-pip-score">
+      <span>SCORE: <span id="subway-score">69420</span></span>
+      <span id="pip-source-badge" style="color: #38bdf8; font-size: 9px;">ИСТОЧНИК: YOUTUBE</span>
+    </div>
+  </div>
+
+  <!-- Bouncing DVD Logo -->
+  <div id="dvd-logo" style="color: #06b6d4; border: 2px solid #06b6d4;">DVD</div>
+
+  <!-- Floating Money/Meme Text Container -->
+  <div id="float-container"></div>
+
+  <!-- Chaotic Event Banner -->
+  <div id="event-banner" class="event-banner">
+    <div id="event-title" class="event-banner-title">🚨 НАЛОГОВАЯ ПРОВЕРКА!</div>
+    <div id="event-desc" class="event-banner-desc">Срочно прячем лишние ключи под верстаки!</div>
+  </div>
+
+  <!-- Toast Popup -->
+  <div id="toast" class="toast-popup">Уведомление</div>
+
+  <!-- Drag Helper Banner -->
+  <div id="drag-banner" class="drag-helper-banner">
+    <i class="fa-solid fa-arrows-up-down-left-right"></i>
+    <span>Режим расстановки: зажмите стол ЛКМ и тащите его по цеху!</span>
+  </div>
+
+  <!-- Contextual Workbench Card -->
+  <div id="poi-card" class="poi-drawer">
+    <div class="poi-header">
+      <div class="poi-title" id="poi-card-title">Рабочее место</div>
+      <button class="close-btn" onclick="closePoi()">&times;</button>
+    </div>
+    <div class="poi-content" id="poi-card-body"></div>
+  </div>
+
+  <!-- 3D Viewport Canvas -->
+  <div id="viewport"></div>
+
+  <!-- Acid Green Fullscreen Wash -->
+  <div id="acid-overlay"></div>
+
+  <!-- PHONK LAB: piano roll + kick/hat/snare + metronome -->
+  <div id="phonk-lab" class="phonk-lab" onclick="if (event.target === this) closePhonkLab()">
+    <div class="phonk-lab-panel">
+      <div class="phonk-lab-header">
+        <span>🎹 ФОНК-ЛАБ · 143 BPM · 16 ШАГОВ</span>
+        <button class="close-btn" onclick="closePhonkLab()">&times;</button>
+      </div>
+
+      <div class="phonk-lab-toolbar">
+        <button id="lab-play-btn" class="lab-btn" onclick="toggleLab()">▶ ИГРАТЬ</button>
+        <button class="lab-btn" onclick="clearLab()">🧹 ОЧИСТИТЬ</button>
+        <button class="lab-btn" onclick="randomizeLab()">🎲 РАНДОМ</button>
+        <button class="lab-btn" onclick="loadDefaultLab()">🎵 ДЕФОЛТ</button>
+        <button id="metro-btn" class="lab-btn" onclick="toggleMetronome()">🥁 МЕТРОНОМ: ВЫКЛ<span id="metro-dot" class="metro-dot"></span></button>
+        <span class="lab-step" id="lab-step-display">ШАГ: 1 / 16</span>
+      </div>
+
+      <div id="lab-grid" class="lab-grid"></div>
+
+      <div class="lab-hint">
+        Кликай по клеткам, чтобы собрать свой зацикленный фонк. Клик по названию ноты — прослушать её.
+        Горячие клавиши: <b>Space</b> — пуск/пауза, <b>R</b> — сброс смены, <b>D</b> — расстановка,
+        <b>G</b> — кислотный флеш, <b>M</b> — метроном, <b>P</b> — эта панель, <b>1/2/3</b> — скорость, <b>Esc</b> — закрыть.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ========================================================
+       1. SYNTHESIZED WEB AUDIO (OFFLINE RETRO SOUNDS + PHONK)
+       ======================================================== */
+    let audioCtx = null;
+    let phonkActive = false;
+    let phonkInterval = null;
+    let phonkUserMuted = false;
+    let soundEnabled = true;
+    const PHONK_BPM = 143;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioClass) return null;
+        try {
+          audioCtx = new AudioClass();
+        } catch (e) {
+          return null;
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Auto-resume audio on any click/touch/interaction
+    ['click', 'pointerdown', 'keydown'].forEach(evt => {
+      window.addEventListener(evt, () => {
+        getAudioContext();
+        if (!phonkActive && !phonkUserMuted) startPhonkLoop();
+      }, { once: false });
+    });
+
+    function playTone(freq, duration, type = 'sine', gainVal = 0.15) {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // 1. MLG AIRHORN
+    function playAirhorn() {
+      if (!soundEnabled) return;
+      triggerScreenShake();
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const notes = [587, 587, 587, 880, 784];
+      const times = [0, 0.12, 0.24, 0.36, 0.52];
+      const durs =  [0.10, 0.10, 0.10, 0.35, 0.40];
+
+      notes.forEach((freq, idx) => {
+        setTimeout(() => {
+          try {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + durs[idx]);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + durs[idx]);
+          } catch(e){}
+        }, times[idx] * 1000);
+      });
+      spawnFloatingText('📢 AIRHORN MLG!', window.innerWidth/2, window.innerHeight/2, '#ec4899');
+    }
+
+    // 2. VINE BOOM (Bass Drop with distortion)
+    function playVineBoom() {
+      if (!soundEnabled) return;
+      triggerScreenShake();
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(140, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(25, ctx.currentTime + 0.6);
+        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.7);
+      } catch(e){}
+      spawnFloatingText('💥 VINE BOOM', window.innerWidth/2, window.innerHeight/2 + 40, '#f43f5e');
+    }
+
+    // 3. STONKS (Ascending chime)
+    function playStonks() {
+      const chords = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+      chords.forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 0.35, 'triangle', 0.18), i * 60);
+      });
+      spawnFloatingText('📈 STONKS +70,000 ₽', window.innerWidth/2, window.innerHeight/3, '#10b981');
+    }
+
+    // 4. QUACK (Rubber Duck)
+    function playQuack() {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(320, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(210, ctx.currentTime + 0.22);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.25);
+      } catch(e){}
+      spawnFloatingText('🦆 КРЯ-КРЯ', window.innerWidth * 0.4, window.innerHeight * 0.6, '#fbbf24');
+    }
+
+    // 5. BRUH
+    function playBruh() {
+      if (!soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(110, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.45);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+      } catch(e){}
+      spawnFloatingText('🗿 BRUH MOMENT', window.innerWidth/2, window.innerHeight/2, '#94a3b8');
+    }
+
+    // 6. ALARM SIREN
+    function playSiren() {
+      if (!soundEnabled) return;
+      triggerScreenShake();
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(600, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(950, ctx.currentTime + 0.25);
+        osc.frequency.linearRampToValueAtTime(600, ctx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.55);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.55);
+      } catch(e){}
+    }
+
+    // 7. PROCEDURAL PHONK BEAT (143 BPM Cowbell & Drums)
+    function startPhonkLoop() {
+      if (phonkUserMuted || !soundEnabled) return;
+      stopPhonkLoop();
+      phonkActive = true;
+      const btnText = document.getElementById('phonk-btn-text');
+      if (btnText) btnText.textContent = 'ФОНК: 143 BPM [ВКЛ] 🔥';
+      const btn = document.getElementById('phonk-toggle-btn');
+      if (btn) {
+        btn.style.borderColor = '#ec4899';
+        btn.style.background = 'rgba(236,72,153,0.3)';
+        btn.style.color = '#fff';
+      }
+
+      let step = 0;
+      const cowbellNotes = [587, 0, 784, 880, 0, 784, 1046, 880];
+      const intervalMs = (60 / PHONK_BPM / 2) * 1000;
+
+      phonkInterval = setInterval(() => {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          if (step % 4 === 0) {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.frequency.setValueAtTime(120, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.12);
+            g.gain.setValueAtTime(0.25, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.15);
+          }
+
+          if (step % 8 === 4) {
+            playTone(250, 0.1, 'triangle', 0.12);
+          }
+
+          if (step % 2 === 0) {
+            playTone(1800, 0.04, 'sawtooth', 0.02);
+          }
+
+          const note = cowbellNotes[step % cowbellNotes.length];
+          if (note > 0) {
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(note, ctx.currentTime);
+            g.gain.setValueAtTime(0.10, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+            osc.connect(g);
+            g.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.18);
+          }
+
+          step = (step + 1) % 16;
+        } catch(e){}
+      }, intervalMs);
+    }
+
+    function stopPhonkLoop() {
+      if (phonkInterval) clearInterval(phonkInterval);
+      phonkInterval = null;
+      phonkActive = false;
+    }
+
+    function togglePhonk() {
+      const btnText = document.getElementById('phonk-btn-text');
+      const btn = document.getElementById('phonk-toggle-btn');
+      if (phonkActive) {
+        stopPhonkLoop();
+        phonkUserMuted = true;
+        if (btnText) btnText.textContent = 'ФОНК: ВЫКЛ 🔇';
+        if (btn) {
+          btn.style.borderColor = 'rgba(255,255,255,0.2)';
+          btn.style.background = 'rgba(15,23,42,0.8)';
+          btn.style.color = 'var(--text-muted)';
+        }
+        showToast('🔇 Фонк выключен');
+      } else {
+        phonkUserMuted = false;
+        if (!soundEnabled) {
+          soundEnabled = true;
+          const icon = document.getElementById('sound-icon');
+          if (icon) icon.className = 'fa-solid fa-volume-high';
+        }
+        getAudioContext();
+        startPhonkLoop();
+        if (btnText) btnText.textContent = 'ФОНК: 143 BPM [ВКЛ] 🔥';
+        if (btn) {
+          btn.style.borderColor = '#ec4899';
+          btn.style.background = 'rgba(236,72,153,0.3)';
+          btn.style.color = '#fff';
+        }
+        showToast('🔥 Фонк включен (143 BPM)!');
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const icon = document.getElementById('sound-icon');
+      if (icon) {
+        icon.className = soundEnabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
+      }
+      if (!soundEnabled) {
+        stopPhonkLoop();
+      } else if (!phonkUserMuted) {
+        getAudioContext();
+        startPhonkLoop();
+      }
+      showToast(soundEnabled ? '🔊 Звук включен' : '🔇 Звук выключен');
+    }
+
+    function soundSale() { playStonks(); }
+    function soundDefect() { playVineBoom(); }
+    function soundDelivery() { playTone(880, 0.08, 'triangle', 0.1); }
+
+    function showToast(text, isDanger = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = text;
+      toast.className = `toast-popup ${isDanger ? 'toast-danger' : 'toast-success'}`;
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2200);
+    }
+
+    function triggerScreenShake() {
+      document.body.classList.add('screen-shake');
+      setTimeout(() => document.body.classList.remove('screen-shake'), 400);
+    }
+
+    function spawnFloatingText(text, x, y, color = '#22c55e') {
+      const container = document.getElementById('float-container');
+      const el = document.createElement('div');
+      el.className = 'floating-text';
+      el.textContent = text;
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      el.style.color = color;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 1600);
+    }
+
+    /* ========================================================
+       SUBWAY SURFERS 3D CANVAS RUNNER (OFFLINE ENGINE)
+       ======================================================== */
+    let runnerMode = 'youtube'; // 'youtube' or 'canvas'
+    let subCanvas = null;
+    let subCtx = null;
+    let runnerLane = 1; // 0, 1, 2
+    let runnerY = 0;
+    let runnerJumpVy = 0;
+    let obstacles = [];
+    let coins = [];
+    let subwayAnimId = null;
+
+    function toggleVideoSource() {
+      const iframe = document.getElementById('subway-iframe');
+      const canvas = document.getElementById('subway-canvas');
+      const btn = document.getElementById('toggle-source-btn');
+      const badge = document.getElementById('pip-source-badge');
+
+      if (runnerMode === 'youtube') {
+        runnerMode = 'canvas';
+        iframe.style.display = 'none';
+        canvas.style.display = 'block';
+        btn.textContent = '📺 YouTube';
+        btn.style.background = 'rgba(6,182,212,0.4)';
+        btn.style.borderColor = '#06b6d4';
+        badge.textContent = 'ИСТОЧНИК: 3D RUNNER (OFFLINE)';
+        badge.style.color = '#22c55e';
+        if (!subwayAnimId) updateSubwaySurfers();
+        showToast('🎮 Переключено на 3D Canvas Runner!');
+      } else {
+        runnerMode = 'youtube';
+        canvas.style.display = 'none';
+        iframe.style.display = 'block';
+        btn.textContent = '🎮 3D Runner';
+        btn.style.background = 'rgba(236,72,153,0.35)';
+        btn.style.borderColor = '#ec4899';
+        badge.textContent = 'ИСТОЧНИК: YOUTUBE';
+        badge.style.color = '#38bdf8';
+        if (subwayAnimId) {
+          cancelAnimationFrame(subwayAnimId);
+          subwayAnimId = null;
+        }
+        showToast('📺 Переключено на YouTube плеер!');
+      }
+    }
+
+    function updateSubwaySurfers() {
+      if (runnerMode !== 'canvas') return;
+
+      if (!subCanvas) subCanvas = document.getElementById('subway-canvas');
+      if (subCanvas && !subCtx) subCtx = subCanvas.getContext('2d');
+      if (!subCanvas || !subCtx) return;
+
+      if (subCanvas.width !== subCanvas.clientWidth || subCanvas.height !== subCanvas.clientHeight) {
+        subCanvas.width = subCanvas.clientWidth || 380;
+        subCanvas.height = subCanvas.clientHeight || 194;
+      }
+
+      // Jump physics
+      if (runnerY > 0 || runnerJumpVy !== 0) {
+        runnerY += runnerJumpVy;
+        runnerJumpVy -= 0.8;
+        if (runnerY <= 0) {
+          runnerY = 0;
+          runnerJumpVy = 0;
+        }
+      }
+
+      // Auto-jump or change lanes randomly to keep brain engaged!
+      if (Math.random() < 0.04 && runnerY === 0) {
+        runnerJumpVy = 8.5;
+      }
+      if (Math.random() < 0.05) {
+        runnerLane = Math.floor(Math.random() * 3);
+      }
+
+      // Spawn obstacles & coins
+      if (Math.random() < 0.05) {
+        obstacles.push({ z: 1.0, lane: Math.floor(Math.random() * 3) });
+      }
+      if (Math.random() < 0.08) {
+        coins.push({ z: 1.0, lane: Math.floor(Math.random() * 3) });
+      }
+
+      // Render
+      const w = subCanvas.width, h = subCanvas.height;
+      subCtx.fillStyle = '#090d16';
+      subCtx.fillRect(0, 0, w, h);
+
+      // Rails
+      const horizonY = 32;
+      const bottomY = h;
+      const lanesX = [w * 0.25, w * 0.5, w * 0.75];
+
+      subCtx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      subCtx.lineWidth = 2;
+      for (let i = 0; i <= 3; i++) {
+        const xBottom = w * 0.12 + (i * w * 0.25);
+        const xTop = w * 0.35 + (i * w * 0.1);
+        subCtx.beginPath();
+        subCtx.moveTo(xTop, horizonY);
+        subCtx.lineTo(xBottom, bottomY);
+        subCtx.stroke();
+      }
+
+      // Draw Coins
+      for (let i = coins.length - 1; i >= 0; i--) {
+        const c = coins[i];
+        c.z -= 0.035;
+        const scale = (1.0 - c.z);
+        const drawX = (w * 0.4 + (c.lane - 1) * 20) + (c.lane - 1) * scale * 50;
+        const drawY = horizonY + scale * (bottomY - horizonY);
+
+        subCtx.fillStyle = '#facc15';
+        subCtx.beginPath();
+        subCtx.arc(drawX, drawY - 10 * scale, 5 * scale, 0, Math.PI * 2);
+        subCtx.fill();
+
+        if (c.z <= 0.05) coins.splice(i, 1);
+      }
+
+      // Draw Obstacles (trains/barriers)
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        const ob = obstacles[i];
+        ob.z -= 0.035;
+        const scale = (1.0 - ob.z);
+        const drawX = (w * 0.4 + (ob.lane - 1) * 20) + (ob.lane - 1) * scale * 50;
+        const drawY = horizonY + scale * (bottomY - horizonY);
+
+        subCtx.fillStyle = '#ef4444';
+        const boxW = 22 * scale;
+        const boxH = 28 * scale;
+        subCtx.fillRect(drawX - boxW/2, drawY - boxH, boxW, boxH);
+
+        if (ob.z <= 0.05) obstacles.splice(i, 1);
+      }
+
+      // Draw Runner Player (Jake from Subway Surfers style)
+      const px = lanesX[runnerLane];
+      const py = bottomY - 12 - runnerY;
+      // Cap
+      subCtx.fillStyle = '#ef4444';
+      subCtx.fillRect(px - 6, py - 30, 12, 4);
+      // Head
+      subCtx.fillStyle = '#fef08a';
+      subCtx.beginPath();
+      subCtx.arc(px, py - 23, 6, 0, Math.PI * 2);
+      subCtx.fill();
+      // Body / Hoodie
+      subCtx.fillStyle = '#06b6d4';
+      subCtx.fillRect(px - 8, py - 18, 16, 14);
+      // Pants
+      subCtx.fillStyle = '#3b82f6';
+      subCtx.fillRect(px - 7, py - 4, 14, 8);
+
+      subwayAnimId = requestAnimationFrame(updateSubwaySurfers);
+    }
+
+    // Change YouTube URL dynamically
+    function changeYoutubeUrl() {
+      const currentUrl = document.getElementById('subway-iframe').src;
+      const newUrl = prompt('Вставь ссылку на видео YouTube (или оставь дефолт):', currentUrl);
+      if (newUrl) {
+        let embedUrl = newUrl;
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+        const match = newUrl.match(regExp);
+        if (match && match[2].length === 11) {
+          const id = match[2];
+          embedUrl = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&modestbranding=1&rel=0`;
+        }
+        document.getElementById('subway-iframe').src = embedUrl;
+        if (runnerMode === 'canvas') {
+          toggleVideoSource();
+        }
+        showToast('📺 Ссылка на YouTube обновлена!');
+      }
+    }
+
+    /* ========================================================
+       2. PROCESS METADATA & POSITIONS (AS-IS / TO-BE PRESETS)
+       ======================================================== */
+    const OPS_METADATA = [
+      { id: 'OP-1', name: 'Сборка корпуса и нижней крышки', baseCycle: 83, inputs: ['WH'], outputTo: 'OP-2', tools: 'Ключ 13', loss5s: 'Лишний ключ 10х12' },
+      { id: 'OP-2', name: 'Сборка верхней крышки', baseCycle: 66, inputs: ['OP-1'], outputTo: 'OP-4', tools: 'Ключ 13', loss5s: 'Лишний ключ 10х12' },
+      { id: 'OP-3', name: 'Сборка дросселя (параллельно)', baseCycle: 13, inputs: ['WH'], outputTo: 'OP-4', tools: 'Руки (без инстр.)', loss5s: '2 лишних ключа' },
+      { id: 'OP-4', name: 'Установка тарелки и дросселя (сход)', baseCycle: 61, inputs: ['OP-2', 'OP-3'], outputTo: 'OP-7', tools: 'Ключ 14', loss5s: 'Лишние ключи 10х12, 19' },
+      { id: 'OP-5', name: 'Сборка мембраны (параллельно)', baseCycle: 35, inputs: ['WH'], outputTo: 'OP-7', tools: 'Ключ 10', loss5s: 'Лишние гаечный и 6-гр.' },
+      { id: 'OP-6', name: 'Сборка пробки (параллельно)', baseCycle: 39, inputs: ['WH'], outputTo: 'OP-7', tools: 'Ключ 19, шаблон 25мм', loss5s: 'Лишний ключ' },
+      { id: 'OP-7', name: 'Сборка пульта управления (узел)', baseCycle: 102, inputs: ['OP-4', 'OP-5', 'OP-6'], outputTo: 'OP-8', tools: 'Ключ 10', loss5s: 'Лишние ключи' },
+      { id: 'OP-8', name: 'Установка 6 болтов М6 (УЗКОЕ МЕСТО)', baseCycle: 171, inputs: ['OP-7'], outputTo: 'OP-9', tools: 'Ключ 10 (ручной)', loss5s: 'УЗКОЕ МЕСТО! 171 с > 120 с' },
+      { id: 'OP-9', name: 'Установка штуцеров и патрубка', baseCycle: 82, inputs: ['OP-8'], outputTo: 'OP-10', tools: 'Ключ 22', loss5s: 'Лишний ключ' },
+      { id: 'OP-10', name: 'Пост ОТК и сдача клиенту', baseCycle: 22, inputs: ['OP-9'], outputTo: 'CLIENT', tools: 'Калибр 25 мм, динамометр', loss5s: 'Отсутствуют' }
+    ];
+
+    // AS-IS: хаотичная расстановка (зал 6.15 x 18.40 м)
+    const POS_AS_IS = {
+      'CLIENT': { x: -1.8, z: -7.5 },
+      'OP-9':   { x: -1.8, z: -5.0 },
+      'OP-2':   { x: -1.8, z: -2.5 },
+      'OP-4':   { x: -1.8, z: 0.0 },
+      'OP-3':   { x: -1.8, z: 2.5 },
+      'OP-6':   { x: -1.8, z: 5.0 },
+      'OP-10':  { x: 1.8,  z: -7.5 },
+      'OP-7':   { x: 1.8,  z: -5.0 },
+      'OP-5':   { x: 1.8,  z: -2.5 },
+      'OP-1':   { x: 1.8,  z: 0.0 },
+      'OP-8':   { x: 1.8,  z: 2.5 },
+      'WH':     { x: 1.8,  z: 7.0 }
+    };
+
+    // TO-BE: чистый U-поток
+    const POS_TO_BE = {
+      'WH':       { x: -1.8, z: 7.2 },
+      'OP-1':     { x: -1.8, z: 5.0 },
+      'OP-2':     { x: -1.8, z: 3.0 },
+      'OP-3':     { x: -1.8, z: 1.0 },
+      'OP-5':     { x: -1.8, z: -1.0 },
+      'OP-6':     { x: -1.8, z: -3.0 },
+      'OP-4':     { x: -1.8, z: -5.0 },
+      'OP-7':     { x: 0.0,  z: -7.0 },
+      'OP-8':     { x: 1.8,  z: -5.0 },
+      'OP-9':     { x: 1.8,  z: -2.5 },
+      'OP-10':    { x: 1.8,  z: 1.0 },
+      'CLIENT':   { x: 1.8,  z: 6.0 }
+    };
+
+    const currentTablePos = JSON.parse(JSON.stringify(POS_TO_BE));
+
+    /* ========================================================
+       3. FSM STATE (resetSim applies the initial WIP)
+       ======================================================== */
+    const workbenchFSM = {};
+    OPS_METADATA.forEach(op => {
+      workbenchFSM[op.id] = {
+        inBuffer: 0,
+        working: false,
+        progressSec: 0,
+        outBuffer: 0,
+        blocked: false,
+        inSlots: {}
+      };
+    });
+
+    const courierState = {
+      x: currentTablePos['WH'].x,
+      z: currentTablePos['WH'].z,
+      targetX: currentTablePos['WH'].x,
+      targetZ: currentTablePos['WH'].z,
+      targetNode: 'WH',
+      speedMps: 1.6,
+      carryingCargo: [],
+      statusText: 'В движении',
+      loadingTimerSec: 0
+    };
+
+    const SHIFT_LIMIT_SEC = 1200;
+    const PLAN_UNITS = 10;
+
+    let simTimerSec = 0;
+    let simSpeed = 20; // 20x TURBO by default!
+    let simRunning = true; // Auto-running by default!
+    let shiftCompleted = false;
+    let goodUnitsCount = 0;
+    let scrapUnitsCount = 0;
+    let antiGravityActive = true;
+    let discoModeActive = true;
+    let dragModeActive = false;
+
+    // Camera 360 Roll State
+    let isRolling = false;
+    let rollStartTime = 0;
+    const rollDuration = 600; // 0.6 seconds exact!
+
+    const rawSetsIssued = {
+      'OP-1': 0, 'OP-3': 0, 'OP-5': 0, 'OP-6': 0
+    };
+
+    function getKaizenState() {
+      const read = id => {
+        const el = document.getElementById(id);
+        return el ? el.checked : false;
+      };
+      return {
+        screwdriver: read('k-tool-op8'),
+        cell356: read('k-cell-356'),
+        batch1: read('k-batch-1'),
+        clean5s: read('k-clean-5s'),
+        zeroDefects: read('k-quality-zero'),
+        initialWip: read('k-initial-wip')
+      };
+    }
+
+    function calculateTotalSpaghettiLength() {
+      let sum = 0;
+      const getDist = (a, b) => {
+        const pa = currentTablePos[a], pb = currentTablePos[b];
+        if (!pa || !pb) return 0;
+        return Math.hypot(pa.x - pb.x, pa.z - pb.z);
+      };
+
+      sum += getDist('WH', 'OP-1');
+      sum += getDist('OP-1', 'OP-2');
+      sum += getDist('OP-2', 'OP-4');
+      sum += getDist('WH', 'OP-3');
+      sum += getDist('OP-3', 'OP-4');
+      sum += getDist('WH', 'OP-5');
+      sum += getDist('OP-5', 'OP-7');
+      sum += getDist('WH', 'OP-6');
+      sum += getDist('OP-6', 'OP-7');
+      sum += getDist('OP-4', 'OP-7');
+      sum += getDist('OP-7', 'OP-8');
+      sum += getDist('OP-8', 'OP-9');
+      sum += getDist('OP-9', 'OP-10');
+      sum += getDist('OP-10', 'CLIENT');
+      return sum;
+    }
+
+    function getEffectiveCycle(opId) {
+      const k = getKaizenState();
+      const meta = OPS_METADATA.find(o => o.id === opId);
+      let c = meta ? meta.baseCycle : 60;
+      if (opId === 'OP-8' && k.screwdriver) {
+        c = 1 + Math.round(170 * 0.50); // 86 sec
+      }
+      if (k.clean5s) {
+        c = Math.max(10, c - 2); // 5S saves 2s
+      }
+      return c;
+    }
+
+    function getPipelineCount() {
+      let count = 0;
+      OPS_METADATA.forEach(op => {
+        const fsm = workbenchFSM[op.id];
+        if (fsm.working) count++;
+        count += fsm.outBuffer;
+        if (op.id === 'OP-4') {
+          count += (fsm.inSlots['OP-2'] || 0) + (fsm.inSlots['OP-3'] || 0);
+        } else if (op.id === 'OP-7') {
+          count += (fsm.inSlots['OP-4'] || 0) + (fsm.inSlots['OP-5'] || 0) + (fsm.inSlots['OP-6'] || 0);
+        } else {
+          count += fsm.inBuffer;
+        }
+      });
+      count += courierState.carryingCargo.length;
+      return count;
+    }
+
+    function canIssueRawFor(stationId) {
+      if (infiniteMode) return true; // бесконечный режим: склад не кончается
+      const needed = PLAN_UNITS + scrapUnitsCount;
+      return (goodUnitsCount < PLAN_UNITS) && ((rawSetsIssued[stationId] || 0) < needed);
+    }
+
+    function calculateTotalWIP() {
+      const count = getPipelineCount();
+      return { count, rubVal: count * 20000 };
+    }
+
+    function updateDashboard() {
+      const k = getKaizenState();
+      const spaghettiDist = calculateTotalSpaghettiLength();
+
+      const assemblyOperators = k.cell356 ? 7 : 9;
+      const totalStaff = assemblyOperators + 2;
+
+      const fot = (assemblyOperators * 15.0) + 17.0 + 8.0;
+      let equip = 153.0;
+      if (k.screwdriver) equip += 12.0;
+      if (k.cell356) equip -= 12.0;
+
+      const overhead = 200.0;
+      // 15 000 ₽ за начатый комплект (по ветке корпуса ОП-1 + брак)
+      const totalKitsStarted = Math.max(goodUnitsCount + scrapUnitsCount, rawSetsIssued['OP-1']);
+      const materialsCost = totalKitsStarted * 15.0;
+      const revenue = goodUnitsCount * 70.0;
+      const totalCost = fot + equip + overhead + materialsCost;
+      const profit = revenue - totalCost;
+      const unitCost = goodUnitsCount > 0 ? totalCost / goodUnitsCount : 0;
+      const wip = calculateTotalWIP();
+
+      document.getElementById('val-spaghetti').textContent = `${spaghettiDist.toFixed(1)} м`;
+      document.getElementById('val-good-units').textContent = infiniteMode
+        ? `${goodUnitsCount} шт (∞)`
+        : `${goodUnitsCount} / ${PLAN_UNITS} шт`;
+      document.getElementById('val-scrap-units').textContent = `${scrapUnitsCount} шт`;
+      document.getElementById('val-wip-total').textContent = `${wip.count} шт (~${Math.round(wip.rubVal / 1000)} тыс. ₽)`;
+
+      const defectBadge = document.getElementById('badge-defects');
+      defectBadge.textContent = `Брак: ${scrapUnitsCount} шт`;
+      defectBadge.style.background = scrapUnitsCount > 0 ? 'rgba(239,68,68,0.2)' : 'rgba(34,197,94,0.2)';
+      defectBadge.style.color = scrapUnitsCount > 0 ? 'var(--red)' : 'var(--green)';
+
+      document.getElementById('val-fot').textContent = `${fot.toFixed(1)} тыс. ₽`;
+      document.getElementById('val-fixed-costs').textContent = `${(equip + overhead).toFixed(1)} тыс. ₽`;
+      document.getElementById('val-mat').textContent = `${materialsCost.toFixed(1)} тыс. ₽`;
+      document.getElementById('val-revenue').textContent = `${revenue.toFixed(1)} тыс. ₽`;
+      document.getElementById('val-unit-cost').textContent = `${unitCost.toFixed(1)} тыс. ₽`;
+
+      const profitElem = document.getElementById('val-profit');
+      profitElem.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(1)} тыс. ₽`;
+      profitElem.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+
+      const cashTicker = document.getElementById('live-cashflow-val');
+      cashTicker.textContent = `${profit >= 0 ? '+' : ''}${Math.round(profit * 1000).toLocaleString('ru-RU')} ₽`;
+      cashTicker.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+
+      document.getElementById('val-staff-count').textContent = `${totalStaff} чел`;
+      const kaizenCount = Object.values(k).filter(Boolean).length;
+      document.getElementById('val-kaizen-count').textContent = `${kaizenCount} / 6`;
+
+      // Cycle bars
+      const barsContainer = document.getElementById('ops-bars');
+      barsContainer.innerHTML = '';
+      let maxCycle = 0;
+      let bottleneckOp = 'OP-8';
+
+      OPS_METADATA.forEach(op => {
+        const c = getEffectiveCycle(op.id);
+        if (c > maxCycle) {
+          maxCycle = c;
+          bottleneckOp = op.id;
+        }
+        const pct = Math.round((c / 120) * 100);
+        let color = 'var(--green)';
+        if (pct >= 85 && pct <= 100) color = 'var(--yellow)';
+        if (pct > 100) color = 'var(--red)';
+
+        const fsm = workbenchFSM[op.id];
+        let statusBadge = '💤 Голодание';
+        if (fsm.blocked) statusBadge = '🛑 Блок';
+        else if (fsm.working) statusBadge = `⚙️ ${Math.round(c - fsm.progressSec)}с`;
+        else if (op.id === 'OP-4') {
+          if (!fsm.inSlots['OP-2']) statusBadge = '⏳ Ждет ОП-2';
+          else if (!fsm.inSlots['OP-3']) statusBadge = '⏳ Ждет ОП-3';
+          else statusBadge = '📦 Готов';
+        } else if (op.id === 'OP-7') {
+          const miss = [];
+          if (!fsm.inSlots['OP-4']) miss.push('ОП-4');
+          if (!fsm.inSlots['OP-5']) miss.push('ОП-5');
+          if (!fsm.inSlots['OP-6']) miss.push('ОП-6');
+          statusBadge = miss.length === 3 ? '💤 Голодание' : (miss.length > 0 ? `⏳ Ждет ${miss.join(',')}` : '📦 Готов');
+        } else if (fsm.inBuffer > 0) {
+          statusBadge = '📦 Готов';
+        }
+
+        const row = document.createElement('div');
+        row.className = 'bar-row';
+        row.innerHTML = `
+          <span class="bar-label">${op.id}</span>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${Math.min(100, (pct/150)*100)}%; background-color: ${color};"></div>
+          </div>
+          <span class="bar-num" style="color: ${color}; font-weight: bold;">${c}с (${statusBadge})</span>
+        `;
+        barsContainer.appendChild(row);
+      });
+
+      const bnBadge = document.getElementById('badge-bottleneck');
+      bnBadge.textContent = `Узкое: ${bottleneckOp} (${maxCycle}с)`;
+      bnBadge.style.color = maxCycle > 120 ? 'var(--red)' : 'var(--green)';
+
+      const vpp = k.batch1 ? (spaghettiDist * 4 + 480) : (spaghettiDist * 12 + 650);
+      document.getElementById('val-vpp').textContent = `${vpp.toFixed(1)} с (${(vpp/60).toFixed(1)} мин)`;
+    }
+
+    /* ========================================================
+       4. DISCRETE SIMULATION ENGINE (20 MIN SHIFT / 10 UNITS)
+       ======================================================== */
+    function stepSimulation(deltaSimSec) {
+      if (!simRunning || shiftCompleted) return;
+
+      simTimerSec += deltaSimSec;
+      if (!infiniteMode && simTimerSec >= SHIFT_LIMIT_SEC) {
+        simTimerSec = SHIFT_LIMIT_SEC;
+        shiftCompleted = true;
+        toggleSim();
+        if (goodUnitsCount >= PLAN_UNITS) {
+          showToast('🏁 Смена 20 минут завершена! План 10 шт выполнен! 🔥', false);
+        } else {
+          showToast(`🏁 Смена завершена. Сдано: ${goodUnitsCount} / ${PLAN_UNITS} шт.`, true);
+        }
+      }
+      formatTimer();
+
+      const k = getKaizenState();
+
+      // Workbenches
+      OPS_METADATA.forEach(op => {
+        const fsm = workbenchFSM[op.id];
+        const cycle = getEffectiveCycle(op.id);
+
+        if (fsm.blocked) {
+          if (fsm.outBuffer < 2) {
+            fsm.outBuffer++;
+            fsm.blocked = false;
+            fsm.working = false;
+            fsm.progressSec = 0;
+            soundDelivery();
+          }
+          return;
+        }
+
+        if (!fsm.working && fsm.outBuffer < 2) {
+          if (op.inputs.length === 1 && fsm.inBuffer > 0) {
+            fsm.inBuffer--;
+            fsm.working = true;
+            fsm.progressSec = 0;
+          } 
+          else if (op.id === 'OP-4') {
+            if ((fsm.inSlots['OP-2'] || 0) > 0 && (fsm.inSlots['OP-3'] || 0) > 0) {
+              fsm.inSlots['OP-2']--;
+              fsm.inSlots['OP-3']--;
+              fsm.working = true;
+              fsm.progressSec = 0;
+            }
+          } 
+          else if (op.id === 'OP-7') {
+            if ((fsm.inSlots['OP-4'] || 0) > 0 && (fsm.inSlots['OP-5'] || 0) > 0 && (fsm.inSlots['OP-6'] || 0) > 0) {
+              fsm.inSlots['OP-4']--;
+              fsm.inSlots['OP-5']--;
+              fsm.inSlots['OP-6']--;
+              fsm.working = true;
+              fsm.progressSec = 0;
+            }
+          }
+        }
+
+        if (fsm.working) {
+          fsm.progressSec += deltaSimSec;
+          if (fsm.progressSec >= cycle) {
+            if (fsm.outBuffer >= 2) {
+              fsm.blocked = true;
+              return;
+            }
+
+            fsm.working = false;
+            fsm.progressSec = 0;
+
+            let isDefect = false;
+            if (!k.zeroDefects) {
+              if (op.id === 'OP-6' && Math.random() < 0.20) isDefect = true;
+              if (op.id === 'OP-8' && Math.random() < 0.15) isDefect = true;
+            }
+
+            if (isDefect) {
+              scrapUnitsCount++;
+              soundDefect();
+              showToast(`💀 Брак на ${op.id}! Деталь списана, склад выдаст замену.`, true);
+            } else {
+              fsm.outBuffer++;
+              soundDelivery();
+            }
+          }
+        }
+      });
+
+      stepCourier(deltaSimSec);
+      sync3DVisualBuffers();
+      updateDashboard();
+    }
+
+    function hasInputCapacity(stationId, fromOp = null) {
+      if (stationId === 'CLIENT') return true;
+      const fsm = workbenchFSM[stationId];
+      if (!fsm) return false;
+
+      if (stationId === 'OP-4' && fromOp) return (fsm.inSlots[fromOp] || 0) < 1;
+      if (stationId === 'OP-7' && fromOp) return (fsm.inSlots[fromOp] || 0) < 1;
+      return fsm.inBuffer < 2;
+    }
+
+    function stepCourier(dt) {
+      const k = getKaizenState();
+      const maxCargo = k.batch1 ? 1 : 2;
+
+      if (courierState.loadingTimerSec > 0) {
+        courierState.loadingTimerSec -= dt;
+        return;
+      }
+
+      const dx = courierState.targetX - courierState.x;
+      const dz = courierState.targetZ - courierState.z;
+      const dist = Math.hypot(dx, dz);
+      const step = courierState.speedMps * dt * 2.8;
+
+      if (dist > step && dist > 0.05) {
+        courierState.x += (dx / dist) * step;
+        courierState.z += (dz / dist) * step;
+        courierState.statusText = `🏎️ Дрифт к ${courierState.targetNode}`;
+      } else {
+        courierState.x = courierState.targetX;
+        courierState.z = courierState.targetZ;
+        handleCourierArrival(courierState.targetNode);
+      }
+
+      document.getElementById('courier-state-badge').textContent = courierState.statusText;
+      document.getElementById('courier-cargo-count').textContent = `${courierState.carryingCargo.length}/${maxCargo} шт`;
+      document.getElementById('courier-task-desc').textContent = courierState.statusText;
+
+      const cargoDetailsElem = document.getElementById('courier-cargo-details');
+      if (courierState.carryingCargo.length === 0) {
+        cargoDetailsElem.innerHTML = `<span style="color: var(--text-muted); font-style: italic;">Тележка пуста</span>`;
+      } else {
+        cargoDetailsElem.innerHTML = courierState.carryingCargo.map(c => 
+          `<span class="courier-cargo-pill">📦 ${c.desc} ➔ ${c.to}</span>`
+        ).join(' ');
+      }
+    }
+
+    function handleCourierArrival(node) {
+      const k = getKaizenState();
+      const maxCargo = k.batch1 ? 1 : 2;
+
+      // Warehouse loading: feed all 4 entry branches independently
+      if (node === 'WH') {
+        courierState.loadingTimerSec = 1.0;
+
+        while (courierState.carryingCargo.length < maxCargo) {
+          const rawDestinations = ['OP-1', 'OP-3', 'OP-5', 'OP-6'];
+          let bestDest = null;
+          let minScore = 999;
+
+          rawDestinations.forEach(d => {
+            if (canIssueRawFor(d)) {
+              const fsm = workbenchFSM[d];
+              const stock = fsm.inBuffer + (fsm.working ? 1 : 0);
+              const inTransit = courierState.carryingCargo.filter(c => c.to === d).length;
+              if (stock + inTransit < 2) {
+                const score = (stock + inTransit + 1) * (d === 'OP-1' ? 0.4 : 1.0) + (rawSetsIssued[d] / 20.0);
+                if (score < minScore) {
+                  minScore = score;
+                  bestDest = d;
+                }
+              }
+            }
+          });
+
+          if (bestDest) {
+            rawSetsIssued[bestDest]++;
+            courierState.carryingCargo.push({ type: 'raw', from: 'WH', to: bestDest, desc: `Сырье для ${bestDest}` });
+            soundDelivery();
+          } else {
+            break;
+          }
+        }
+
+        if (courierState.carryingCargo.length > 0) {
+          const first = courierState.carryingCargo[0].to;
+          courierState.targetNode = first;
+          courierState.targetX = currentTablePos[first].x;
+          courierState.targetZ = currentTablePos[first].z;
+          courierState.statusText = `Доставка на ${first}`;
+          return;
+        }
+      }
+
+      // Workstation arrival
+      if (node.startsWith('OP-')) {
+        const fsm = workbenchFSM[node];
+        courierState.loadingTimerSec = 0.9;
+
+        // 1. Unload cargo destined for this table
+        const rem = [];
+        courierState.carryingCargo.forEach(item => {
+          if (item.to === node) {
+            if (node === 'OP-4' || node === 'OP-7') fsm.inSlots[item.from] = Math.min(1, (fsm.inSlots[item.from] || 0) + 1);
+            else fsm.inBuffer = Math.min(2, fsm.inBuffer + 1);
+            soundDelivery();
+          } else {
+            rem.push(item);
+          }
+        });
+        courierState.carryingCargo = rem;
+
+        // 2. Pick up completed units if cart has room AND downstream has capacity
+        const meta = OPS_METADATA.find(o => o.id === node);
+        const nextDest = meta ? meta.outputTo : 'CLIENT';
+
+        while (courierState.carryingCargo.length < maxCargo && fsm.outBuffer > 0) {
+          if (hasInputCapacity(nextDest, node)) {
+            if (!infiniteMode && nextDest === 'CLIENT' && goodUnitsCount >= PLAN_UNITS) break;
+            fsm.outBuffer--;
+            courierState.carryingCargo.push({ type: 'semi', from: node, to: nextDest, desc: `Узел ${node}` });
+            soundDelivery();
+          } else {
+            break;
+          }
+        }
+
+        // Unblock if outBuffer opened up
+        if (fsm.blocked && fsm.outBuffer < 2) {
+          fsm.outBuffer++;
+          fsm.blocked = false;
+          fsm.working = false;
+          fsm.progressSec = 0;
+        }
+
+        if (courierState.carryingCargo.length > 0) {
+          const nxt = courierState.carryingCargo[0].to;
+          courierState.targetNode = nxt;
+          courierState.targetX = currentTablePos[nxt].x;
+          courierState.targetZ = currentTablePos[nxt].z;
+          courierState.statusText = `Рейс: ${node} ➔ ${nxt}`;
+          return;
+        }
+      }
+
+      // Client arrival
+      if (node === 'CLIENT') {
+        const finishedItems = courierState.carryingCargo.filter(i => i.to === 'CLIENT');
+        if (finishedItems.length > 0) {
+          goodUnitsCount += finishedItems.length;
+          courierState.carryingCargo = courierState.carryingCargo.filter(i => i.to !== 'CLIENT');
+          soundSale();
+          spawnConfetti();
+          playAirhorn();
+          if (goodUnitsCount >= PLAN_UNITS && !infiniteMode) {
+            goodUnitsCount = PLAN_UNITS;
+            showToast(`🎉 ПЛАН ВЫПОЛНЕН: ${PLAN_UNITS}/${PLAN_UNITS} годных изделий! Выручка 700 тыс. ₽!`, false);
+          } else {
+            showToast(`🤑 +70 000 ₽! Сдан РДГ #${goodUnitsCount}! 🔥`, false);
+          }
+        }
+      }
+
+      findNextCourierMission();
+    }
+
+    function findNextCourierMission() {
+      if (courierState.carryingCargo.length > 0) {
+        const dest = courierState.carryingCargo[0].to;
+        courierState.targetNode = dest;
+        courierState.targetX = currentTablePos[dest].x;
+        courierState.targetZ = currentTablePos[dest].z;
+        courierState.statusText = `Доставка на ${dest}`;
+        return;
+      }
+
+      const checkOrder = ['OP-10', 'OP-9', 'OP-8', 'OP-7', 'OP-4', 'OP-2', 'OP-3', 'OP-5', 'OP-6', 'OP-1'];
+      for (let opId of checkOrder) {
+        const fsm = workbenchFSM[opId];
+        if (fsm.outBuffer > 0 || fsm.blocked) {
+          const meta = OPS_METADATA.find(o => o.id === opId);
+          const nextDest = meta ? meta.outputTo : 'CLIENT';
+          if (nextDest === 'CLIENT' && goodUnitsCount >= PLAN_UNITS && !infiniteMode) continue;
+          if (hasInputCapacity(nextDest, opId)) {
+            courierState.targetNode = opId;
+            courierState.targetX = currentTablePos[opId].x;
+            courierState.targetZ = currentTablePos[opId].z;
+            courierState.statusText = `Забор с ${opId}`;
+            return;
+          }
+        }
+      }
+
+      const rawStations = ['OP-1', 'OP-3', 'OP-5', 'OP-6'];
+      const needsRaw = rawStations.some(d => {
+        const f = workbenchFSM[d];
+        const inTransit = courierState.carryingCargo.filter(c => c.to === d).length;
+        return ((f.inBuffer + (f.working ? 1 : 0) + inTransit) < 2) && canIssueRawFor(d);
+      });
+
+      if (needsRaw) {
+        courierState.targetNode = 'WH';
+        courierState.targetX = currentTablePos['WH'].x;
+        courierState.targetZ = currentTablePos['WH'].z;
+        courierState.statusText = `На склад за сырьем`;
+        return;
+      }
+
+      courierState.targetNode = 'WH';
+      courierState.targetX = currentTablePos['WH'].x;
+      courierState.targetZ = currentTablePos['WH'].z;
+      courierState.statusText = `Линия на мази. Отдых`;
+    }
+
+    /* ========================================================
+       4b. CONTROL PANEL: CLOCK, SPEED, SCENARIOS, DRAG & POI
+       ======================================================== */
+    function toggleSim() {
+      if (!simRunning && shiftCompleted) {
+        resetSim(true);
+      }
+      simRunning = !simRunning;
+
+      const btnIcon = document.getElementById('sim-icon');
+      const btnText = document.getElementById('sim-text');
+      const btn = document.getElementById('sim-play-btn');
+
+      if (simRunning) {
+        btnIcon.className = 'fa-solid fa-pause';
+        btnText.textContent = 'Пауза';
+        btn.className = 'sim-btn btn-running';
+        showToast('⚡ Симуляция смены запущена');
+      } else {
+        btnIcon.className = 'fa-solid fa-play';
+        btnText.textContent = 'Старт';
+        btn.className = 'sim-btn';
+      }
+    }
+
+    function resetSim(silent = false) {
+      if (simRunning) toggleSim();
+      simTimerSec = 0;
+      goodUnitsCount = 0;
+      scrapUnitsCount = 0;
+      rawSetsIssued['OP-1'] = 0;
+      rawSetsIssued['OP-3'] = 0;
+      rawSetsIssued['OP-5'] = 0;
+      rawSetsIssued['OP-6'] = 0;
+      shiftCompleted = false;
+
+      const k = getKaizenState();
+      const hasInitialWip = k.initialWip;
+
+      OPS_METADATA.forEach(op => {
+        workbenchFSM[op.id] = {
+          inBuffer: 0,
+          working: hasInitialWip,
+          progressSec: 0,
+          outBuffer: 0,
+          blocked: false,
+          inSlots: {}
+        };
+      });
+
+      if (hasInitialWip) {
+        workbenchFSM['OP-4'].inSlots['OP-3'] = 1;
+        workbenchFSM['OP-7'].inSlots['OP-5'] = 1;
+        workbenchFSM['OP-7'].inSlots['OP-6'] = 1;
+      }
+
+      courierState.x = currentTablePos['WH'].x;
+      courierState.z = currentTablePos['WH'].z;
+      courierState.targetX = currentTablePos['WH'].x;
+      courierState.targetZ = currentTablePos['WH'].z;
+      courierState.targetNode = 'WH';
+      courierState.carryingCargo = [];
+      courierState.statusText = 'Сброшено';
+      courierState.loadingTimerSec = 0;
+
+      formatTimer();
+      sync3DVisualBuffers();
+      updateDashboard();
+      if (!silent) {
+        showToast(hasInitialWip ? '📦 Линия сброшена: штатный задел 36 тыс. ₽' : '🧊 Линия сброшена: цех пуст (холодный пуск)');
+      }
+    }
+
+    function setSpeed(spd, btn) {
+      simSpeed = spd;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-speed'));
+      if (btn) btn.classList.add('active-speed');
+      const hdr = document.getElementById('hdr-speed');
+      if (hdr) hdr.textContent = `🚀 СКОРОСТЬ: ${spd}x TURBO`;
+      showToast(`⚡ Скорость симуляции: ${spd}x`);
+    }
+
+    function formatTimer() {
+      const m = Math.floor(simTimerSec / 60).toString().padStart(2, '0');
+      const s = Math.floor(simTimerSec % 60).toString().padStart(2, '0');
+      const el = document.getElementById('sim-clock');
+      if (el) el.textContent = `${m}:${s} / ${infiniteMode ? '∞' : '20:00'}`;
+    }
+
+    function setScenario(scen) {
+      const isToBe = (scen === 'TO_BE');
+      document.getElementById('btn-as-is').className = isToBe ? 'scenario-btn' : 'scenario-btn active-as-is';
+      document.getElementById('btn-to-be').className = isToBe ? 'scenario-btn active-to-be' : 'scenario-btn';
+
+      document.getElementById('k-tool-op8').checked = isToBe;
+      document.getElementById('k-cell-356').checked = isToBe;
+      document.getElementById('k-batch-1').checked = isToBe;
+      document.getElementById('k-clean-5s').checked = isToBe;
+      document.getElementById('k-quality-zero').checked = isToBe;
+      document.getElementById('k-initial-wip').checked = isToBe;
+
+      const targetPosMap = isToBe ? POS_TO_BE : POS_AS_IS;
+      Object.entries(targetPosMap).forEach(([id, pos]) => {
+        currentTablePos[id].x = pos.x;
+        currentTablePos[id].z = pos.z;
+        if (tableMeshes[id]) {
+          tableMeshes[id].position.x = pos.x;
+          tableMeshes[id].position.z = pos.z;
+        }
+      });
+
+      const wasRunning = simRunning;
+      rebuildSpaghettiLine();
+      resetSim(true);
+      if (wasRunning) {
+        simRunning = true;
+        document.getElementById('sim-icon').className = 'fa-solid fa-pause';
+        document.getElementById('sim-text').textContent = 'Пауза';
+        document.getElementById('sim-play-btn').className = 'sim-btn btn-running';
+      }
+      showToast(isToBe
+        ? '🚀 TO-BE: U-поток, задел 36 тыс. ₽, план 10 изделий!'
+        : '💀 AS-IS: хаос, партия 2 шт, убыток и боль!', !isToBe);
+    }
+
+    function applyCustomKaizen() {
+      const k = getKaizenState();
+      const allChecked = Object.values(k).every(Boolean);
+      const noneChecked = Object.values(k).every(v => !v);
+
+      if (allChecked) {
+        document.getElementById('btn-as-is').className = 'scenario-btn';
+        document.getElementById('btn-to-be').className = 'scenario-btn active-to-be';
+      } else if (noneChecked) {
+        document.getElementById('btn-as-is').className = 'scenario-btn active-as-is';
+        document.getElementById('btn-to-be').className = 'scenario-btn';
+      } else {
+        document.getElementById('btn-as-is').className = 'scenario-btn';
+        document.getElementById('btn-to-be').className = 'scenario-btn';
+      }
+
+      if (simTimerSec === 0 && !simRunning) {
+        resetSim(true);
+      } else {
+        sync3DVisualBuffers();
+        updateDashboard();
+      }
+    }
+
+    /* ---------- DRAG & DROP + POI CARD ---------- */
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let draggedObject = null;
+    const dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    const dragIntersection = new THREE.Vector3();
+
+    function toggleDragMode() {
+      dragModeActive = !dragModeActive;
+      const btn = document.getElementById('btn-drag-mode');
+      const banner = document.getElementById('drag-banner');
+
+      if (dragModeActive) {
+        btn.className = 'ctrl-btn active-mode';
+        banner.style.display = 'flex';
+        if (controls) controls.enabled = false;
+        closePoi();
+        showToast('✋ Режим расстановки: тащите столы мышкой!');
+      } else {
+        btn.className = 'ctrl-btn';
+        banner.style.display = 'none';
+        if (controls) controls.enabled = true;
+        showToast('🎥 Камера разблокирована');
+      }
+    }
+
+    function onPointerDown(e) {
+      const drawer = document.getElementById('poi-card');
+      const leftPanel = document.getElementById('left-panel');
+      const rightPanel = document.getElementById('right-panel');
+      const header = document.querySelector('.top-header');
+
+      if (drawer.contains(e.target) || leftPanel.contains(e.target) ||
+          rightPanel.contains(e.target) || header.contains(e.target)) {
+        return;
+      }
+
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(scene.children, true);
+      let hitTable = null;
+
+      for (const hit of intersects) {
+        let parent = hit.object.parent;
+        while (parent && (!parent.userData || !parent.userData.id)) {
+          parent = parent.parent;
+        }
+        if (parent && parent.userData && parent.userData.id) {
+          hitTable = parent;
+          break;
+        }
+      }
+
+      if (hitTable) {
+        if (dragModeActive) {
+          draggedObject = hitTable;
+          soundDelivery();
+        } else {
+          showPoi(hitTable.userData.id, e.clientX, e.clientY);
+        }
+      } else {
+        closePoi();
+      }
+    }
+
+    function onPointerMove(e) {
+      if (!dragModeActive || !draggedObject) return;
+
+      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+
+      if (raycaster.ray.intersectPlane(dragPlane, dragIntersection)) {
+        const clampedX = Math.max(-2.5, Math.min(2.5, dragIntersection.x));
+        const clampedZ = Math.max(-8.5, Math.min(8.5, dragIntersection.z));
+
+        draggedObject.position.x = clampedX;
+        draggedObject.position.z = clampedZ;
+
+        const id = draggedObject.userData.id;
+        currentTablePos[id].x = clampedX;
+        currentTablePos[id].z = clampedZ;
+
+        rebuildSpaghettiLine();
+        updateDashboard();
+      }
+    }
+
+    function onPointerUp() {
+      if (draggedObject) {
+        soundDelivery();
+        draggedObject = null;
+      }
+    }
+
+    function showPoi(id, mouseX, mouseY) {
+      const drawer = document.getElementById('poi-card');
+      const title = document.getElementById('poi-card-title');
+      const body = document.getElementById('poi-card-body');
+
+      const op = OPS_METADATA.find(o => o.id === id);
+      if (op) {
+        const cycle = getEffectiveCycle(op.id);
+        const load = Math.round((cycle / 120) * 100);
+        const fsm = workbenchFSM[op.id];
+
+        let stateDesc = '💤 Голодание (нет входящих деталей)';
+        let inBadgesHtml = '';
+
+        if (op.id === 'OP-4') {
+          const hasOp2 = (fsm.inSlots['OP-2'] || 0) > 0;
+          const hasOp3 = (fsm.inSlots['OP-3'] || 0) > 0;
+          inBadgesHtml = `
+            <div style="margin-top: 4px;">
+              <span class="slot-pill ${hasOp2 ? 'slot-pill-ok' : 'slot-pill-miss'}">Корпус (ОП-2): ${hasOp2 ? '1/1 ✔️' : '0/1 ❌'}</span>
+              <span class="slot-pill ${hasOp3 ? 'slot-pill-ok' : 'slot-pill-miss'}">Дроссель (ОП-3): ${hasOp3 ? '1/1 ✔️' : '0/1 ❌'}</span>
+            </div>
+          `;
+          if (fsm.working) stateDesc = `⚙️ В работе (${Math.round(cycle - fsm.progressSec)} с)`;
+          else if (fsm.blocked) stateDesc = '🛑 Блокировка (выход 2/2 полон)';
+          else if (hasOp2 && hasOp3) stateDesc = '📦 Все компоненты в сборе, готов к работе';
+          else if (!hasOp2 && !hasOp3) stateDesc = '💤 Голодание (ждет ОП-2 и ОП-3)';
+          else stateDesc = `⏳ Ожидание: ${!hasOp2 ? 'Корпус с ОП-2' : 'Дроссель с ОП-3'}`;
+        } else if (op.id === 'OP-7') {
+          const hasOp4 = (fsm.inSlots['OP-4'] || 0) > 0;
+          const hasOp5 = (fsm.inSlots['OP-5'] || 0) > 0;
+          const hasOp6 = (fsm.inSlots['OP-6'] || 0) > 0;
+          inBadgesHtml = `
+            <div style="margin-top: 4px;">
+              <span class="slot-pill ${hasOp4 ? 'slot-pill-ok' : 'slot-pill-miss'}">Предсборка (ОП-4): ${hasOp4 ? '1/1 ✔️' : '0/1 ❌'}</span>
+              <span class="slot-pill ${hasOp5 ? 'slot-pill-ok' : 'slot-pill-miss'}">Мембрана (ОП-5): ${hasOp5 ? '1/1 ✔️' : '0/1 ❌'}</span>
+              <span class="slot-pill ${hasOp6 ? 'slot-pill-ok' : 'slot-pill-miss'}">Пробка (ОП-6): ${hasOp6 ? '1/1 ✔️' : '0/1 ❌'}</span>
+            </div>
+          `;
+          if (fsm.working) stateDesc = `⚙️ В работе (${Math.round(cycle - fsm.progressSec)} с)`;
+          else if (fsm.blocked) stateDesc = '🛑 Блокировка (выход 2/2 полон)';
+          else if (hasOp4 && hasOp5 && hasOp6) stateDesc = '📦 Все 3 компонента в сборе, готов к работе';
+          else {
+            const miss = [];
+            if (!hasOp4) miss.push('Предсборка (ОП-4)');
+            if (!hasOp5) miss.push('Мембрана (ОП-5)');
+            if (!hasOp6) miss.push('Пробка (ОП-6)');
+            stateDesc = `⏳ Ожидание доставки: ${miss.join(', ')}`;
+          }
+        } else {
+          inBadgesHtml = `<div>Заготовки: <strong>${fsm.inBuffer} / 2</strong> шт</div>`;
+          if (fsm.working) stateDesc = `⚙️ В работе (${Math.round(cycle - fsm.progressSec)} с)`;
+          else if (fsm.blocked) stateDesc = '🛑 Блокировка (выход 2/2 полон)';
+          else if (fsm.inBuffer > 0) stateDesc = '📦 Заготовки готовы к сборке';
+        }
+
+        title.textContent = `${op.id}: ${op.name}`;
+        body.innerHTML = `
+          <div style="margin-bottom: 6px;">
+            <strong>Длительность операции:</strong> <span style="font-family: monospace; font-size: 13px; color: var(--accent);">${cycle} сек</span>
+            (Загрузка: <strong style="color: ${load > 100 ? 'var(--red)' : (load >= 85 ? 'var(--yellow)' : 'var(--green)')};">${load}%</strong> к такту 120 с)
+          </div>
+          <div style="margin-bottom: 6px;">
+            <strong>Статус:</strong> <span>${stateDesc}</span>
+          </div>
+
+          <div class="poi-buffers-grid">
+            <div class="poi-buf-col poi-buf-in">
+              <div><strong>ВХОД</strong></div>
+              ${inBadgesHtml}
+            </div>
+            <div class="poi-buf-col poi-buf-work">
+              <div><strong>В РАБОТЕ</strong></div>
+              <div style="font-size: 13px; font-weight: bold; margin-top: 2px;">${fsm.working ? '1 / 1' : '0 / 1'}</div>
+              <div>на сборке</div>
+            </div>
+            <div class="poi-buf-col poi-buf-out">
+              <div><strong>ВЫХОД</strong></div>
+              <div style="font-size: 13px; font-weight: bold; margin-top: 2px;">${fsm.outBuffer} / 2</div>
+              <div>готово</div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 4px;">
+            <strong>Штатный инструмент:</strong> ${op.tools}
+          </div>
+          <div style="margin-bottom: 4px; color: #f87171;">
+            <strong>Потери 5S:</strong> ${op.loss5s}
+          </div>
+          <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px;">
+            💡 <em>Кликни в пустое место зала, чтобы закрыть карточку.</em>
+          </div>
+        `;
+      } else if (id === 'WH') {
+        title.textContent = 'Склад комплектующих (WH)';
+        body.innerHTML = `
+          <div><strong>Назначение:</strong> Хранение деталей для 38 позиций узла Пилот РДГ.</div>
+          <div style="margin-top: 4px;"><strong>Правило логиста:</strong> Выдача заготовок партиями по 2 шт (AS-IS) или 1 шт (TO-BE). Запрет переноски деталей в руках!</div>
+          <div style="margin-top: 4px; color: #38bdf8;"><strong>Стоимость материалов:</strong> 15 000 ₽ за 1 сборочный комплект узла.</div>
+          <div style="margin-top: 8px;"><strong>Выдано заготовок по 4 веткам входа:</strong></div>
+          <div style="margin-top: 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 11px;">
+            <span class="slot-pill slot-pill-ok">Корпуса (ОП-1): ${rawSetsIssued['OP-1']} / ${PLAN_UNITS}</span>
+            <span class="slot-pill slot-pill-ok">Дроссели (ОП-3): ${rawSetsIssued['OP-3']} / ${PLAN_UNITS}</span>
+            <span class="slot-pill slot-pill-ok">Мембраны (ОП-5): ${rawSetsIssued['OP-5']} / ${PLAN_UNITS}</span>
+            <span class="slot-pill slot-pill-ok">Пробки (ОП-6): ${rawSetsIssued['OP-6']} / ${PLAN_UNITS}</span>
+          </div>
+        `;
+      } else if (id === 'CLIENT') {
+        title.textContent = 'Зона клиента / Контроль отгрузки';
+        body.innerHTML = `
+          <div><strong>План выпуска смены:</strong> ${PLAN_UNITS} годных изделий за 20 минут.</div>
+          <div style="margin-top: 4px;"><strong>Цена закупки:</strong> 70 000 ₽ / годное изделие.</div>
+          <div style="margin-top: 4px; color: var(--green);"><strong>Факт сдачи:</strong> ${goodUnitsCount} принятых изделий (выручка: ${(goodUnitsCount * 70).toLocaleString('ru-RU')} ₽).</div>
+        `;
+      }
+
+      if (mouseX !== undefined && mouseY !== undefined) {
+        let left = mouseX + 16;
+        let top = mouseY + 16;
+
+        if (left + 410 > window.innerWidth) {
+          left = Math.max(10, mouseX - 410);
+        }
+        if (top + 330 > window.innerHeight) {
+          top = Math.max(10, mouseY - 330);
+        }
+
+        drawer.style.left = `${left}px`;
+        drawer.style.top = `${top}px`;
+      }
+
+      drawer.style.display = 'block';
+    }
+
+    function closePoi() {
+      const drawer = document.getElementById('poi-card');
+      if (drawer) drawer.style.display = 'none';
+    }
+
+    /* ========================================================
+       4c. INFINITE MODE, ACID FLASH, PHONK LAB & HOTKEYS
+       ======================================================== */
+    let infiniteMode = false;
+
+    function toggleInfinite() {
+      infiniteMode = !infiniteMode;
+      const btn = document.getElementById('btn-infinite');
+      if (btn) btn.className = 'ctrl-btn' + (infiniteMode ? ' active-inf' : '');
+      formatTimer();
+      updateDashboard();
+      showToast(infiniteMode
+        ? '∞ БЕСКОНЕЧНЫЙ ГРИНД ВКЛЮЧЕН! Смена не кончится никогда!'
+        : '⏱ Режим смены: 20 минут и план 10 изделий', !infiniteMode);
+    }
+
+    /* ---------- ACID GREEN FLASH ---------- */
+    let acidFlashTimer = null;
+
+    function triggerAcidFlash(durationMs = 3000) {
+      document.body.classList.add('acid-mode');
+      if (scene) {
+        scene.background.setHex(0x39ff14);
+        if (scene.fog) scene.fog.color.setHex(0x39ff14);
+      }
+      playTone(880, 0.18, 'square', 0.08);
+      spawnFloatingText('☢️ КИСЛОТА!', window.innerWidth / 2, window.innerHeight * 0.22, '#39ff14');
+      if (acidFlashTimer) clearTimeout(acidFlashTimer);
+      acidFlashTimer = setTimeout(() => {
+        document.body.classList.remove('acid-mode');
+        if (scene) {
+          scene.background.setHex(0x05050f);
+          if (scene.fog) scene.fog.color.setHex(0x05050f);
+        }
+      }, durationMs);
+    }
+
+    function scheduleAcidFlash() {
+      setTimeout(() => {
+        if (!document.body.classList.contains('acid-mode')) {
+          triggerAcidFlash(2200 + Math.random() * 2200);
+        }
+        scheduleAcidFlash();
+      }, 12000 + Math.random() * 28000);
+    }
+
+    /* ---------- PHONK LAB: PIANO ROLL + DRUMS ---------- */
+    const LAB_BPM = 143;
+    const LAB_STEP_MS = (60 / LAB_BPM / 4) * 1000; // 16-е доли
+
+    const LAB_MELODY = [
+      { id: 'B5',  freq: 987.77 },
+      { id: 'A#5', freq: 932.33 },
+      { id: 'A5',  freq: 880.00 },
+      { id: 'G#5', freq: 830.61 },
+      { id: 'G5',  freq: 783.99 },
+      { id: 'F#5', freq: 739.99 },
+      { id: 'F5',  freq: 698.46 },
+      { id: 'E5',  freq: 659.25 },
+      { id: 'D#5', freq: 622.25 },
+      { id: 'D5',  freq: 587.33 },
+      { id: 'C#5', freq: 554.37 },
+      { id: 'C5',  freq: 523.25 }
+    ];
+
+    const LAB_LANES = [
+      ...LAB_MELODY.map(n => ({ id: n.id, label: n.id, freq: n.freq, color: '#ec4899', drum: false })),
+      { id: 'kick',  label: 'KICK',  color: '#f43f5e', drum: true },
+      { id: 'hat',   label: 'HAT',   color: '#38bdf8', drum: true },
+      { id: 'snare', label: 'SNARE', color: '#a855f7', drum: true }
+    ];
+
+    function makeLabPattern() {
+      const p = {};
+      LAB_MELODY.forEach(n => { p[n.id] = new Array(16).fill(0); });
+      p.kick = new Array(16).fill(0);
+      p.hat = new Array(16).fill(0);
+      p.snare = new Array(16).fill(0);
+
+      [0, 10].forEach(s => { p['C5'][s] = 1; });
+      [2, 8, 14].forEach(s => { p['D#5'][s] = 1; });
+      [4, 12].forEach(s => { p['G5'][s] = 1; });
+      p['A#5'][6] = 1;
+
+      [0, 3, 6, 10, 12].forEach(s => { p.kick[s] = 1; });
+      [0, 2, 4, 6, 8, 10, 12, 14].forEach(s => { p.hat[s] = 1; });
+      [4, 12].forEach(s => { p.snare[s] = 1; });
+      return p;
+    }
+
+    let labPattern = makeLabPattern();
+    let labPlaying = false;
+    let labStep = 0;
+    let labTimer = null;
+    let labNoiseBuf = null;
+
+    function buildLabGrid() {
+      const grid = document.getElementById('lab-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      LAB_LANES.forEach(lane => {
+        const row = document.createElement('div');
+        row.className = 'lab-row' + (lane.drum ? ' lab-row-drum' : '');
+
+        const label = document.createElement('button');
+        label.className = 'lab-label';
+        label.textContent = lane.label;
+        label.title = lane.drum ? lane.label : `Проиграть ${lane.label}`;
+        if (!lane.drum) {
+          label.addEventListener('click', () => playLabNote(lane.freq));
+        }
+        row.appendChild(label);
+
+        for (let i = 0; i < 16; i++) {
+          const cell = document.createElement('div');
+          cell.className = 'lab-cell' + (i % 4 === 0 ? ' beat' : '') + (labPattern[lane.id][i] ? ' on' : '');
+          cell.dataset.lane = lane.id;
+          cell.dataset.step = String(i);
+          cell.style.setProperty('--lane-color', lane.color);
+          cell.addEventListener('click', () => {
+            labPattern[lane.id][i] = labPattern[lane.id][i] ? 0 : 1;
+            cell.classList.toggle('on', !!labPattern[lane.id][i]);
+            if (labPattern[lane.id][i]) {
+              if (lane.drum) playDrum(lane.id);
+              else playLabNote(lane.freq);
+            }
+          });
+          row.appendChild(cell);
+        }
+
+        grid.appendChild(row);
+      });
+    }
+
+    function refreshLabCells() {
+      document.querySelectorAll('#lab-grid .lab-cell').forEach(cell => {
+        const lane = cell.dataset.lane;
+        const step = Number(cell.dataset.step);
+        cell.classList.toggle('on', !!(labPattern[lane] && labPattern[lane][step]));
+      });
+    }
+
+    function clearLab() {
+      Object.keys(labPattern).forEach(k => { labPattern[k] = new Array(16).fill(0); });
+      refreshLabCells();
+      showToast('🧹 Паттерн очищен');
+    }
+
+    function randomizeLab() {
+      Object.keys(labPattern).forEach(k => { labPattern[k] = new Array(16).fill(0); });
+      const scale = ['C5', 'D#5', 'F5', 'G5', 'A#5'];
+      for (let i = 0; i < 9; i++) {
+        const note = scale[Math.floor(Math.random() * scale.length)];
+        labPattern[note][Math.floor(Math.random() * 16)] = 1;
+      }
+      [0, 2, 4, 6, 8, 10, 12, 14].forEach(s => {
+        if (Math.random() < 0.85) labPattern.hat[s] = 1;
+      });
+      for (let i = 0; i < 5; i++) {
+        labPattern.kick[Math.floor(Math.random() * 16)] = 1;
+      }
+      labPattern.snare[4] = 1;
+      if (Math.random() < 0.6) labPattern.snare[12] = 1;
+      refreshLabCells();
+      showToast('🎲 Новый фонк сгенерирован!');
+    }
+
+    function loadDefaultLab() {
+      labPattern = makeLabPattern();
+      refreshLabCells();
+      showToast('🎵 Дефолтный мемфис-фонк загружен!');
+    }
+
+    function playLabNote(freq) {
+      if (!soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const t = ctx.currentTime;
+      const o1 = ctx.createOscillator();
+      const o2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+      o1.type = 'sawtooth';
+      o2.type = 'square';
+      o1.frequency.setValueAtTime(freq, t);
+      o2.frequency.setValueAtTime(freq * 1.006, t);
+      gain.gain.setValueAtTime(0.085, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+      o1.connect(gain);
+      o2.connect(gain);
+      gain.connect(ctx.destination);
+      o1.start(t);
+      o2.start(t);
+      o1.stop(t + 0.24);
+      o2.stop(t + 0.24);
+    }
+
+    function getLabNoise() {
+      const ctx = getAudioContext();
+      if (!labNoiseBuf) {
+        labNoiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.5), ctx.sampleRate);
+        const data = labNoiseBuf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      }
+      return labNoiseBuf;
+    }
+
+    function playDrum(id) {
+      if (!soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const t = ctx.currentTime;
+
+      if (id === 'kick') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(155, t);
+        osc.frequency.exponentialRampToValueAtTime(38, t + 0.13);
+        gain.gain.setValueAtTime(0.5, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.32);
+      } else if (id === 'hat') {
+        const src = ctx.createBufferSource();
+        src.buffer = getLabNoise();
+        const hp = ctx.createBiquadFilter();
+        hp.type = 'highpass';
+        hp.frequency.value = 7600;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.11, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+        src.connect(hp);
+        hp.connect(gain);
+        gain.connect(ctx.destination);
+        src.start(t);
+        src.stop(t + 0.06);
+      } else if (id === 'snare') {
+        const src = ctx.createBufferSource();
+        src.buffer = getLabNoise();
+        const bp = ctx.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.frequency.value = 1800;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.16, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+        src.connect(bp);
+        bp.connect(gain);
+        gain.connect(ctx.destination);
+        src.start(t);
+        src.stop(t + 0.16);
+
+        const osc = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(180, t);
+        g2.gain.setValueAtTime(0.08, t);
+        g2.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+        osc.connect(g2);
+        g2.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.12);
+      }
+    }
+
+    function highlightLabStep(step) {
+      document.querySelectorAll('#lab-grid .lab-cell').forEach(cell => {
+        cell.classList.toggle('playing', Number(cell.dataset.step) === step);
+      });
+      const el = document.getElementById('lab-step-display');
+      if (el) el.textContent = `ШАГ: ${step + 1} / 16`;
+    }
+
+    function labTick() {
+      const step = labStep;
+      LAB_LANES.forEach(lane => {
+        if (labPattern[lane.id][step]) {
+          if (lane.drum) playDrum(lane.id);
+          else playLabNote(lane.freq);
+        }
+      });
+      highlightLabStep(step);
+      labStep = (labStep + 1) % 16;
+    }
+
+    function startLab() {
+      getAudioContext();
+      if (labTimer) clearInterval(labTimer);
+      labPlaying = true;
+      labStep = 0;
+      const btn = document.getElementById('lab-play-btn');
+      if (btn) btn.textContent = '⏸ СТОП';
+      labTick();
+      labTimer = setInterval(labTick, LAB_STEP_MS);
+    }
+
+    function stopLab() {
+      labPlaying = false;
+      if (labTimer) clearInterval(labTimer);
+      labTimer = null;
+      const btn = document.getElementById('lab-play-btn');
+      if (btn) btn.textContent = '▶ ИГРАТЬ';
+      document.querySelectorAll('#lab-grid .lab-cell.playing').forEach(c => c.classList.remove('playing'));
+    }
+
+    function toggleLab() {
+      if (labPlaying) stopLab();
+      else startLab();
+    }
+
+    /* ---------- METRONOME 143 BPM ---------- */
+    let metronomeOn = false;
+    let metroTimer = null;
+    let metroBeat = 0;
+
+    function playMetronomeClick(accent) {
+      if (!soundEnabled) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(accent ? 1800 : 1200, ctx.currentTime);
+      gain.gain.setValueAtTime(accent ? 0.11 : 0.06, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.05);
+    }
+
+    function metroTick() {
+      const accent = (metroBeat % 4 === 0);
+      playMetronomeClick(accent);
+      const dot = document.getElementById('metro-dot');
+      if (dot) {
+        dot.classList.toggle('beat-on', accent);
+        setTimeout(() => dot.classList.remove('beat-on'), 90);
+      }
+      metroBeat++;
+    }
+
+    function toggleMetronome() {
+      metronomeOn = !metronomeOn;
+      const btn = document.getElementById('metro-btn');
+      if (metronomeOn) {
+        getAudioContext();
+        metroBeat = 0;
+        metroTick();
+        metroTimer = setInterval(metroTick, 60000 / LAB_BPM);
+        if (btn) { btn.classList.add('on'); btn.innerHTML = '🥁 МЕТРОНОМ: ВКЛ<span id="metro-dot" class="metro-dot"></span>'; }
+        showToast(`🥁 Метроном ${LAB_BPM} BPM включен`);
+      } else {
+        if (metroTimer) clearInterval(metroTimer);
+        metroTimer = null;
+        if (btn) { btn.classList.remove('on'); btn.innerHTML = '🥁 МЕТРОНОМ: ВЫКЛ<span id="metro-dot" class="metro-dot"></span>'; }
+        showToast('🥁 Метроном выключен');
+      }
+    }
+
+    /* ---------- LAB MODAL ---------- */
+    function openPhonkLab() {
+      buildLabGrid();
+      const lab = document.getElementById('phonk-lab');
+      if (lab) lab.classList.add('show');
+      getAudioContext();
+    }
+
+    function closePhonkLab() {
+      const lab = document.getElementById('phonk-lab');
+      if (lab) lab.classList.remove('show');
+    }
+
+    /* ---------- HOTKEYS ---------- */
+    window.addEventListener('keydown', (e) => {
+      const tag = e.target && e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      switch (e.code) {
+        case 'Space':
+          e.preventDefault();
+          toggleSim();
+          break;
+        case 'KeyR':
+          resetSim();
+          break;
+        case 'KeyD':
+          toggleDragMode();
+          break;
+        case 'KeyG':
+          triggerAcidFlash(3500);
+          break;
+        case 'KeyM':
+          toggleMetronome();
+          break;
+        case 'KeyP':
+          openPhonkLab();
+          break;
+        case 'Escape':
+          closePhonkLab();
+          break;
+        case 'Digit1':
+          setSpeed(1, document.querySelectorAll('.speed-btn')[0]);
+          break;
+        case 'Digit2':
+          setSpeed(5, document.querySelectorAll('.speed-btn')[1]);
+          break;
+        case 'Digit3':
+          setSpeed(20, document.querySelectorAll('.speed-btn')[2]);
+          break;
+      }
+    });
+
+    /* ========================================================
+       5. THREE.JS 3D SCENE & DISCO CHAOS
+       ======================================================== */
+    let scene, camera, renderer, controls;
+    const tableMeshes = {};
+    let spaghettiLine = null;
+    let courierMesh = null;
+    let discoBall = null;
+    let discoLights = [];
+    let confettiParticles = [];
+    let jetFlame = null;
+
+    function init3D() {
+      const container = document.getElementById('viewport');
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x05050f);
+      scene.fog = new THREE.FogExp2(0x05050f, 0.025);
+
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 16, 13);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
+
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2.05;
+      controls.target.set(0, 0, 0);
+
+      const ambLight = new THREE.AmbientLight(0xffffff, 0.5);
+      scene.add(ambLight);
+
+      // Disco Spotlights
+      const colors = [0xff0055, 0x00ffcc, 0xffcc00, 0x9900ff];
+      colors.forEach((col, idx) => {
+        const spot = new THREE.SpotLight(col, 2.5, 30, Math.PI / 6, 0.4);
+        spot.position.set(Math.cos(idx * Math.PI/2) * 8, 12, Math.sin(idx * Math.PI/2) * 8);
+        scene.add(spot);
+        discoLights.push(spot);
+      });
+
+      // Hanging Spinning Disco Ball
+      const ballGeo = new THREE.SphereGeometry(0.7, 16, 16);
+      const ballMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.95, roughness: 0.1 });
+      discoBall = new THREE.Mesh(ballGeo, ballMat);
+      discoBall.position.set(0, 7.5, 0);
+      scene.add(discoBall);
+
+      buildWorkshop();
+      buildWorkbenches();
+      buildCourierCart();
+      rebuildSpaghettiLine();
+
+      window.addEventListener('resize', onWindowResize);
+      renderer.domElement.addEventListener('pointerdown', onPointerDown);
+      renderer.domElement.addEventListener('pointermove', onPointerMove);
+      renderer.domElement.addEventListener('pointerup', onPointerUp);
+
+      // Auto-start the shift with the current kaizen / initial WIP setup
+      simRunning = false;
+      resetSim(true);
+      simRunning = true;
+
+      animate();
+
+      // Random acid-green flashes across the shift
+      scheduleAcidFlash();
+    }
+
+    function buildWorkshop() {
+      const floorGeo = new THREE.PlaneGeometry(6.15, 18.40);
+      const floorMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.8, metalness: 0.2 });
+      const floorPlane = new THREE.Mesh(floorGeo, floorMat);
+      floorPlane.rotation.x = -Math.PI / 2;
+      floorPlane.receiveShadow = true;
+      scene.add(floorPlane);
+
+      const grid = new THREE.GridHelper(20, 20, 0xec4899, 0x1e293b);
+      grid.position.y = 0.01;
+      scene.add(grid);
+    }
+
+    function buildWorkbenches() {
+      const allNodes = [
+        { id: 'WH', name: 'СКЛАД' },
+        ...OPS_METADATA,
+        { id: 'CLIENT', name: 'КЛИЕНТ' }
+      ];
+
+      allNodes.forEach(node => {
+        const group = new THREE.Group();
+        const pos = currentTablePos[node.id] || { x: 0, z: 0 };
+        group.position.set(pos.x, 0, pos.z);
+
+        const isSpecial = (node.id === 'WH' || node.id === 'CLIENT');
+        const tableGeo = new THREE.BoxGeometry(1.0, 0.82, 0.7);
+        const tableMat = new THREE.MeshStandardMaterial({
+          color: node.id === 'WH' ? 0x0284c7 : (node.id === 'CLIENT' ? 0x8b5cf6 : (node.id === 'OP-8' ? 0xb91c1c : 0x334155)),
+          metalness: 0.4,
+          roughness: 0.4
+        });
+        const table = new THREE.Mesh(tableGeo, tableMat);
+        table.position.y = 0.41;
+        table.castShadow = true;
+        table.receiveShadow = true;
+        group.add(table);
+
+        const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), new THREE.MeshBasicMaterial({ color: 0x22c55e }));
+        beacon.position.set(0, 0.95, 0);
+        group.add(beacon);
+
+        // Dancing operator stickman
+        if (!isSpecial) {
+          const stickman = buildStickman();
+          stickman.position.set(0, 0.82, -0.22);
+          group.add(stickman);
+          group.userData.stickman = stickman;
+        }
+
+        const bufGroup = new THREE.Group();
+        group.add(bufGroup);
+
+        group.userData.id = node.id;
+        group.userData.beacon = beacon;
+        group.userData.bufGroup = bufGroup;
+        scene.add(group);
+        tableMeshes[node.id] = group;
+      });
+    }
+
+    function buildStickman() {
+      const man = new THREE.Group();
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.08, 12, 12), new THREE.MeshStandardMaterial({ color: 0xfbbf24 }));
+      head.position.y = 0.35;
+      man.add(head);
+
+      const body = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.22), new THREE.MeshStandardMaterial({ color: 0x3b82f6 }));
+      body.position.y = 0.18;
+      man.add(body);
+
+      const hat = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.08, 12), new THREE.MeshStandardMaterial({ color: 0xef4444 }));
+      hat.position.y = 0.44;
+      man.add(hat);
+      return man;
+    }
+
+    function buildCourierCart() {
+      const group = new THREE.Group();
+      const bodyMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(0.55, 0.25, 0.38),
+        new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.3, metalness: 0.7 })
+      );
+      bodyMesh.position.y = 0.2;
+      group.add(bodyMesh);
+
+      [-0.18, 0.18].forEach(x => {
+        [-0.18, 0.18].forEach(z => {
+          const w = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.05), new THREE.MeshBasicMaterial({ color: 0x111827 }));
+          w.rotation.x = Math.PI / 2;
+          w.position.set(x, 0.07, z);
+          group.add(w);
+        });
+      });
+
+      const flameGeo = new THREE.ConeGeometry(0.12, 0.35, 12);
+      flameGeo.rotateX(Math.PI / 2);
+      const flameMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, transparent: true, opacity: 0.85 });
+      jetFlame = new THREE.Mesh(flameGeo, flameMat);
+      jetFlame.position.set(0, 0.2, -0.32);
+      group.add(jetFlame);
+
+      scene.add(group);
+      courierMesh = group;
+    }
+
+    function rebuildSpaghettiLine() {
+      if (spaghettiLine) scene.remove(spaghettiLine);
+
+      const flowEdges = [
+        ['WH', 'OP-1'], ['OP-1', 'OP-2'], ['OP-2', 'OP-4'],
+        ['WH', 'OP-3'], ['OP-3', 'OP-4'],
+        ['WH', 'OP-5'], ['OP-5', 'OP-7'],
+        ['WH', 'OP-6'], ['OP-6', 'OP-7'],
+        ['OP-4', 'OP-7'], ['OP-7', 'OP-8'],
+        ['OP-8', 'OP-9'], ['OP-9', 'OP-10'],
+        ['OP-10', 'CLIENT']
+      ];
+
+      const points = [];
+      flowEdges.forEach(([from, to]) => {
+        const p1 = currentTablePos[from], p2 = currentTablePos[to];
+        if (p1 && p2) {
+          points.push(new THREE.Vector3(p1.x, 0.5, p1.z));
+          points.push(new THREE.Vector3(p2.x, 0.5, p2.z));
+        }
+      });
+
+      const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+      const lineMat = new THREE.LineBasicMaterial({ color: 0xec4899, linewidth: 3 });
+      spaghettiLine = new THREE.LineSegments(lineGeo, lineMat);
+      scene.add(spaghettiLine);
+    }
+
+    function sync3DVisualBuffers() {
+      OPS_METADATA.forEach(op => {
+        const meshGroup = tableMeshes[op.id];
+        if (!meshGroup) return;
+
+        const fsm = workbenchFSM[op.id];
+        const bufGroup = meshGroup.userData.bufGroup;
+
+        while (bufGroup.children.length > 0) {
+          bufGroup.remove(bufGroup.children[0]);
+        }
+
+        const boxGeo = new THREE.BoxGeometry(0.12, 0.1, 0.12);
+        const inZ = [-0.14, 0.14];
+        let totalIn = (op.id === 'OP-4') 
+          ? ((fsm.inSlots['OP-2']||0) + (fsm.inSlots['OP-3']||0))
+          : (op.id === 'OP-7' 
+              ? ((fsm.inSlots['OP-4']||0) + (fsm.inSlots['OP-5']||0) + (fsm.inSlots['OP-6']||0))
+              : fsm.inBuffer);
+
+        for (let i = 0; i < Math.min(2, totalIn); i++) {
+          const inBox = new THREE.Mesh(boxGeo, new THREE.MeshStandardMaterial({ color: 0x06b6d4 }));
+          inBox.position.set(-0.32, 0.88, inZ[i] || 0);
+          bufGroup.add(inBox);
+        }
+
+        if (fsm.working) {
+          const workBox = new THREE.Mesh(boxGeo, new THREE.MeshStandardMaterial({ 
+            color: 0xfacc15, emissive: 0xeab308, emissiveIntensity: 0.8 
+          }));
+          workBox.position.set(0, 0.88, 0);
+          workBox.rotation.y = Date.now() * 0.005;
+          bufGroup.add(workBox);
+        }
+
+        for (let i = 0; i < Math.min(2, fsm.outBuffer); i++) {
+          const outBox = new THREE.Mesh(boxGeo, new THREE.MeshStandardMaterial({ color: 0x22c55e }));
+          outBox.position.set(0.32, 0.88, inZ[i] || 0);
+          bufGroup.add(outBox);
+        }
+
+        if (fsm.blocked) meshGroup.userData.beacon.material.color.setHex(0xef4444);
+        else if (fsm.working) meshGroup.userData.beacon.material.color.setHex(0xfacc15);
+        else meshGroup.userData.beacon.material.color.setHex(0x22c55e);
+      });
+    }
+
+    function spawnConfetti() {
+      if (!scene) return;
+      const colors = [0xff0055, 0x00ffcc, 0xffcc00, 0x9900ff, 0x22c55e];
+      for (let i = 0; i < 40; i++) {
+        const geo = new THREE.BoxGeometry(0.08, 0.08, 0.02);
+        const mat = new THREE.MeshBasicMaterial({ color: colors[Math.floor(Math.random() * colors.length)] });
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.position.set(currentTablePos['CLIENT'].x, 1.2, currentTablePos['CLIENT'].z);
+        mesh.userData = {
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * 5 + 3,
+          vz: (Math.random() - 0.5) * 4,
+          rotX: Math.random() * 0.2,
+          rotY: Math.random() * 0.2,
+          life: 2.0
+        };
+        scene.add(mesh);
+        confettiParticles.push(mesh);
+      }
+    }
+
+    /* ========================================================
+       6. 360-DEGREE CAMERA BARREL ROLL (0.6s Exact)
+       ======================================================== */
+    function triggerCameraBarrelRoll() {
+      if (isRolling) return;
+      isRolling = true;
+      rollStartTime = performance.now();
+      playTone(440, 0.6, 'sawtooth', 0.15);
+      spawnFloatingText('🌀 360° БАРРЕЛЬ-РОЛЛ!', window.innerWidth/2, window.innerHeight/2, '#ec4899');
+    }
+
+    /* ========================================================
+       7. RANDOM ADHD CHAOTIC EVENT ROULETTE
+       ======================================================== */
+    const CHAOS_EVENTS = [
+      {
+        title: '🚨 НАЛОГОВАЯ ПРОВЕРКА!',
+        desc: 'Срочно прячем лишние ключи и заготовки под верстаки!',
+        fn: () => {
+          playSiren();
+          triggerScreenShake();
+          showToast('🚨 НАЛОГОВАЯ ПРОВЕРКА В ЦЕХЕ!', true);
+        }
+      },
+      {
+        title: '⚡ OVERDOSE РЕДБУЛЛА!',
+        desc: 'Логист и операторы выпили ящик энергетика! Скорость x3!',
+        fn: () => {
+          playAirhorn();
+          const prevSpeed = courierState.speedMps;
+          courierState.speedMps *= 2.5;
+          setTimeout(() => { courierState.speedMps = prevSpeed; }, 6000);
+          showToast('⚡ СКОРОСТЬ ПОВЫШЕНА НА 6 СЕКУНД! ⚡');
+        }
+      },
+      {
+        title: '🦆 НАШЕСТВИЕ РЕЗИНОВЫХ УТОК!',
+        desc: 'Склад захвачен уточками! Кря-кря-кря на все предприятие!',
+        fn: () => {
+          for (let i = 0; i < 5; i++) {
+            setTimeout(playQuack, i * 140);
+          }
+          showToast('🦆 500 УТОК ЗАБЛОКИРОВАЛИ СКЛАД!');
+        }
+      },
+      {
+        title: '🌪️ АНТИГРАВИТАЦИЯ!',
+        desc: 'В цеху отключилась земная гравитация! Верстаки парят!',
+        fn: () => {
+          antiGravityActive = !antiGravityActive;
+          playVineBoom();
+          showToast(antiGravityActive ? '🌪️ НЕВЕСОМОСТЬ ВКЛЮЧЕНА!' : 'Гравитация вернулась!');
+        }
+      },
+      {
+        title: '💸 ДОЖДЬ ИЗ БАКСОВ!',
+        desc: 'Клиент так доволен качеством РДГ, что раскидал чаевые!',
+        fn: () => {
+          playStonks();
+          spawnConfetti();
+          showToast('💸 КЛИЕНТ ПЕРЕВЕЛ ЧАЕВЫЕ +100,000 ₽!');
+        }
+      },
+      {
+        title: '🕺 ДИСКО-ТЕКТОНИК НА ОП-8!',
+        desc: 'Шуруповёрт Bosch вошел в резонанс и крутится под фонк!',
+        fn: () => {
+          playAirhorn();
+          triggerCameraBarrelRoll();
+          showToast('🕺 ТЕКТОНИК НА ОП-8!');
+        }
+      }
+    ];
+
+    function triggerRandomEvent() {
+      const ev = CHAOS_EVENTS[Math.floor(Math.random() * CHAOS_EVENTS.length)];
+      const banner = document.getElementById('event-banner');
+      document.getElementById('event-title').textContent = ev.title;
+      document.getElementById('event-desc').textContent = ev.desc;
+      banner.classList.add('show');
+      ev.fn();
+      setTimeout(() => banner.classList.remove('show'), 3200);
+    }
+
+    /* ========================================================
+       8. AUTOMATED SOUND & CHAOS LOOP (Every 1 to 4 Seconds)
+       ======================================================== */
+    function scheduleNextChaosAction() {
+      const delayMs = 1000 + Math.random() * 3000; // Random 1.0s to 4.0s
+      const indicator = document.getElementById('auto-sound-indicator');
+      if (indicator) {
+        indicator.textContent = `🔊 УДАР ЧЕРЕЗ ${(delayMs/1000).toFixed(1)}с...`;
+      }
+
+      setTimeout(() => {
+        const chaosSoundActions = [
+          playAirhorn,
+          playVineBoom,
+          playStonks,
+          playQuack,
+          playBruh,
+          playSiren,
+          triggerCameraBarrelRoll,
+          triggerRandomEvent
+        ];
+        const action = chaosSoundActions[Math.floor(Math.random() * chaosSoundActions.length)];
+        action();
+        scheduleNextChaosAction();
+      }, delayMs);
+    }
+
+    /* ========================================================
+       9. SIMULATION ANIMATION & CAMERA ROLL LOOP
+       ======================================================== */
+    let lastTimestamp = performance.now();
+
+    function animate(now = performance.now()) {
+      requestAnimationFrame(animate);
+
+      const dt = Math.min(0.1, (now - lastTimestamp) / 1000);
+      lastTimestamp = now;
+
+      if (controls && controls.enabled) controls.update();
+
+      // CAMERA 360-DEGREE BARREL ROLL (Exact 0.6 seconds)
+      if (isRolling) {
+        const elapsedSec = (now - rollStartTime) / 1000;
+        const progress = Math.min(1.0, elapsedSec / (rollDuration / 1000));
+        const rollAngle = progress * Math.PI * 2;
+        const viewDir = new THREE.Vector3().subVectors(controls.target, camera.position).normalize();
+        camera.up.set(0, 1, 0).applyAxisAngle(viewDir, rollAngle);
+        camera.lookAt(controls.target);
+        if (progress >= 1.0) {
+          isRolling = false;
+          camera.up.set(0, 1, 0);
+          camera.lookAt(controls.target);
+        }
+      }
+
+      // Discrete Sim Step
+      if (simRunning && !shiftCompleted) {
+        let remaining = dt * simSpeed;
+        const subStep = 0.2;
+        while (remaining > 0 && simRunning) {
+          const stepSize = Math.min(remaining, subStep);
+          stepSimulation(stepSize);
+          remaining -= stepSize;
+        }
+      }
+
+      // Courier
+      if (courierMesh) {
+        courierMesh.position.x = courierState.x;
+        courierMesh.position.z = courierState.z;
+        courierMesh.position.y = antiGravityActive ? Math.sin(now * 0.003) * 0.4 : 0;
+        if (jetFlame) {
+          jetFlame.scale.z = 0.8 + Math.random() * 0.6;
+        }
+      }
+
+      // Disco Ball & Spotlights
+      if (discoBall) {
+        discoBall.rotation.y += 0.04;
+      }
+      if (discoLights.length > 0) {
+        discoLights.forEach((light, i) => {
+          const t = now * 0.0025 + (i * Math.PI / 2);
+          light.target.position.set(Math.cos(t) * 4, 0, Math.sin(t) * 4);
+          light.target.updateMatrixWorld();
+        });
+      }
+
+      // Stickmen Dancing
+      const time = now * 0.009;
+      Object.values(tableMeshes).forEach(m => {
+        if (m.userData.stickman) {
+          m.userData.stickman.position.y = 0.82 + Math.abs(Math.sin(time)) * 0.08;
+          m.userData.stickman.rotation.y = Math.sin(time * 0.5) * 0.3;
+        }
+        if (antiGravityActive) {
+          m.position.y = Math.sin(time + m.position.x) * 0.5;
+        } else {
+          m.position.y = 0;
+        }
+      });
+
+      // Confetti physics
+      for (let i = confettiParticles.length - 1; i >= 0; i--) {
+        const p = confettiParticles[i];
+        p.position.x += p.userData.vx * dt;
+        p.position.y += p.userData.vy * dt;
+        p.position.z += p.userData.vz * dt;
+        p.userData.vy -= 9.8 * dt;
+        p.rotation.x += p.userData.rotX;
+        p.rotation.y += p.userData.rotY;
+        p.userData.life -= dt;
+        if (p.userData.life <= 0 || p.position.y < 0) {
+          scene.remove(p);
+          confettiParticles.splice(i, 1);
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    /* ========================================================
+       10. BOUNCING DVD LOGO
+       ======================================================== */
+    const dvd = document.getElementById('dvd-logo');
+    let dvdX = 100, dvdY = 100;
+    let dvdVx = 2.8, dvdVy = 2.8;
+    const dvdColors = ['#ec4899', '#06b6d4', '#10b981', '#facc15', '#a855f7', '#f43f5e'];
+
+    function updateDvd() {
+      dvdX += dvdVx;
+      dvdY += dvdVy;
+
+      const maxX = window.innerWidth - 70;
+      const maxY = window.innerHeight - 38;
+
+      let hit = false;
+      if (dvdX <= 0 || dvdX >= maxX) {
+        dvdVx = -dvdVx;
+        hit = true;
+      }
+      if (dvdY <= 60 || dvdY >= maxY) {
+        dvdVy = -dvdVy;
+        hit = true;
+      }
+
+      if (hit) {
+        const col = dvdColors[Math.floor(Math.random() * dvdColors.length)];
+        dvd.style.color = col;
+        dvd.style.borderColor = col;
+        dvd.style.boxShadow = `0 0 16px ${col}`;
+      }
+
+      dvd.style.left = `${dvdX}px`;
+      dvd.style.top = `${dvdY}px`;
+      requestAnimationFrame(updateDvd);
+    }
+
+    // Subway score counter ticker
+    let subScore = 69420;
+    setInterval(() => {
+      subScore += 17;
+      const el = document.getElementById('subway-score');
+      if (el) el.textContent = subScore;
+    }, 120);
+
+    // Startup
+    window.addEventListener('DOMContentLoaded', () => {
+      init3D();
+      updateDvd();
+      scheduleNextChaosAction();
+      startPhonkLoop();
+
+      // If running via file:// protocol, notify user about Error 153 bypass
+      if (window.location.protocol === 'file:') {
+        setTimeout(() => {
+          showToast('💡 При Error 153 нажми [🎮 3D Runner] или открой http://localhost:8080/adhd.html');
+        }, 1200);
+      }
+    });
+  </script>
+</body>
+</html>
