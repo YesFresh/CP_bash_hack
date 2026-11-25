@@ -576,24 +576,51 @@
       position: fixed;
       z-index: 180;
       display: none;
-      width: 280px;
-      height: 190px;
+      width: 310px;
+      height: 235px;
       overflow: hidden;
       border: 2px solid #67e8f9;
-      border-radius: 12px;
-      background: radial-gradient(ellipse at 50% 20%, #1d7d9a, #082f49 65%, #041525);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(34,211,238,0.45);
+      border-radius: 14px;
+      background: radial-gradient(ellipse at 50% 15%, #0e7490, #082f49 65%, #03111f);
+      box-shadow: 0 12px 34px rgba(0,0,0,0.75), 0 0 24px rgba(34,211,238,0.5);
       text-align: center;
     }
     .mermaid-window.show { display: block; }
     .mermaid-window .window-drag-handle {
-      padding: 7px;
-      background: rgba(3, 105, 161, 0.75);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 10px;
+      background: rgba(3, 105, 161, 0.85);
       font-size: 11px;
       font-weight: 900;
     }
-    .mermaid-scene { padding-top: 16px; font-size: 40px; }
-    .mermaid-scene small { display: block; font-size: 11px; color: #cffafe; }
+    .mermaid-stage {
+      position: relative;
+      height: calc(100% - 30px);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    #mermaid-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .mermaid-speech {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      padding: 4px 8px;
+      border-radius: 8px;
+      background: rgba(2, 6, 23, 0.78);
+      border: 1px solid rgba(103, 232, 249, 0.5);
+      color: #cffafe;
+      font-size: 10px;
+      font-weight: 800;
+      pointer-events: none;
+    }
     .bubble-overlay {
       position: fixed;
       inset: 0;
@@ -612,36 +639,327 @@
     @keyframes bubbleRise {
       to { transform: translateY(-110vh) translateX(24px); opacity: 0; }
     }
-    .scare-peek {
+
+    /* FOXY BEHIND SCREEN / PEEKING ANIMATRONIC */
+    .foxy-peek {
       position: fixed;
+      z-index: 470;
+      width: 150px;
+      height: 170px;
+      display: none;
+      cursor: pointer;
+      filter: drop-shadow(0 0 18px rgba(239, 68, 68, 0.85));
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      user-select: none;
+    }
+    .foxy-peek.show { display: block; }
+    .foxy-peek svg { width: 100%; height: 100%; overflow: visible; }
+    .foxy-speech {
+      position: absolute;
+      top: -26px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #dc2626;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 3px 8px;
+      border-radius: 8px;
+      white-space: nowrap;
+      border: 1px solid #fecaca;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+    .foxy-jumpscare {
+      position: fixed;
+      inset: 0;
+      z-index: 950;
       display: none;
       align-items: center;
       justify-content: center;
+      background: radial-gradient(circle, rgba(127, 29, 29, 0.78), rgba(0, 0, 0, 0.9));
       pointer-events: none;
-      border-radius: 16px;
-      background: radial-gradient(circle, rgba(127,29,29,0.92), rgba(15,23,42,0.8) 65%, transparent);
-      font-size: clamp(50px, 8vw, 110px);
-      filter: drop-shadow(0 0 20px #ef4444);
-      animation: scarePop 0.55s ease-out both;
     }
-    .scare-peek.show { display: flex; }
-    @keyframes scarePop {
-      0% { opacity: 0; transform: scale(0.1); }
-      18% { opacity: 1; transform: scale(1.15); }
-      100% { opacity: 0; transform: scale(0.7); }
+    .foxy-jumpscare.show {
+      display: flex;
+      animation: foxyLunge 0.55s ease-out forwards;
     }
-    .spider-web {
+    @keyframes foxyLunge {
+      0% { opacity: 0; transform: scale(0.25) rotate(-8deg); }
+      25% { opacity: 1; transform: scale(1.22) rotate(5deg); }
+      65% { opacity: 1; transform: scale(1.1) rotate(-3deg); }
+      100% { opacity: 0; transform: scale(1.5) rotate(0deg); }
+    }
+
+    /* SPIDER-MAN SWING + INTERACTIVE WEBS */
+    .spiderman-rig {
+      position: fixed;
+      top: -260px;
+      left: 50%;
+      z-index: 485;
+      width: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: top 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: top center;
+      animation: spideySwing 2.2s ease-in-out infinite alternate;
+    }
+    .spiderman-rig.down { top: 26px; }
+    @keyframes spideySwing {
+      from { transform: translateX(-50%) rotate(-7deg); }
+      to { transform: translateX(-50%) rotate(7deg); }
+    }
+    .spiderman-thread {
+      width: 2px;
+      height: 110px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.4), #fff);
+      box-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+    .spiderman-quote {
+      margin-top: 4px;
+      background: rgba(15, 23, 42, 0.94);
+      border: 2px solid #ef4444;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 4px 8px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 170px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    }
+    .spider-web-layer {
       position: fixed;
       inset: 0;
-      z-index: 480;
-      display: none;
+      z-index: 475;
       pointer-events: none;
-      background:
-        radial-gradient(circle at 50% 50%, transparent 0 10%, rgba(255,255,255,0.75) 10.2% 10.45%, transparent 10.7% 20%, rgba(255,255,255,0.65) 20.2% 20.45%, transparent 20.7% 30%, rgba(255,255,255,0.55) 30.2% 30.45%, transparent 30.7%),
-        repeating-conic-gradient(from 7deg at 50% 50%, transparent 0deg 14deg, rgba(255,255,255,0.58) 14.2deg 14.45deg, transparent 14.7deg 30deg);
-      opacity: 0.8;
     }
-    .spider-web.show { display: block; }
+    .web-splat {
+      position: fixed;
+      width: 170px;
+      height: 170px;
+      pointer-events: auto;
+      cursor: pointer;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.6));
+      animation: webAppear 0.22s ease-out;
+    }
+    .web-splat:hover { transform: scale(1.06); opacity: 1; }
+    @keyframes webAppear {
+      from { transform: scale(0.15) rotate(-25deg); opacity: 0; }
+      to { transform: scale(1) rotate(0deg); opacity: 0.9; }
+    }
+
+    /* PIRATE INVASION OVERLAY & SHIPS */
+    .pirate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 410;
+      pointer-events: none;
+      display: none;
+      box-shadow: inset 0 0 120px rgba(14, 116, 144, 0.85);
+      background: linear-gradient(to top, rgba(3, 105, 161, 0.25), transparent 35%);
+    }
+    .pirate-overlay.active { display: block; }
+    .pirate-raider {
+      position: fixed;
+      bottom: 18px;
+      z-index: 465;
+      font-size: 38px;
+      cursor: pointer;
+      pointer-events: auto;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.8));
+      animation: pirateBob 0.55s ease-in-out infinite alternate;
+    }
+    @keyframes pirateBob {
+      from { transform: translateY(0) rotate(-6deg); }
+      to { transform: translateY(-10px) rotate(6deg); }
+    }
+
+    /* FAKE POPUP ADS (2000s / BRAINROT STYLE) */
+    .fake-ad-popup {
+      position: fixed;
+      z-index: 490;
+      width: 280px;
+      border: 3px solid #facc15;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1e1b4b, #4c0519);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.85), 0 0 22px rgba(250, 204, 21, 0.55);
+      overflow: hidden;
+      animation: adPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes adPop {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .fake-ad-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 8px;
+      background: linear-gradient(90deg, #ef4444, #f59e0b);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      cursor: grab;
+    }
+    .fake-ad-body {
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.35;
+      color: #f8fafc;
+    }
+    .fake-ad-cta {
+      margin-top: 8px;
+      width: 100%;
+      padding: 7px 10px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #22c55e, #eab308);
+      color: #05050d;
+      font-weight: 900;
+      font-size: 11px;
+      cursor: pointer;
+      animation: pulseBadge 0.45s infinite alternate;
+    }
+
+    /* FAKE TECH / 1C CHAT + ACHIEVEMENTS */
+    .factory-chat-box {
+      position: fixed;
+      bottom: 14px;
+      right: 14px;
+      z-index: 260;
+      width: 300px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 2px solid #38bdf8;
+      background: rgba(8, 12, 26, 0.96);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.8), 0 0 20px rgba(56, 189, 248, 0.35);
+      font-size: 11px;
+    }
+    .factory-chat-box.show { display: flex; animation: poiPop 0.2s ease-out; }
+    .factory-chat-actions { display: flex; gap: 6px; margin-top: 4px; }
+    .factory-chat-actions button {
+      flex: 1;
+      padding: 5px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+      font: inherit;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .factory-chat-actions button:hover { background: rgba(56, 189, 248, 0.5); }
+
+    .achievement-toast {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      z-index: 620;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 2px solid #22c55e;
+      background: rgba(9, 14, 28, 0.96);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.85), 0 0 24px rgba(34, 197, 94, 0.5);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      pointer-events: none;
+    }
+    .achievement-toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* BOSS PANIC MODE (BORING EXCEL / 1C REPORT) */
+    .boss-mode-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 980;
+      display: none;
+      flex-direction: column;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .boss-mode-overlay.show { display: flex; }
+    .boss-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: #fff;
+      font-size: 13px;
+    }
+    .boss-table th, .boss-table td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .boss-table th { background: #e2e8f0; }
+
+    /* ULTRAKILL SHIFT RANK MODAL */
+    .rank-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 640;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(2, 6, 23, 0.84);
+      backdrop-filter: blur(8px);
+    }
+    .rank-overlay.show { display: flex; }
+    .rank-card {
+      width: min(460px, 92vw);
+      padding: 20px;
+      border-radius: 16px;
+      border: 2px solid #facc15;
+      background: linear-gradient(160deg, #0f172a, #1e1b4b);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 36px rgba(250, 204, 21, 0.35);
+      text-align: center;
+    }
+    .rank-grade {
+      font-size: 56px;
+      font-weight: 900;
+      color: #facc15;
+      text-shadow: 0 0 24px rgba(250, 204, 21, 0.8);
+      margin: 6px 0;
+    }
+
+    /* SETTINGS FOR ROBUX EXTRAS */
+    .settings-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .settings-pill-btn {
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 5px 10px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #fff;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .settings-pill-btn.active {
+      background: #22c55e;
+      color: #05050d;
+      border-color: #22c55e;
+    }
+    body.ui-frozen .side-panel {
+      animation-play-state: paused !important;
+      transform: none !important;
+    }
     @media (max-width: 700px) {
       .shift-wallet { top: 88px; left: 8px; padding: 6px; font-size: 10px; }
       .left-controls { top: 140px; }
@@ -1176,14 +1494,30 @@
         <i id="sound-icon" class="fa-solid fa-volume-high"></i>
       </button>
 
+      <button id="btn-voice" class="ctrl-btn" onclick="toggleVoice()" title="Озвучка мемов голосом робота">
+        🗣️ Голос
+      </button>
+
+      <button id="btn-pov" class="ctrl-btn" onclick="togglePovCamera()" title="Камера от лица Tesla Roadster">
+        🎥 POV
+      </button>
+
+      <button id="btn-chaos-level" class="ctrl-btn" onclick="cycleChaosLevel()" title="Интенсивность хаоса">
+        ⚡ Хаос: СДВГ
+      </button>
+
+      <button id="btn-boss" class="ctrl-btn" onclick="toggleBossMode()" title="Босс идёт! Режим отчёта Excel/1С (клавиша B)">
+        💼 Босс
+      </button>
+
       <button id="btn-infinite" class="ctrl-btn" onclick="toggleInfinite()" title="Бесконечный режим: смена никогда не кончается">∞ БЕСК</button>
 
-      <button id="btn-phonk-lab" class="ctrl-btn" onclick="openPhonkLab()" title="Фонк-лаборатория: пианино, кики, хэты, метроном 143 BPM">🎹 ФОНК</button>
+      <button id="btn-phonk-lab" class="ctrl-btn" onclick="openPhonkLab()" title="Настроить музыку на пианино (единственный саундтрек цеха)">🎹 ПИАНИНО</button>
 
       <button id="phonk-toggle-btn" onclick="togglePhonk()" class="status-tag" style="cursor: pointer; background: rgba(236,72,153,0.3); border: 1px solid #ec4899; color: #fff; font-weight: 800; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
-        <i class="fa-solid fa-volume-high"></i> <span id="phonk-btn-text">ФОНК: 143 BPM [ВКЛ] 🔥</span>
+        <i class="fa-solid fa-music"></i> <span id="phonk-btn-text">МУЗЫКА: ПИАНИНО [ВКЛ] 🎹</span>
       </button>
-      <span class="status-tag" id="hdr-speed" style="color: #22c55e;">🚀 СКОРОСТЬ: 20x TURBO</span>
+      <span class="status-tag" id="hdr-speed" style="color: #22c55e;">🚀 20x</span>
     </div>
   </header>
 
@@ -1224,12 +1558,21 @@
     </div>
 
     <!-- Brainrot quick actions -->
-    <div class="brainrot-actions">
+    <div class="brainrot-actions" style="flex-wrap: wrap;">
       <button class="brainrot-action acid" onclick="triggerAcidFlash(3200)" title="Залить всё кислотно-зелёным">
         ☢️ КИСЛОТА
       </button>
       <button class="brainrot-action chaos" onclick="triggerRandomEvent()" title="Случайный brainrot-ивент">
         🎲 ХАОС
+      </button>
+      <button class="brainrot-action" onclick="orderPizzaBonus()" title="Премия рабочим: Пицца вместо денег (-1.5к ₽ в P&L)">
+        🍕 ПИЦЦА
+      </button>
+      <button class="brainrot-action" onclick="triggerUfoAbduction()" title="Вызвать НЛО в цех">
+        🛸 НЛО
+      </button>
+      <button class="brainrot-action" onclick="triggerPirateInvasion()" title="Пиратское нашествие!">
+        🏴‍☠️ ПИРАТЫ
       </button>
     </div>
 
@@ -1431,47 +1774,183 @@
 
   <div class="shift-wallet window-drag-handle" data-draggable-window>
     <span>🪙 ₽ смены: <span id="shift-cash-balance">0</span></span>
-    <span>Робаксс: <span id="robux-balance">0</span></span>
-    <button onclick="openShop()">🛍️ Магазин</button>
+    <span>💎 R$: <span id="robux-balance">30</span></span>
+    <button onclick="openShop()">⚙️ Настройки (R$)</button>
   </div>
 
+  <!-- SETTINGS MODAL (ALL UPGRADES & TOGGLES BOUGHT WITH ROBUX) -->
   <div id="shop-overlay" class="shop-overlay" onclick="if (event.target === this) closeShop()">
     <section class="shop-panel" data-draggable-window>
       <header class="shop-header window-drag-handle">
-        <span>🛍️ Магазин смены — всё за игровые ₽</span>
-        <button class="close-btn" onclick="closeShop()" aria-label="Закрыть магазин">&times;</button>
+        <span>⚙️ Настройки цеха — всё покупается за Робаксы (R$)</span>
+        <button class="close-btn" onclick="closeShop()" aria-label="Закрыть настройки">&times;</button>
       </header>
       <div class="shop-content">
-        <div class="shop-item">
-          <div><strong>🧜‍♀️ Окно с русалками</strong><div class="shop-item-desc">Открывает переносной подводный вид.</div></div>
-          <button id="buy-mermaid" class="shop-buy-btn" onclick="buyShopItem('mermaid', 70000)">70 000 ₽</button>
+        <div class="shop-item" style="border-color: rgba(250, 204, 21, 0.45); background: rgba(234, 179, 8, 0.08);">
+          <div>
+            <strong>💱 Обменник смены (₽ ➔ R$)</strong>
+            <div class="shop-item-desc">Обменяй 10 000 игровых ₽ смены на <b>10 R$</b>. Игровые очки, не реальные деньги.</div>
+          </div>
+          <button class="shop-action-btn" onclick="exchangeForRobux()">+10 R$ за 10 000 ₽</button>
         </div>
-        <div class="shop-item">
-          <div><strong>🫧 Пузырьковый фон</strong><div class="shop-item-desc">Добавляет пузырьки на экран и в водный раннер.</div></div>
-          <button id="buy-bubbles" class="shop-buy-btn" onclick="buyShopItem('bubbles', 35000)">35 000 ₽</button>
-        </div>
-        <div class="shop-item">
-          <div><strong>🧽 Губка-герой</strong><div class="shop-item-desc">Забавный жёлтый спутник для подводного забега.</div></div>
-          <button id="buy-sponge" class="shop-buy-btn" onclick="buyShopItem('sponge', 55000)">55 000 ₽</button>
-        </div>
-        <div class="shop-item">
-          <div><div><strong>Обменять сменные ₽</strong><div class="shop-item-desc">10 игровых Робаксов за 10 000 ₽. Это очки игры, не реальные покупки.</div></div></div>
-          <button class="shop-action-btn" onclick="exchangeForRobux()">Обменять</button>
-        </div>
-        <div id="shop-owned-actions" class="shop-item" style="display:none;">
-          <div><strong>Открыть окно с русалками</strong><div class="shop-item-desc">Перетаскивай его за верхнюю полоску.</div></div>
-          <button class="shop-action-btn" onclick="toggleMermaidWindow()">Открыть</button>
-        </div>
+
+        <div id="settings-items-list"></div>
       </div>
     </section>
   </div>
+
+  <!-- ANIMATED MERMAID AQUARIUM WINDOW -->
   <div id="mermaid-window" class="mermaid-window" data-draggable-window>
-    <div class="window-drag-handle">🌊 ОКНО РУСАЛОК <button class="close-btn" onclick="toggleMermaidWindow()" aria-label="Закрыть окно">&times;</button></div>
-    <div class="mermaid-scene">🧜‍♀️ 🐠 🫧<small>Подводная смена — пузырькиии!</small></div>
+    <div class="window-drag-handle">
+      <span>🧜‍♀️ АКВАРИУМ РУСАЛКИ 5S</span>
+      <button class="close-btn" onclick="toggleMermaidWindow()" aria-label="Закрыть окно">&times;</button>
+    </div>
+    <div class="mermaid-stage" onclick="pokeMermaid()">
+      <canvas id="mermaid-canvas" width="306" height="200"></canvas>
+      <div id="mermaid-speech" class="mermaid-speech">Кликни по мне, пупсик — дам +3 R$ 🫧</div>
+    </div>
   </div>
+
   <div id="bubble-overlay" class="bubble-overlay" aria-hidden="true"></div>
-  <div id="scare-peek" class="scare-peek" aria-hidden="true">🦊🏴‍☠️</div>
-  <div id="spider-web" class="spider-web" aria-hidden="true"></div>
+
+  <!-- FOXY THE PIRATE ANIMATRONIC (PEEKING BEHIND WINDOWS/EDGES + JUMPSCARE) -->
+  <div id="foxy-peek" class="foxy-peek" onclick="boopFoxy()" title="Кликни по Фокси, чтобы прогнать!">
+    <div id="foxy-speech" class="foxy-speech">YARR! Я слежу за ОП-8!</div>
+    <svg viewBox="0 0 180 200" aria-hidden="true">
+      <!-- Ears -->
+      <polygon points="34,58 14,10 62,36" fill="#b91c1c" stroke="#450a0a" stroke-width="3"/>
+      <polygon points="36,50 23,22 54,39" fill="#fca5a5"/>
+      <polygon points="146,58 166,10 118,36" fill="#b91c1c" stroke="#450a0a" stroke-width="3"/>
+      <polygon points="144,50 157,22 126,39" fill="#fca5a5"/>
+      <!-- Fur tuft -->
+      <polygon points="82,24 90,4 98,24 106,12 100,32 80,32 74,12" fill="#dc2626"/>
+      <!-- Head -->
+      <ellipse cx="90" cy="86" rx="56" ry="50" fill="#dc2626" stroke="#450a0a" stroke-width="3"/>
+      <ellipse cx="90" cy="108" rx="44" ry="26" fill="#fca5a5"/>
+      <!-- Snout -->
+      <ellipse cx="90" cy="102" rx="28" ry="18" fill="#fecaca" stroke="#7f1d1d" stroke-width="2"/>
+      <ellipse cx="90" cy="92" rx="11" ry="7" fill="#0f172a"/>
+      <!-- Jaw + Sharp Teeth -->
+      <path d="M58,118 Q90,145 122,118 L114,132 Q90,148 66,132 Z" fill="#1e1b4b"/>
+      <polygon points="66,119 72,130 78,119" fill="#fef9c3"/>
+      <polygon points="80,120 86,131 92,120" fill="#fef9c3"/>
+      <polygon points="94,120 100,131 106,120" fill="#fef9c3"/>
+      <polygon points="108,119 114,129 118,118" fill="#fef9c3"/>
+      <!-- Left Eye (Glowing Yellow/Red) -->
+      <circle cx="65" cy="72" r="13" fill="#09090b"/>
+      <circle cx="65" cy="72" r="7" fill="#facc15"/>
+      <circle cx="65" cy="72" r="3" fill="#ef4444"/>
+      <!-- Eyepatch on Right Eye -->
+      <line x1="34" y1="60" x2="146" y2="66" stroke="#09090b" stroke-width="4"/>
+      <rect x="101" y="57" width="28" height="24" rx="7" fill="#09090b" stroke="#3f3f46" stroke-width="2"/>
+      <!-- Pirate Hook -->
+      <path d="M138,162 C156,162 162,136 144,128" fill="none" stroke="#cbd5e1" stroke-width="7" stroke-linecap="round"/>
+      <rect x="128" y="156" width="20" height="16" rx="4" fill="#475569"/>
+    </svg>
+  </div>
+  <div id="foxy-jumpscare" class="foxy-jumpscare" aria-hidden="true">
+    <svg viewBox="0 0 180 200" style="width:min(70vw,420px);height:min(70vh,420px);">
+      <polygon points="34,58 14,10 62,36" fill="#b91c1c" stroke="#000" stroke-width="4"/>
+      <polygon points="146,58 166,10 118,36" fill="#b91c1c" stroke="#000" stroke-width="4"/>
+      <ellipse cx="90" cy="86" rx="58" ry="52" fill="#dc2626" stroke="#000" stroke-width="4"/>
+      <ellipse cx="90" cy="108" rx="44" ry="26" fill="#fecaca"/>
+      <path d="M52,112 Q90,158 128,112 L120,145 Q90,170 60,145 Z" fill="#000"/>
+      <polygon points="62,115 70,136 78,115" fill="#fff"/>
+      <polygon points="82,115 90,138 98,115" fill="#fff"/>
+      <polygon points="102,115 110,136 118,115" fill="#fff"/>
+      <circle cx="65" cy="70" r="14" fill="#000"/><circle cx="65" cy="70" r="8" fill="#ef4444"/><circle cx="65" cy="70" r="3" fill="#fff"/>
+      <rect x="102" y="56" width="28" height="24" rx="6" fill="#09090b"/>
+      <ellipse cx="90" cy="92" rx="11" ry="7" fill="#000"/>
+    </svg>
+  </div>
+
+  <!-- SPIDER-MAN HANGING ON THREAD + INTERACTIVE WEBS -->
+  <div id="spiderman-rig" class="spiderman-rig" onclick="pokeSpiderman()" title="Кликни по Пауку!">
+    <div class="spiderman-thread"></div>
+    <svg viewBox="0 0 120 120" style="width:92px;height:92px;">
+      <!-- Upside down Spider-Man torso & head -->
+      <rect x="40" y="2" width="40" height="36" rx="10" fill="#dc2626" stroke="#1d4ed8" stroke-width="4"/>
+      <!-- Hands shooting web -->
+      <circle cx="32" cy="30" r="9" fill="#dc2626"/>
+      <circle cx="88" cy="30" r="9" fill="#dc2626"/>
+      <!-- Head (upside down!) -->
+      <ellipse cx="60" cy="64" rx="25" ry="30" fill="#ef4444" stroke="#7f1d1d" stroke-width="2.5"/>
+      <!-- Web lines on mask -->
+      <path d="M60,34 L60,94 M35,64 L85,64 M42,43 L78,85 M78,43 L42,85" stroke="#450a0a" stroke-width="1.2" opacity="0.6"/>
+      <!-- Iconic white Spider eyes (upside down squinting) -->
+      <path d="M40,66 Q50,55 57,69 Q47,75 40,66 Z" fill="#fff" stroke="#09090b" stroke-width="2.5"/>
+      <path d="M80,66 Q70,55 63,69 Q73,75 80,66 Z" fill="#fff" stroke="#09090b" stroke-width="2.5"/>
+    </svg>
+    <div id="spiderman-quote" class="spiderman-quote">Пицца-тайм! Кто не убрал ключ 10х12? 🍕</div>
+  </div>
+  <div id="spider-web-layer" class="spider-web-layer"></div>
+
+  <!-- PIRATE INVASION OVERLAY & RAIDERS -->
+  <div id="pirate-overlay" class="pirate-overlay"></div>
+  <div id="pirate-raiders-container"></div>
+
+  <!-- FAKE POPUP ADS -->
+  <div id="fake-ads-container"></div>
+
+  <!-- FAKE TECH / 1C CHAT -->
+  <div id="factory-chat-box" class="factory-chat-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;font-weight:900;color:#38bdf8;">
+      <span id="factory-chat-sender">💬 Технолог Игорь</span>
+      <button class="close-btn" onclick="closeFactoryChat()" style="font-size:15px;">&times;</button>
+    </div>
+    <div id="factory-chat-text" style="color:#e2e8f0;line-height:1.35;">Кто опять унёс шаблон 25 мм домой?!</div>
+    <div class="factory-chat-actions">
+      <button id="factory-chat-btn1" onclick="replyFactoryChat(0)">Понять и простить</button>
+      <button id="factory-chat-btn2" onclick="replyFactoryChat(1)">Списать на ОП-8</button>
+    </div>
+  </div>
+
+  <!-- STEAM-STYLE ACHIEVEMENT BANNER -->
+  <div id="achievement-toast" class="achievement-toast">
+    <span style="font-size:26px;" id="ach-icon">🏆</span>
+    <div>
+      <div style="font-size:10px;font-weight:900;color:#22c55e;text-transform:uppercase;">Достижение разблокировано!</div>
+      <div style="font-size:13px;font-weight:900;color:#fff;" id="ach-title">Мастер цеха</div>
+      <div style="font-size:10px;color:#cbd5e1;" id="ach-desc">Описание</div>
+    </div>
+  </div>
+
+  <!-- BOSS PANIC MODE (BORING EXCEL / 1C REPORT) -->
+  <div id="boss-mode-overlay" class="boss-mode-overlay">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #94a3b8;padding-bottom:10px;">
+      <div>
+        <h2 style="margin:0;font-size:18px;">📊 АО «РДГ-Маш» — Оперативный отчёт по внедрению бережливого производства (ФЦК)</h2>
+        <div style="font-size:12px;color:#475569;">Форма №5S-2026 · Утверждено главным технологом · Автосохранение в 1С</div>
+      </div>
+      <button onclick="toggleBossMode()" style="padding:7px 14px;border:1px solid #64748b;background:#e2e8f0;color:#0f172a;font-weight:700;cursor:pointer;border-radius:4px;">Вернуться (B)</button>
+    </div>
+    <table class="boss-table">
+      <thead>
+        <tr><th>Показатель смены</th><th>План (TO-BE)</th><th>Факт (текущий)</th><th>Примечание технолога</th></tr>
+      </thead>
+      <tbody id="boss-table-body">
+        <tr><td>Выпуск годных изделий РДГ</td><td>10 шт</td><td id="boss-good">0 шт</td><td>Согласно сменному заданию 20 мин</td></tr>
+        <tr><td>Объём брака</td><td>0 шт</td><td id="boss-scrap">0 шт</td><td>Контроль калибром 25 мм</td></tr>
+        <tr><td>Прибыль смены (P&L)</td><td>+67.0 тыс. ₽</td><td id="boss-profit">0 тыс. ₽</td><td>Без учёта непроизводственных расходов</td></tr>
+        <tr><td>Длина маршрута (Спагетти)</td><td>12.3 м</td><td id="boss-spaghetti">12.3 м</td><td>U-образная расстановка верстаков</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:16px;font-size:12px;color:#475569;">Статус линии: штатная работа. Посторонние объекты (НЛО, пираты, утки) в отчёте не отражаются.</p>
+  </div>
+
+  <!-- ULTRAKILL SHIFT RANK MODAL -->
+  <div id="rank-overlay" class="rank-overlay" onclick="if (event.target === this) closeRankModal()">
+    <div class="rank-card">
+      <div style="font-size:12px;font-weight:900;color:#38bdf8;letter-spacing:1px;">🏁 СМЕНА ЗАВЕРШЕНА · ИТОГИ ЦЕХА</div>
+      <div id="rank-grade" class="rank-grade">SSS+</div>
+      <div id="rank-subtitle" style="font-size:15px;font-weight:900;color:#fff;margin-bottom:10px;">КАЙДЗЕН-БОГ 2077</div>
+      <div id="rank-stats" style="text-align:left;font-size:12px;line-height:1.6;background:rgba(0,0,0,0.35);padding:10px 12px;border-radius:10px;margin-bottom:12px;color:#e2e8f0;"></div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <button class="shop-action-btn" onclick="closeRankModal(); resetSim(false); toggleSim();" style="background:linear-gradient(90deg,#22c55e,#06b6d4);color:#05050d;font-weight:900;">🔄 Новая смена (New Game+)</button>
+        <button class="shop-action-btn" onclick="closeRankModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Bouncing DVD Logo -->
   <div id="dvd-logo" style="color: #06b6d4; border: 2px solid #06b6d4;">DVD</div>
@@ -1509,19 +1988,34 @@
   <!-- Acid Green Fullscreen Wash -->
   <div id="acid-overlay"></div>
 
-  <!-- PHONK LAB: piano roll + kick/hat/snare + metronome -->
+  <!-- PIANO MUSIC STUDIO (ONLY MUSIC SOURCE IN THE WORKSHOP) -->
   <div id="phonk-lab" class="phonk-lab" onclick="if (event.target === this) closePhonkLab()">
     <div class="phonk-lab-panel" data-draggable-window>
       <div class="phonk-lab-header window-drag-handle">
-        <span>🎹 ФОНК-ЛАБ · 143 BPM · 16 ШАГОВ</span>
+        <span id="lab-header-title">🎹 ПИАНИНО-СТУДИЯ (ЕДИНСТВЕННАЯ МУЗЫКА ЦЕХА) · 143 BPM</span>
         <button class="close-btn" onclick="closePhonkLab()">&times;</button>
       </div>
 
       <div class="phonk-lab-toolbar">
-        <button id="lab-play-btn" class="lab-btn" onclick="toggleLab()">▶ ИГРАТЬ</button>
+        <button id="lab-play-btn" class="lab-btn" onclick="togglePhonk()">▶ ИГРАТЬ В ЦЕХЕ</button>
         <button class="lab-btn" onclick="clearLab()">🧹 ОЧИСТИТЬ</button>
         <button class="lab-btn" onclick="randomizeLab()">🎲 РАНДОМ</button>
-        <button class="lab-btn" onclick="loadDefaultLab()">🎵 ДЕФОЛТ</button>
+        <button class="lab-btn" onclick="loadLabPreset('memphis')">🔥 ФОНК</button>
+        <button class="lab-btn" onclick="loadLabPreset('pirate')">🏴‍☠️ ПИРАТЫ</button>
+        <button class="lab-btn" onclick="loadLabPreset('circus')">🤡 ЦИРК</button>
+        <label class="lab-btn" style="cursor:default;">
+          🎛️ Тембр:
+          <select id="lab-synth-select" onchange="setLabSynth(this.value)" style="background:#0f172a;color:#fff;border:1px solid #334155;border-radius:4px;font-size:10px;padding:1px 4px;">
+            <option value="piano" selected>🎹 Пианино</option>
+            <option value="cowbell">🔔 Коубелл</option>
+            <option value="chiptune">👾 8-бит</option>
+            <option value="organ">⛪ Орган</option>
+          </select>
+        </label>
+        <label class="lab-btn" style="cursor:default;">
+          BPM: <span id="lab-bpm-val">143</span>
+          <input id="lab-bpm-slider" type="range" min="85" max="195" value="143" oninput="setLabBpm(this.value)" style="width:70px;accent-color:#ec4899;">
+        </label>
         <button id="metro-btn" class="lab-btn" onclick="toggleMetronome()">🥁 МЕТРОНОМ: ВЫКЛ<span id="metro-dot" class="metro-dot"></span></button>
         <span class="lab-step" id="lab-step-display">ШАГ: 1 / 16</span>
       </div>
@@ -1529,23 +2023,25 @@
       <div id="lab-grid" class="lab-grid"></div>
 
       <div class="lab-hint">
-        Кликай по клеткам, чтобы собрать свой зацикленный фонк. Клик по названию ноты — прослушать её.
-        Горячие клавиши: <b>Space</b> — пуск/пауза, <b>R</b> — сброс смены, <b>D</b> — расстановка,
-        <b>G</b> — кислотный флеш, <b>M</b> — метроном, <b>P</b> — эта панель, <b>1/2/3</b> — скорость, <b>Esc</b> — закрыть.
+        Вся музыка в цеху играет <b>только</b> по этому настраиваемому пианино! Кликай по клеткам, меняй тембр и BPM — трек сразу играет на весь завод.
+        Горячие клавиши: <b>Space</b> — пуск/пауза, <b>R</b> — сброс, <b>D</b> — расстановка,
+        <b>G</b> — кислота, <b>M</b> — метроном, <b>P</b> — пианино, <b>B</b> — Босс идёт!, <b>Esc</b> — закрыть.
       </div>
     </div>
   </div>
 
   <script>
     /* ========================================================
-       1. SYNTHESIZED WEB AUDIO (OFFLINE RETRO SOUNDS + PHONK)
+       1. SYNTHESIZED WEB AUDIO (ONLY CONFIGURABLE PIANO MUSIC + SFX)
        ======================================================== */
     let audioCtx = null;
     let phonkActive = false;
-    let phonkInterval = null;
     let phonkUserMuted = false;
     let soundEnabled = true;
-    const PHONK_BPM = 143;
+    let voiceEnabled = false;
+    let bossModeActive = false;
+    let labBpm = 143;
+    let labSynth = 'piano';
 
     function getAudioContext() {
       if (!audioCtx) {
@@ -1563,18 +2059,44 @@
       return audioCtx;
     }
 
-    // Auto-resume audio on any click/touch/interaction
+    // Auto-resume audio & start configurable piano music on first user gesture
     ['click', 'pointerdown', 'keydown'].forEach(evt => {
       window.addEventListener(evt, () => {
         getAudioContext();
-        if (!phonkActive && !phonkUserMuted) startPhonkLoop();
+        if (!phonkActive && !phonkUserMuted && soundEnabled && !bossModeActive) startPhonkLoop();
       }, { once: false });
     });
 
+    function speakMeme(text) {
+      if (!voiceEnabled || !soundEnabled || bossModeActive || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(String(text).replace(/[^\p{L}\p{N}\s.,!?-]/gu, ''));
+        utter.lang = 'ru-RU';
+        utter.rate = 1.18;
+        utter.pitch = 0.78;
+        window.speechSynthesis.speak(utter);
+      } catch (e) {}
+    }
+
+    function toggleVoice() {
+      voiceEnabled = !voiceEnabled;
+      const btn = document.getElementById('btn-voice');
+      if (btn) btn.className = 'ctrl-btn' + (voiceEnabled ? ' active-mode' : '');
+      if (voiceEnabled) {
+        speakMeme('Голосовой помощник завода активирован. Несите болты эм шесть.');
+        showToast('🗣️ Озвучка роботом включена');
+      } else {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        showToast('🔇 Озвучка выключена');
+      }
+    }
+
     function playTone(freq, duration, type = 'sine', gainVal = 0.15) {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = type;
@@ -1590,7 +2112,7 @@
 
     // 1. MLG AIRHORN
     function playAirhorn() {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       triggerScreenShake();
       const ctx = getAudioContext();
       if (!ctx) return;
@@ -1605,7 +2127,7 @@
             const gain = ctx.createGain();
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(freq, ctx.currentTime);
-            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.setValueAtTime(0.18, ctx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + durs[idx]);
             osc.connect(gain);
             gain.connect(ctx.destination);
@@ -1617,18 +2139,19 @@
       spawnFloatingText('📢 AIRHORN MLG!', window.innerWidth/2, window.innerHeight/2, '#ec4899');
     }
 
-    // 2. VINE BOOM (Bass Drop with distortion)
+    // 2. VINE BOOM (Bass Drop)
     function playVineBoom() {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       triggerScreenShake();
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(140, ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(25, ctx.currentTime + 0.6);
-        gain.gain.setValueAtTime(0.4, ctx.currentTime);
+        gain.gain.setValueAtTime(0.35, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -1642,22 +2165,23 @@
     function playStonks() {
       const chords = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
       chords.forEach((freq, i) => {
-        setTimeout(() => playTone(freq, 0.35, 'triangle', 0.18), i * 60);
+        setTimeout(() => playTone(freq, 0.35, 'triangle', 0.16), i * 60);
       });
       spawnFloatingText('📈 STONKS +70,000 ₽', window.innerWidth/2, window.innerHeight/3, '#10b981');
     }
 
     // 4. QUACK (Rubber Duck)
     function playQuack() {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(320, ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(210, ctx.currentTime + 0.22);
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -1669,15 +2193,16 @@
 
     // 5. BRUH
     function playBruh() {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(110, ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.45);
-        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        gain.gain.setValueAtTime(0.22, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -1689,17 +2214,18 @@
 
     // 6. ALARM SIREN
     function playSiren() {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       triggerScreenShake();
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(600, ctx.currentTime);
         osc.frequency.linearRampToValueAtTime(950, ctx.currentTime + 0.25);
         osc.frequency.linearRampToValueAtTime(600, ctx.currentTime + 0.5);
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.55);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -1708,87 +2234,85 @@
       } catch(e){}
     }
 
-    // 7. PROCEDURAL PHONK BEAT (143 BPM Cowbell & Drums)
-    function startPhonkLoop() {
-      if (phonkUserMuted || !soundEnabled) return;
-      stopPhonkLoop();
-      phonkActive = true;
-      const btnText = document.getElementById('phonk-btn-text');
-      if (btnText) btnText.textContent = 'ФОНК: 143 BPM [ВКЛ] 🔥';
-      const btn = document.getElementById('phonk-toggle-btn');
-      if (btn) {
-        btn.style.borderColor = '#ec4899';
-        btn.style.background = 'rgba(236,72,153,0.3)';
-        btn.style.color = '#fff';
-      }
-
-      let step = 0;
-      const cowbellNotes = [587, 0, 784, 880, 0, 784, 1046, 880];
-      const intervalMs = (60 / PHONK_BPM / 2) * 1000;
-
-      phonkInterval = setInterval(() => {
-        try {
-          const ctx = getAudioContext();
-          if (!ctx) return;
-          if (step % 4 === 0) {
-            const osc = ctx.createOscillator();
-            const g = ctx.createGain();
-            osc.frequency.setValueAtTime(120, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.12);
-            g.gain.setValueAtTime(0.25, ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-            osc.connect(g);
-            g.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.15);
-          }
-
-          if (step % 8 === 4) {
-            playTone(250, 0.1, 'triangle', 0.12);
-          }
-
-          if (step % 2 === 0) {
-            playTone(1800, 0.04, 'sawtooth', 0.02);
-          }
-
-          const note = cowbellNotes[step % cowbellNotes.length];
-          if (note > 0) {
-            const osc = ctx.createOscillator();
-            const g = ctx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(note, ctx.currentTime);
-            g.gain.setValueAtTime(0.10, ctx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
-            osc.connect(g);
-            g.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.18);
-          }
-
-          step = (step + 1) % 16;
-        } catch(e){}
-      }, intervalMs);
+    // 7. UFO THEREMIN WOBBLE
+    function playUfoSound() {
+      if (!soundEnabled || bossModeActive) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(920, ctx.currentTime + 0.6);
+        osc.frequency.exponentialRampToValueAtTime(360, ctx.currentTime + 1.3);
+        lfo.frequency.value = 11;
+        lfoGain.gain.value = 55;
+        lfo.connect(lfoGain);
+        lfoGain.connect(osc.frequency);
+        gain.gain.setValueAtTime(0.16, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.35);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        lfo.start();
+        osc.start();
+        lfo.stop(ctx.currentTime + 1.35);
+        osc.stop(ctx.currentTime + 1.35);
+      } catch (e) {}
     }
 
-    function stopPhonkLoop() {
-      if (phonkInterval) clearInterval(phonkInterval);
-      phonkInterval = null;
-      phonkActive = false;
+    // 8. PIRATE CANNON BOOM
+    function playCannonBoom() {
+      if (!soundEnabled || bossModeActive) return;
+      triggerScreenShake();
+      playTone(95, 0.45, 'sawtooth', 0.28);
+      setTimeout(() => playTone(60, 0.55, 'triangle', 0.25), 50);
     }
 
-    function togglePhonk() {
+    // 9. UNIFIED BACKGROUND MUSIC: ONLY FROM CONFIGURABLE PIANO ROLL
+    function syncMusicButtons() {
       const btnText = document.getElementById('phonk-btn-text');
       const btn = document.getElementById('phonk-toggle-btn');
+      const labBtn = document.getElementById('lab-play-btn');
       if (phonkActive) {
-        stopPhonkLoop();
-        phonkUserMuted = true;
-        if (btnText) btnText.textContent = 'ФОНК: ВЫКЛ 🔇';
+        if (btnText) btnText.textContent = `МУЗЫКА: ПИАНИНО ${labBpm} BPM [ВКЛ] 🎹`;
+        if (btn) {
+          btn.style.borderColor = '#ec4899';
+          btn.style.background = 'rgba(236,72,153,0.3)';
+          btn.style.color = '#fff';
+        }
+        if (labBtn) labBtn.textContent = '⏸ СТОП';
+      } else {
+        if (btnText) btnText.textContent = 'МУЗЫКА: ПИАНИНО [ВЫКЛ] 🔇';
         if (btn) {
           btn.style.borderColor = 'rgba(255,255,255,0.2)';
           btn.style.background = 'rgba(15,23,42,0.8)';
           btn.style.color = 'var(--text-muted)';
         }
-        showToast('🔇 Фонк выключен');
+        if (labBtn) labBtn.textContent = '▶ ИГРАТЬ В ЦЕХЕ';
+      }
+    }
+
+    function startPhonkLoop() {
+      if (phonkUserMuted || !soundEnabled || bossModeActive) return;
+      if (typeof startLab === 'function') startLab();
+      phonkActive = true;
+      syncMusicButtons();
+    }
+
+    function stopPhonkLoop() {
+      if (typeof stopLab === 'function') stopLab();
+      phonkActive = false;
+      syncMusicButtons();
+    }
+
+    function togglePhonk() {
+      if (phonkActive) {
+        phonkUserMuted = true;
+        stopPhonkLoop();
+        showToast('🔇 Музыка пианино выключена');
       } else {
         phonkUserMuted = false;
         if (!soundEnabled) {
@@ -1798,13 +2322,7 @@
         }
         getAudioContext();
         startPhonkLoop();
-        if (btnText) btnText.textContent = 'ФОНК: 143 BPM [ВКЛ] 🔥';
-        if (btn) {
-          btn.style.borderColor = '#ec4899';
-          btn.style.background = 'rgba(236,72,153,0.3)';
-          btn.style.color = '#fff';
-        }
-        showToast('🔥 Фонк включен (143 BPM)!');
+        showToast(`🎹 Музыка из пианино включена (${labBpm} BPM)!`);
       }
     }
 
@@ -1816,7 +2334,8 @@
       }
       if (!soundEnabled) {
         stopPhonkLoop();
-      } else if (!phonkUserMuted) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      } else if (!phonkUserMuted && !bossModeActive) {
         getAudioContext();
         startPhonkLoop();
       }
@@ -1865,23 +2384,201 @@
     let coins = [];
     let subwayAnimId = null;
     let shiftCashBalance = 0;
-    let robuxBalance = 0;
-    const shopInventory = { mermaid: false, bubbles: false, sponge: false };
+    let robuxBalance = 30;
+    const shopInventory = {
+      mermaid: false,
+      bubbles: false,
+      sponge: false,
+      foxy: true,
+      spiderman: true,
+      ufo: true,
+      pirates: true,
+      adblock: false,
+      uiFrozen: false,
+      goodButton: false
+    };
+    const settingsEnabled = {
+      mermaid: false,
+      bubbles: true,
+      sponge: true,
+      foxy: true,
+      spiderman: true,
+      ufo: true,
+      pirates: true,
+      ads: true,
+      uiFrozen: false
+    };
+    const SETTINGS_CATALOG = [
+      {
+        id: 'mermaid',
+        name: '🧜‍♀️ Окно с русалкой (Анимированный аквариум)',
+        desc: 'Живая русалка в аквариуме. Клик по ней даёт +3 R$ и пузыри!',
+        priceR: 15,
+        toggleKey: 'mermaid',
+        actionLabel: '🌊 Открыть/Скрыть',
+        onAction: () => toggleMermaidWindow()
+      },
+      {
+        id: 'bubbles',
+        name: '🫧 Пузырьковый фон',
+        desc: 'Пузырьки поднимаются по всему цеху и в подводном раннере.',
+        priceR: 10,
+        toggleKey: 'bubbles'
+      },
+      {
+        id: 'sponge',
+        name: '🧽 Губка-герой в подводном раннере',
+        desc: 'Добавляет жёлтого напарника рядом с дайвером в 3D Runner.',
+        priceR: 12,
+        toggleKey: 'sponge'
+      },
+      {
+        id: 'foxy',
+        name: '🦊 Охрана: Фокси за экраном',
+        desc: 'Пиратский лис выглядывает из-за окон и краёв экрана. Нажми на него, чтобы прогнать за +5 R$!',
+        priceR: 0,
+        toggleKey: 'foxy',
+        actionLabel: '👀 Вызвать сейчас',
+        onAction: () => showFoxyEdgePeek(true)
+      },
+      {
+        id: 'spiderman',
+        name: '🕷️ Человек-Паук в цеху',
+        desc: 'Спускается сверху на паутине и закидывает экран кликабельной паутиной.',
+        priceR: 0,
+        toggleKey: 'spiderman',
+        actionLabel: '🕸️ Позвать Паука',
+        onAction: () => triggerSpiderman(true)
+      },
+      {
+        id: 'ufo',
+        name: '🛸 НЛО (Похищение работников ➔ Коровы/Дельфины)',
+        desc: 'Тарелка похищает рабочих и сажает за стол коров или дельфинов.',
+        priceR: 0,
+        toggleKey: 'ufo',
+        actionLabel: '🛸 Вызвать НЛО',
+        onAction: () => { closeShop(); triggerUfoAbduction(); }
+      },
+      {
+        id: 'pirates',
+        name: '🏴‍☠️ Пиратское нашествие',
+        desc: 'Автоматические пиратские набеги с пушками и кораблём в цеху.',
+        priceR: 0,
+        toggleKey: 'pirates',
+        actionLabel: '🏴‍☠️ На абордаж!',
+        onAction: () => { closeShop(); triggerPirateInvasion(); }
+      },
+      {
+        id: 'adblock',
+        name: '🚫 AdBlock 2077 (Убрать фейковую рекламу)',
+        desc: 'Отключает всплывающие скам-баннеры 2000-х (можно включать/выключать).',
+        priceR: 25,
+        toggleKey: 'ads',
+        invertToggle: true,
+        actionLabel: '📢 Тест рекламы',
+        onAction: () => { closeShop(); spawnFakeAd(); }
+      },
+      {
+        id: 'uiFrozen',
+        name: '🧊 Заморозить морфинг панелей',
+        desc: 'Останавливает дёрганье и изменение размера боковых панелей.',
+        priceR: 15,
+        toggleKey: 'uiFrozen'
+      },
+      {
+        id: 'goodButton',
+        name: '✨ Кнопка «Сделать хорошо»',
+        desc: 'Секретная кнопка оптимизации завода. Осторожно: она убегает!',
+        priceR: 50,
+        isScamButton: true
+      }
+    ];
+    let scamDodgeCount = 0;
     let runnerScore = 0;
     let subScore = 69420;
 
     function updateWallet() {
       document.getElementById('shift-cash-balance').textContent = shiftCashBalance.toLocaleString('ru-RU');
       document.getElementById('robux-balance').textContent = robuxBalance.toLocaleString('ru-RU');
-      document.getElementById('buy-mermaid').textContent = shopInventory.mermaid ? 'Куплено' : '70 000 ₽';
-      document.getElementById('buy-bubbles').textContent = shopInventory.bubbles ? 'Куплено' : '35 000 ₽';
-      document.getElementById('buy-sponge').textContent = shopInventory.sponge ? 'Куплено' : '55 000 ₽';
-      ['mermaid', 'bubbles', 'sponge'].forEach(item => {
-        const button = document.getElementById(`buy-${item}`);
-        button.disabled = shopInventory[item];
-        button.style.opacity = shopInventory[item] ? '0.55' : '1';
+      renderSettingsList();
+    }
+
+    function renderSettingsList() {
+      const list = document.getElementById('settings-items-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      SETTINGS_CATALOG.forEach(item => {
+        const owned = !!shopInventory[item.id];
+        const row = document.createElement('div');
+        row.className = 'shop-item';
+
+        const left = document.createElement('div');
+        left.innerHTML = `<strong>${item.name}</strong><div class="shop-item-desc">${item.desc}</div>`;
+        row.appendChild(left);
+
+        const right = document.createElement('div');
+        right.style.cssText = 'display:flex;gap:6px;align-items:center;flex-shrink:0;';
+
+        if (!owned) {
+          const buyBtn = document.createElement('button');
+          buyBtn.className = 'shop-buy-btn';
+          buyBtn.textContent = `💎 ${item.priceR} R$`;
+          if (item.isScamButton) {
+            buyBtn.onmouseenter = () => {
+              if (scamDodgeCount < 3) {
+                scamDodgeCount++;
+                buyBtn.style.transform = `translate(${(Math.random() - 0.5) * 90}px, ${(Math.random() - 0.5) * 40}px)`;
+                showToast('💨 Кнопка увернулась! Поймай её!');
+              }
+            };
+          }
+          buyBtn.onclick = () => buyShopItem(item.id, item.priceR);
+          right.appendChild(buyBtn);
+        } else {
+          if (item.isScamButton) {
+            const scamBtn = document.createElement('button');
+            scamBtn.className = 'shop-action-btn';
+            scamBtn.textContent = '✨ Сделать хорошо';
+            scamBtn.onclick = () => {
+              playBruh();
+              for (let i = 0; i < 5; i++) setTimeout(playQuack, i * 110);
+              showToast('🗿 Бережливое производство так не работает! На тебе 5 уток!', true);
+            };
+            right.appendChild(scamBtn);
+          } else if (item.toggleKey) {
+            const rawState = settingsEnabled[item.toggleKey];
+            const isOn = item.invertToggle ? !rawState : rawState;
+            const toggleBtn = document.createElement('button');
+            toggleBtn.className = 'settings-pill-btn' + (isOn ? ' active' : '');
+            toggleBtn.textContent = isOn ? 'ВКЛ' : 'ВЫКЛ';
+            toggleBtn.onclick = () => {
+              settingsEnabled[item.toggleKey] = !settingsEnabled[item.toggleKey];
+              if (item.toggleKey === 'uiFrozen') {
+                document.body.classList.toggle('ui-frozen', settingsEnabled.uiFrozen);
+              }
+              if (item.toggleKey === 'mermaid') {
+                const win = document.getElementById('mermaid-window');
+                if (win) win.classList.toggle('show', settingsEnabled.mermaid);
+                if (settingsEnabled.mermaid) startMermaidAnimation();
+              }
+              renderSettingsList();
+            };
+            right.appendChild(toggleBtn);
+          }
+
+          if (item.onAction) {
+            const actBtn = document.createElement('button');
+            actBtn.className = 'shop-action-btn';
+            actBtn.textContent = item.actionLabel;
+            actBtn.onclick = item.onAction;
+            right.appendChild(actBtn);
+          }
+        }
+
+        row.appendChild(right);
+        list.appendChild(row);
       });
-      document.getElementById('shop-owned-actions').style.display = shopInventory.mermaid ? 'flex' : 'none';
     }
 
     function openShop() {
@@ -1893,17 +2590,33 @@
       document.getElementById('shop-overlay').classList.remove('show');
     }
 
-    function buyShopItem(item, price) {
+    function buyShopItem(item, priceR) {
       if (!Object.prototype.hasOwnProperty.call(shopInventory, item) || shopInventory[item]) return;
-      if (shiftCashBalance < price) {
-        showToast(`Нужно заработать ещё ${(price - shiftCashBalance).toLocaleString('ru-RU')} ₽ за смену`, true);
+      if (robuxBalance < priceR) {
+        showToast(`Не хватает Робаксов! Нужно еще ${priceR - robuxBalance} R$ (обменяй ₽ смены)`, true);
         return;
       }
-      shiftCashBalance -= price;
+      robuxBalance -= priceR;
       shopInventory[item] = true;
+      if (item === 'mermaid') {
+        settingsEnabled.mermaid = true;
+        toggleMermaidWindow(true);
+      } else if (item === 'bubbles') {
+        settingsEnabled.bubbles = true;
+      } else if (item === 'sponge') {
+        settingsEnabled.sponge = true;
+      } else if (item === 'adblock') {
+        settingsEnabled.ads = false;
+      } else if (item === 'uiFrozen') {
+        settingsEnabled.uiFrozen = true;
+        document.body.classList.add('ui-frozen');
+      } else if (item === 'goodButton') {
+        playBruh();
+        showToast('🗿 Ты купил кнопку "Сделать хорошо"! Жми на неё на свой страх и риск!');
+      }
       updateWallet();
-      showToast(item === 'mermaid' ? '🧜‍♀️ Окно русалок куплено!' :
-        item === 'bubbles' ? '🫧 Пузырьки куплены!' : '🧽 Губка-герой куплен!');
+      playStonks();
+      showToast(`💎 Куплено за ${priceR} R$!`);
     }
 
     function exchangeForRobux() {
@@ -1914,16 +2627,162 @@
       shiftCashBalance -= 10000;
       robuxBalance += 10;
       updateWallet();
-      showToast('🎮 +10 игровых Робаксов (без реальных платежей)');
+      playTone(1046, 0.14, 'triangle', 0.15);
+      showToast('💎 +10 игровых Робаксов!');
+      if (typeof lastCalculatedProfit !== 'undefined' && lastCalculatedProfit < 0 && robuxBalance >= 30) {
+        unlockAchievement('scam_profit', '💎', 'Скам века', 'Фармишь робаксы, пока завод работает в убыток!');
+      }
     }
 
-    function toggleMermaidWindow() {
+    /* ---------- ANIMATED MERMAID AQUARIUM ---------- */
+    let mermaidAnimId = null;
+    const MERMAID_LINES = [
+      'Эй, логист! Где мои болты М6?! 🫧',
+      'Оптимизируй поток, пупсик 🧜‍♀️',
+      'На ОП-8 опять очередь, а я плаваю 🐠',
+      'Вот тебе +3 R$ за красивые глаза 💎',
+      'Вода 25 мм — по стандарту ФЦК!'
+    ];
+
+    function toggleMermaidWindow(forceOpen = null) {
       const mermaidWindow = document.getElementById('mermaid-window');
-      const isOpen = mermaidWindow.classList.toggle('show');
+      const isOpen = forceOpen !== null ? forceOpen : !mermaidWindow.classList.contains('show');
+      mermaidWindow.classList.toggle('show', isOpen);
+      settingsEnabled.mermaid = isOpen;
       if (isOpen) {
-        mermaidWindow.style.left = `${Math.max(12, window.innerWidth / 2 - 140)}px`;
-        mermaidWindow.style.top = `${Math.max(100, window.innerHeight / 2 - 95)}px`;
+        mermaidWindow.style.left = `${Math.max(12, window.innerWidth / 2 - 155)}px`;
+        mermaidWindow.style.top = `${Math.max(100, window.innerHeight / 2 - 120)}px`;
+        startMermaidAnimation();
+      } else if (mermaidAnimId) {
+        cancelAnimationFrame(mermaidAnimId);
+        mermaidAnimId = null;
       }
+      renderSettingsList();
+    }
+
+    function pokeMermaid() {
+      robuxBalance += 3;
+      updateWallet();
+      playTone(880, 0.12, 'sine', 0.14);
+      setTimeout(() => playTone(1318, 0.15, 'sine', 0.12), 70);
+      const speech = document.getElementById('mermaid-speech');
+      if (speech) speech.textContent = MERMAID_LINES[Math.floor(Math.random() * MERMAID_LINES.length)];
+      spawnFloatingText('🧜‍♀️ +3 R$!', window.innerWidth / 2, window.innerHeight / 2, '#67e8f9');
+    }
+
+    function startMermaidAnimation() {
+      if (mermaidAnimId) cancelAnimationFrame(mermaidAnimId);
+      const canvas = document.getElementById('mermaid-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function drawFrame(now) {
+        if (!document.getElementById('mermaid-window').classList.contains('show')) {
+          mermaidAnimId = null;
+          return;
+        }
+        const t = now * 0.003;
+        const w = canvas.width;
+        const h = canvas.height;
+
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, '#0ea5e9');
+        grad.addColorStop(0.55, '#0369a1');
+        grad.addColorStop(1, '#082f49');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Seafloor & swaying seaweed
+        ctx.fillStyle = '#ca8a04';
+        ctx.fillRect(0, h - 18, w, 18);
+        for (let i = 0; i < 6; i++) {
+          const sx = 24 + i * 54;
+          ctx.strokeStyle = i % 2 === 0 ? '#22c55e' : '#10b981';
+          ctx.lineWidth = 6;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(sx, h - 14);
+          ctx.quadraticCurveTo(sx + Math.sin(t + i) * 14, h - 46, sx + Math.cos(t + i) * 10, h - 78);
+          ctx.stroke();
+        }
+
+        // Swimming fish
+        for (let f = 0; f < 3; f++) {
+          const fx = ((now * (0.04 + f * 0.015) + f * 110) % (w + 60)) - 30;
+          const fy = 36 + f * 44 + Math.sin(t * 1.4 + f) * 8;
+          ctx.fillStyle = ['#fb923c', '#facc15', '#f472b6'][f];
+          ctx.beginPath();
+          ctx.ellipse(fx, fy, 11, 6, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(fx - 10, fy);
+          ctx.lineTo(fx - 18, fy - 6);
+          ctx.lineTo(fx - 18, fy + 6);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        // Mermaid body swimming in center
+        const mx = w * 0.5 + Math.sin(t * 0.7) * 26;
+        const my = h * 0.48 + Math.cos(t) * 10;
+        const tailWag = Math.sin(t * 2.4) * 14;
+
+        // Flowing tail + fin
+        ctx.strokeStyle = '#14b8a6';
+        ctx.lineWidth = 15;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(mx - 6, my + 8);
+        ctx.quadraticCurveTo(mx - 34, my + 16 + tailWag * 0.4, mx - 58, my + 6 + tailWag);
+        ctx.stroke();
+
+        ctx.fillStyle = '#2dd4bf';
+        ctx.beginPath();
+        ctx.moveTo(mx - 58, my + 6 + tailWag);
+        ctx.lineTo(mx - 78, my - 10 + tailWag);
+        ctx.lineTo(mx - 72, my + 8 + tailWag);
+        ctx.lineTo(mx - 80, my + 22 + tailWag);
+        ctx.closePath();
+        ctx.fill();
+
+        // Torso & seashell top
+        ctx.fillStyle = '#fde68a';
+        ctx.beginPath();
+        ctx.ellipse(mx + 6, my + 2, 13, 10, -0.2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#ec4899';
+        ctx.beginPath();
+        ctx.arc(mx + 12, my + 2, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Head & flowing hair
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.ellipse(mx + 14, my - 18 + Math.sin(t * 2) * 2, 16, 11, -0.35, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#fef3c7';
+        ctx.beginPath();
+        ctx.arc(mx + 20, my - 14, 10, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(mx + 24, my - 15, 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Bubbles
+        for (let b = 0; b < 8; b++) {
+          const bx = (b * 41 + Math.sin(t + b) * 10) % w;
+          const by = h - ((now * 0.05 + b * 29) % h);
+          ctx.strokeStyle = 'rgba(224,242,254,0.75)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(bx, by, 2 + (b % 4), 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        mermaidAnimId = requestAnimationFrame(drawFrame);
+      }
+      mermaidAnimId = requestAnimationFrame(drawFrame);
     }
 
     function initDraggableWindows() {
@@ -1956,7 +2815,7 @@
           if (element.classList.contains('side-panel')) element.style.animationPlayState = 'paused';
           handle.setPointerCapture(event.pointerId);
           event.preventDefault();
-          if (Math.random() < 0.18) showWindowScare(element, rect);
+          if (Math.random() < 0.22) showWindowScare(element, rect);
         });
       });
 
@@ -1975,31 +2834,322 @@
       document.addEventListener('pointercancel', () => { activeDrag = null; });
     }
 
+    /* ---------- FOXY BEHIND SCREEN & JUMPSCARE ---------- */
+    let foxyTimer = null;
+    const FOXY_QUOTES = [
+      'YARR! Кто стащил ключ на 13?!',
+      'Я всё вижу из-за окна, пупсик! 🦊',
+      'На ОП-8 опять затор! Кликай по мне!',
+      'Не спи, логист — сменка идёт!'
+    ];
+
     function showWindowScare(element, rect) {
-      const scare = document.getElementById('scare-peek');
+      if (!settingsEnabled.foxy) return;
+      const foxy = document.getElementById('foxy-peek');
       const zIndex = Number.parseInt(getComputedStyle(element).zIndex, 10) || 50;
-      scare.style.zIndex = String(Math.max(2, zIndex - 1));
-      scare.style.left = `${Math.max(0, rect.left + rect.width * 0.3)}px`;
-      scare.style.top = `${Math.max(0, rect.top + rect.height * 0.2)}px`;
-      scare.style.width = `${Math.min(190, Math.max(90, rect.width * 0.4))}px`;
-      scare.style.height = `${Math.min(150, Math.max(80, rect.height * 0.5))}px`;
-      scare.classList.remove('show');
-      void scare.offsetWidth;
-      scare.classList.add('show');
-      setTimeout(() => scare.classList.remove('show'), 560);
+      foxy.style.zIndex = String(Math.max(2, zIndex - 1));
+      foxy.style.left = `${Math.max(10, Math.min(window.innerWidth - 160, rect.right - 65))}px`;
+      foxy.style.top = `${Math.max(60, Math.min(window.innerHeight - 170, rect.top + 30))}px`;
+      foxy.style.transform = 'rotate(18deg) scale(1)';
+      document.getElementById('foxy-speech').textContent = '🦊 ПОДГЛЯДЫВАЮ!';
+      foxy.classList.add('show');
+      playTone(220, 0.16, 'sawtooth', 0.12);
+      if (foxyTimer) clearTimeout(foxyTimer);
+      foxyTimer = setTimeout(() => foxy.classList.remove('show'), 2600);
+    }
+
+    function showFoxyEdgePeek(force = false) {
+      if (!force && !settingsEnabled.foxy) return;
+      const foxy = document.getElementById('foxy-peek');
+      if (!foxy) return;
+      const side = Math.floor(Math.random() * 3); // 0=left, 1=right, 2=bottom
+      foxy.style.zIndex = '470';
+      if (side === 0) {
+        foxy.style.left = '-25px';
+        foxy.style.top = `${120 + Math.random() * (window.innerHeight - 320)}px`;
+        foxy.style.transform = 'rotate(24deg)';
+      } else if (side === 1) {
+        foxy.style.left = `${window.innerWidth - 125}px`;
+        foxy.style.top = `${120 + Math.random() * (window.innerHeight - 320)}px`;
+        foxy.style.transform = 'rotate(-24deg)';
+      } else {
+        foxy.style.left = `${140 + Math.random() * Math.max(120, window.innerWidth - 360)}px`;
+        foxy.style.top = `${window.innerHeight - 145}px`;
+        foxy.style.transform = 'rotate(0deg)';
+      }
+      document.getElementById('foxy-speech').textContent = FOXY_QUOTES[Math.floor(Math.random() * FOXY_QUOTES.length)];
+      foxy.classList.add('show');
+      playTone(185, 0.22, 'sawtooth', 0.1);
+      if (foxyTimer) clearTimeout(foxyTimer);
+      foxyTimer = setTimeout(() => {
+        if (foxy.classList.contains('show')) {
+          foxy.classList.remove('show');
+          if (Math.random() < 0.35 && !bossModeActive) triggerFoxyJumpscare();
+        }
+      }, 4200);
+    }
+
+    function boopFoxy() {
+      const foxy = document.getElementById('foxy-peek');
+      if (foxyTimer) clearTimeout(foxyTimer);
+      foxy.classList.remove('show');
+      robuxBalance += 5;
+      updateWallet();
+      playTone(920, 0.08, 'sine', 0.16);
+      showToast('🦊 БУП ПО НОСУ ФОКСИ! +5 R$ за храбрость!');
+      spawnFloatingText('🦊 BOOP! +5 R$', window.innerWidth / 2, window.innerHeight / 2, '#ef4444');
+    }
+
+    function triggerFoxyJumpscare() {
+      if (bossModeActive) return;
+      const js = document.getElementById('foxy-jumpscare');
+      js.classList.remove('show');
+      void js.offsetWidth;
+      js.classList.add('show');
+      playAirhorn();
+      setTimeout(() => js.classList.remove('show'), 560);
+    }
+
+    function scheduleFoxyPeek() {
+      setTimeout(() => {
+        if (settingsEnabled.foxy && !bossModeActive && Math.random() < 0.65) {
+          showFoxyEdgePeek(false);
+        }
+        scheduleFoxyPeek();
+      }, 15000 + Math.random() * 18000);
+    }
+
+    /* ---------- SPIDER-MAN SWING + INTERACTIVE WEBS ---------- */
+    let spideyHideTimer = null;
+    const SPIDEY_QUOTES = [
+      'Это ОП-8 тормозит поток! 👉',
+      'Пицца-тайм! Кто съел мои болты? 🍕',
+      'Я дружелюбный сосед по бережливому цеху!',
+      'Кликни по паутине — отмою за 2 R$!'
+    ];
+
+    function spawnWebSplat(x = null, y = null) {
+      const layer = document.getElementById('spider-web-layer');
+      if (!layer) return;
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 120 120');
+      svg.setAttribute('class', 'web-splat');
+      const px = x !== null ? x : (40 + Math.random() * Math.max(100, window.innerWidth - 220));
+      const py = y !== null ? y : (90 + Math.random() * Math.max(100, window.innerHeight - 260));
+      svg.style.left = `${px}px`;
+      svg.style.top = `${py}px`;
+      svg.innerHTML = `
+        <g stroke="rgba(255,255,255,0.88)" stroke-width="2" fill="none">
+          <line x1="60" y1="60" x2="60" y2="5"/><line x1="60" y1="60" x2="105" y2="20"/>
+          <line x1="60" y1="60" x2="115" y2="65"/><line x1="60" y1="60" x2="98" y2="108"/>
+          <line x1="60" y1="60" x2="52" y2="115"/><line x1="60" y1="60" x2="16" y2="102"/>
+          <line x1="60" y1="60" x2="6" y2="58"/><line x1="60" y1="60" x2="22" y2="18"/>
+          <polygon points="60,44 74,48 78,61 72,74 58,77 45,72 42,58 48,47"/>
+          <polygon points="60,26 88,34 96,63 85,90 55,96 31,86 24,58 36,33"/>
+          <polygon points="60,10 100,23 111,64 95,103 53,111 19,98 10,58 25,21"/>
+        </g>`;
+      svg.onclick = () => {
+        svg.remove();
+        robuxBalance += 2;
+        updateWallet();
+        playTone(680, 0.08, 'triangle', 0.12);
+        spawnFloatingText('🕸️ +2 R$', px + 60, py + 40, '#f8fafc');
+      };
+      layer.appendChild(svg);
+      setTimeout(() => { if (svg.parentNode) svg.remove(); }, 11000);
+    }
+
+    function triggerSpiderman(force = false) {
+      if (!force && !settingsEnabled.spiderman) return;
+      const rig = document.getElementById('spiderman-rig');
+      if (!rig) return;
+      rig.style.left = `${20 + Math.random() * 60}%`;
+      document.getElementById('spiderman-quote').textContent =
+        SPIDEY_QUOTES[Math.floor(Math.random() * SPIDEY_QUOTES.length)];
+      rig.classList.add('down');
+      playTone(460, 0.08, 'sine', 0.12);
+      setTimeout(() => spawnWebSplat(), 350);
+      setTimeout(() => spawnWebSplat(), 750);
+      if (spideyHideTimer) clearTimeout(spideyHideTimer);
+      spideyHideTimer = setTimeout(() => rig.classList.remove('down'), 5500);
+    }
+
+    function pokeSpiderman() {
+      const rig = document.getElementById('spiderman-rig');
+      rig.classList.remove('down');
+      robuxBalance += 4;
+      updateWallet();
+      playTone(760, 0.12, 'triangle', 0.15);
+      showToast('🕷️ Паук свалил по делам! +4 R$');
     }
 
     function maybeShowSpiderWeb() {
-      if (Math.floor(Math.random() * 67) === 0) {
-        const web = document.getElementById('spider-web');
-        web.classList.add('show');
-        setTimeout(() => web.classList.remove('show'), 1000);
+      if (settingsEnabled.spiderman && !bossModeActive && Math.random() < 0.25) {
+        triggerSpiderman(false);
       }
-      setTimeout(maybeShowSpiderWeb, 2000);
+      setTimeout(maybeShowSpiderWeb, 18000 + Math.random() * 14000);
+    }
+
+    /* ---------- FAKE POPUP ADS (2000s / BRAINROT) ---------- */
+    const FAKE_ADS = [
+      {
+        title: '🔥 СРОЧНАЯ РАСПРОДАЖА',
+        text: 'ГОРЯЧИЕ БОЛТЫ М6 В 300 МЕТРАХ ОТ ВАШЕГО ВЕРСТАКА! Без регистрации и СМС!',
+        cta: 'ЗАБРАТЬ БЕСПЛАТНО!',
+        effect: () => { shiftCashBalance += 5000; updateWallet(); playStonks(); showToast('🔩 Вы нашли коробку болтов на +5 000 ₽!'); }
+      },
+      {
+        title: '⚠️ НАЙДЕНЫ ЛИШНИЕ КЛЮЧИ!',
+        text: 'На ОП-8 обнаружено 14 лишних ключей 10х12! Установите 5S Antivirus PRO немедленно!',
+        cta: 'СКАЧАТЬ 5S ANTIVIRUS',
+        effect: () => { playQuack(); triggerAcidFlash(1800); showToast('🦆 Вместо антивируса скачалась резиновая утка!'); }
+      },
+      {
+        title: '💎 ВЫ 1 000 000-Й ЛОГИСТ!',
+        text: 'Поздравляем! Вы выиграли бесплатные Робаксы (или дырку от шаурмы)!',
+        cta: 'ПОЛУЧИТЬ +8 R$!',
+        effect: () => { robuxBalance += 8; updateWallet(); playStonks(); showToast('💎 Джекпот! +8 R$ зачислено!'); }
+      },
+      {
+        title: '🥟 ПЕЛЬМЕНИ «БЕРЕЖЛИВЫЕ»',
+        text: 'Увеличивают скорость сборки на +40 см в сутки! Секрет старого технолога...',
+        cta: 'УЗНАТЬ СЕКРЕТ 🗿',
+        effect: () => { playBruh(); showToast('🗿 Секрет прост: просто не тормози на ОП-8!'); }
+      }
+    ];
+
+    function spawnFakeAd() {
+      if (!settingsEnabled.ads || bossModeActive) return;
+      const container = document.getElementById('fake-ads-container');
+      if (!container || container.children.length >= 2) return;
+      const ad = FAKE_ADS[Math.floor(Math.random() * FAKE_ADS.length)];
+      const el = document.createElement('div');
+      el.className = 'fake-ad-popup';
+      el.style.left = `${80 + Math.random() * Math.max(80, window.innerWidth - 380)}px`;
+      el.style.top = `${110 + Math.random() * Math.max(80, window.innerHeight - 280)}px`;
+      el.innerHTML = `
+        <div class="fake-ad-bar">
+          <span>${ad.title}</span>
+          <button class="close-btn" style="color:#fff;font-size:15px;" aria-label="Закрыть">&times;</button>
+        </div>
+        <div class="fake-ad-body">
+          <div style="font-weight:800;">${ad.text}</div>
+          <button class="fake-ad-cta">${ad.cta}</button>
+        </div>`;
+      el.querySelector('.close-btn').onclick = () => el.remove();
+      el.querySelector('.fake-ad-cta').onclick = () => { el.remove(); ad.effect(); };
+      container.appendChild(el);
+      playTone(1100, 0.08, 'square', 0.08);
+      setTimeout(() => { if (el.parentNode) el.remove(); }, 12000);
+    }
+
+    function scheduleFakeAds() {
+      setTimeout(() => {
+        if (settingsEnabled.ads && !bossModeActive) spawnFakeAd();
+        scheduleFakeAds();
+      }, 22000 + Math.random() * 22000);
+    }
+
+    /* ---------- FAKE TECH / 1C CHAT ---------- */
+    const FACTORY_CHATS = [
+      {
+        sender: '💬 Технолог Игорь',
+        text: 'Кто опять унёс шаблон 25 мм домой?! Без него ОП-6 гонит брак!',
+        btn1: 'Я не брал 🗿',
+        btn2: 'Списать на ОП-8',
+        fn1: () => { playBruh(); showToast('🗿 Игорь поверил, но осадочек остался.'); },
+        fn2: () => { robuxBalance += 3; updateWallet(); showToast('📋 Списано на ОП-8! Премия за смекалку +3 R$'); }
+      },
+      {
+        sender: '📊 Бухгалтерия (1С)',
+        text: 'У нас в 1С рубль смены пересчитался в шаурму. Что делать?',
+        btn1: 'Оставить в шаурме 🌯',
+        btn2: 'Конвертировать в R$',
+        fn1: () => { shiftCashBalance += 4000; updateWallet(); showToast('🌯 +4 000 ₽ шаурмячного кэша!'); },
+        fn2: () => { robuxBalance += 5; updateWallet(); showToast('💎 Бухгалтер начислил +5 R$!'); }
+      },
+      {
+        sender: '👷 Старший по 5S',
+        text: 'Проверка! На столе ОП-4 замечена лишняя кружка с чаем!',
+        btn1: 'Спрятать под стол',
+        btn2: 'Сказать что это НЗП',
+        fn1: () => { playQuack(); showToast('☕ Кружка спрятана под верстак!'); },
+        fn2: () => { playStonks(); showToast('📦 Гениально! Кружка учтена как НЗП 36 тыс. ₽'); }
+      }
+    ];
+    let currentChatItem = null;
+
+    function showFactoryChat() {
+      if (bossModeActive) return;
+      currentChatItem = FACTORY_CHATS[Math.floor(Math.random() * FACTORY_CHATS.length)];
+      document.getElementById('factory-chat-sender').textContent = currentChatItem.sender;
+      document.getElementById('factory-chat-text').textContent = currentChatItem.text;
+      document.getElementById('factory-chat-btn1').textContent = currentChatItem.btn1;
+      document.getElementById('factory-chat-btn2').textContent = currentChatItem.btn2;
+      document.getElementById('factory-chat-box').classList.add('show');
+      playTone(660, 0.08, 'sine', 0.1);
+    }
+
+    function closeFactoryChat() {
+      document.getElementById('factory-chat-box').classList.remove('show');
+    }
+
+    function replyFactoryChat(choice) {
+      closeFactoryChat();
+      if (!currentChatItem) return;
+      if (choice === 0) currentChatItem.fn1();
+      else currentChatItem.fn2();
+    }
+
+    function scheduleFactoryChat() {
+      setTimeout(() => {
+        showFactoryChat();
+        scheduleFactoryChat();
+      }, 28000 + Math.random() * 25000);
+    }
+
+    /* ---------- STEAM-STYLE ACHIEVEMENTS ---------- */
+    const unlockedAchievements = new Set();
+    let achHideTimer = null;
+
+    function unlockAchievement(id, icon, title, desc) {
+      if (unlockedAchievements.has(id)) return;
+      unlockedAchievements.add(id);
+      document.getElementById('ach-icon').textContent = icon;
+      document.getElementById('ach-title').textContent = title;
+      document.getElementById('ach-desc').textContent = desc;
+      const el = document.getElementById('achievement-toast');
+      el.classList.add('show');
+      playTone(587, 0.12, 'triangle', 0.16);
+      setTimeout(() => playTone(880, 0.25, 'triangle', 0.18), 110);
+      if (achHideTimer) clearTimeout(achHideTimer);
+      achHideTimer = setTimeout(() => el.classList.remove('show'), 4000);
+    }
+
+    /* ---------- BOSS PANIC MODE ---------- */
+    function toggleBossMode() {
+      bossModeActive = !bossModeActive;
+      const overlay = document.getElementById('boss-mode-overlay');
+      overlay.classList.toggle('show', bossModeActive);
+      const btn = document.getElementById('btn-boss');
+      if (btn) btn.className = 'ctrl-btn' + (bossModeActive ? ' active-mode' : '');
+
+      if (bossModeActive) {
+        stopPhonkLoop();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        document.getElementById('boss-good').textContent = `${goodUnitsCount} шт`;
+        document.getElementById('boss-scrap').textContent = `${scrapUnitsCount} шт`;
+        const pEl = document.getElementById('val-profit');
+        document.getElementById('boss-profit').textContent = pEl ? pEl.textContent : '0 тыс. ₽';
+        const sEl = document.getElementById('val-spaghetti');
+        document.getElementById('boss-spaghetti').textContent = sEl ? sEl.textContent : '12.3 м';
+      } else {
+        if (!phonkUserMuted && soundEnabled) startPhonkLoop();
+      }
     }
 
     function spawnBubble() {
-      if (!shopInventory.bubbles) return;
+      if (!shopInventory.bubbles || !settingsEnabled.bubbles || bossModeActive) return;
       const overlay = document.getElementById('bubble-overlay');
       const bubble = document.createElement('span');
       const size = 8 + Math.random() * 24;
@@ -2185,7 +3335,7 @@
       subCtx.moveTo(px, py + 1);
       subCtx.lineTo(px + 6, py + 7);
       subCtx.stroke();
-      if (shopInventory.sponge) {
+      if (shopInventory.sponge && settingsEnabled.sponge) {
         subCtx.fillStyle = '#facc15';
         subCtx.fillRect(px + 13, py - 14, 17, 17);
         subCtx.fillStyle = '#0f172a';
@@ -2312,6 +3462,18 @@
     let discoModeActive = true;
     let dragModeActive = false;
 
+    // Fun & Chaos Stats
+    let pizzaCost = 0;
+    let pizzaBoostUntil = 0;
+    let inspectorOpId = null;
+    let inspectorBoostUntil = 0;
+    let lastCalculatedProfit = 0;
+    let trucksHitCount = 0;
+    let ufoAbductCount = 0;
+    let shawarmaMealsCount = 0;
+    let povCameraActive = false;
+    let chaosLevel = 'adhd'; // 'chill' | 'adhd' | 'hell'
+
     // Camera 360 Roll State
     let isRolling = false;
     let rollStartTime = 0;
@@ -2371,6 +3533,13 @@
       if (k.clean5s) {
         c = Math.max(10, c - 2); // 5S saves 2s
       }
+      const now = performance.now();
+      if (now < pizzaBoostUntil) c = Math.max(8, Math.round(c * 0.67));
+      if (inspectorOpId === opId && now < inspectorBoostUntil) c = Math.max(8, Math.round(c * 0.5));
+      const tbl = typeof tableMeshes !== 'undefined' ? tableMeshes[opId] : null;
+      if (tbl && tbl.userData.fullBellyUntil && now < tbl.userData.fullBellyUntil) {
+        c = Math.max(8, Math.round(c * 0.75));
+      }
       return c;
     }
 
@@ -2406,6 +3575,9 @@
     function updateDashboard() {
       const k = getKaizenState();
       const spaghettiDist = calculateTotalSpaghettiLength();
+      if (spaghettiDist > 50) {
+        unlockAchievement('spaghetti_master', '🍝', 'Мастер спагетти', 'Растянул маршрут логиста более чем на 50 метров!');
+      }
 
       const assemblyOperators = k.cell356 ? 7 : 9;
       const totalStaff = assemblyOperators + 2;
@@ -2415,13 +3587,14 @@
       if (k.screwdriver) equip += 12.0;
       if (k.cell356) equip -= 12.0;
 
-      const overhead = 200.0;
+      const overhead = 200.0 + pizzaCost;
       // 15 000 ₽ за начатый комплект (по ветке корпуса ОП-1 + брак)
       const totalKitsStarted = Math.max(goodUnitsCount + scrapUnitsCount, rawSetsIssued['OP-1']);
       const materialsCost = totalKitsStarted * 15.0;
       const revenue = goodUnitsCount * 70.0;
       const totalCost = fot + equip + overhead + materialsCost;
       const profit = revenue - totalCost;
+      lastCalculatedProfit = profit;
       const unitCost = goodUnitsCount > 0 ? totalCost / goodUnitsCount : 0;
       const wip = calculateTotalWIP();
 
@@ -2510,6 +3683,51 @@
       document.getElementById('val-vpp').textContent = `${vpp.toFixed(1)} с (${(vpp/60).toFixed(1)} мин)`;
     }
 
+    function orderPizzaBonus() {
+      pizzaCost += 1.5;
+      pizzaBoostUntil = performance.now() + 10000;
+      playStonks();
+      for (let i = 0; i < 8; i++) {
+        spawnFloatingText('🍕', window.innerWidth * (0.2 + Math.random() * 0.6), window.innerHeight * (0.3 + Math.random() * 0.4), '#facc15');
+      }
+      speakMeme('Премия пицца четыре сыра выдана! Рабочие ускорились!');
+      showToast('🍕 ПИЦЦА ВМЕСТО ПРЕМИИ! Мотивация x1.5 на 10с (в P&L −1.5 тыс. ₽)');
+      updateDashboard();
+    }
+
+    function showShiftRankModal() {
+      let grade = 'D';
+      let subtitle = 'УБЫТОЧНЫЙ ХАОС';
+      if (goodUnitsCount >= 10 && scrapUnitsCount === 0 && lastCalculatedProfit > 50) {
+        grade = 'SSS+';
+        subtitle = 'КАЙДЗЕН-БОГ 2077 🔥';
+      } else if (goodUnitsCount >= 10 && lastCalculatedProfit > 0) {
+        grade = 'S';
+        subtitle = 'МАСТЕР БЕРЕЖЛИВОГО ПОТОКА';
+      } else if (goodUnitsCount >= 7) {
+        grade = 'A';
+        subtitle = 'КРЕПКИЙ СБОРЩИК РДГ';
+      } else if (goodUnitsCount >= 4) {
+        grade = 'B';
+        subtitle = 'НУЖЕН ШУРУПОВЁРТ BOSCH';
+      }
+      document.getElementById('rank-grade').textContent = grade;
+      document.getElementById('rank-subtitle').textContent = subtitle;
+      document.getElementById('rank-stats').innerHTML = `
+        <div>✅ Сдано годных РДГ: <b>${goodUnitsCount} / ${PLAN_UNITS} шт</b></div>
+        <div>💀 Брака: <b>${scrapUnitsCount} шт</b></div>
+        <div>💰 Итог P&L: <b>${lastCalculatedProfit >= 0 ? '+' : ''}${lastCalculatedProfit.toFixed(1)} тыс. ₽</b></div>
+        <div>🛸 Похищений НЛО: <b>${ufoAbductCount}</b></div>
+        <div>🌯 Походов за шаурмой: <b>${shawarmaMealsCount}</b></div>
+        <div>🛻 Сбито грузовиком (сальто): <b>${trucksHitCount}</b></div>
+      `;
+      document.getElementById('rank-overlay').classList.add('show');
+    }
+
+    function closeRankModal() {
+      document.getElementById('rank-overlay').classList.remove('show');
+    }
+
     /* ========================================================
        4. DISCRETE SIMULATION ENGINE (20 MIN SHIFT / 10 UNITS)
        ======================================================== */
@@ -2521,6 +3739,7 @@
         simTimerSec = SHIFT_LIMIT_SEC;
         shiftCompleted = true;
         toggleSim();
+        showShiftRankModal();
         if (goodUnitsCount >= PLAN_UNITS) {
           showToast('🏁 Смена 20 минут завершена! План 10 шт выполнен! 🔥', false);
         } else {
@@ -2573,7 +3792,9 @@
         }
 
         if (fsm.working) {
-          fsm.progressSec += deltaSimSec;
+          const tblMesh = typeof tableMeshes !== 'undefined' ? tableMeshes[op.id] : null;
+          const lunchPenalty = (tblMesh && tblMesh.userData.lunchState && tblMesh.userData.lunchState !== 'idle') ? 0.5 : 1.0;
+          fsm.progressSec += deltaSimSec * lunchPenalty;
           if (fsm.progressSec >= cycle) {
             if (fsm.outBuffer >= 2) {
               fsm.blocked = true;
@@ -2592,6 +3813,7 @@
             if (isDefect) {
               scrapUnitsCount++;
               soundDefect();
+              speakMeme(`Брак на ${op.id}! Минус премия!`);
               showToast(`💀 Брак на ${op.id}! Деталь списана, склад выдаст замену.`, true);
             } else {
               fsm.outBuffer++;
@@ -2854,6 +4076,7 @@
       simTimerSec = 0;
       goodUnitsCount = 0;
       scrapUnitsCount = 0;
+      pizzaCost = 0;
       rawSetsIssued['OP-1'] = 0;
       rawSetsIssued['OP-3'] = 0;
       rawSetsIssued['OP-5'] = 0;
@@ -2902,7 +4125,7 @@
       document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-speed'));
       if (btn) btn.classList.add('active-speed');
       const hdr = document.getElementById('hdr-speed');
-      if (hdr) hdr.textContent = `🚀 СКОРОСТЬ: ${spd}x TURBO`;
+      if (hdr) hdr.textContent = `🚀 ${spd}x`;
       showToast(`⚡ Скорость симуляции: ${spd}x`);
     }
 
@@ -3000,13 +4223,7 @@
     }
 
     function onPointerDown(e) {
-      const drawer = document.getElementById('poi-card');
-      const leftPanel = document.getElementById('left-panel');
-      const rightPanel = document.getElementById('right-panel');
-      const header = document.querySelector('.top-header');
-
-      if (drawer.contains(e.target) || leftPanel.contains(e.target) ||
-          rightPanel.contains(e.target) || header.contains(e.target)) {
+      if (e.target.closest('#poi-card, #left-panel, #right-panel, .top-header, .shift-wallet, .adhd-pip, .mermaid-window, .fake-ad-popup, .factory-chat-box, .shop-overlay.show, .phonk-lab.show, .rank-overlay.show, .boss-mode-overlay.show')) {
         return;
       }
 
@@ -3016,20 +4233,40 @@
 
       const intersects = raycaster.intersectObjects(scene.children, true);
       let hitTable = null;
+      let hitSpecial = null;
 
       for (const hit of intersects) {
-        let parent = hit.object.parent;
-        while (parent && (!parent.userData || !parent.userData.id)) {
-          parent = parent.parent;
+        let obj = hit.object;
+        while (obj) {
+          if (obj === discoBall) { hitSpecial = 'DISCO'; break; }
+          if (obj.userData && obj.userData.isCybertruck) { hitSpecial = obj; break; }
+          if (obj.userData && obj.userData.id) { hitTable = obj; break; }
+          obj = obj.parent;
         }
-        if (parent && parent.userData && parent.userData.id) {
-          hitTable = parent;
-          break;
-        }
+        if (hitSpecial || hitTable) break;
+      }
+
+      if (hitSpecial === 'DISCO') {
+        robuxBalance += 3;
+        updateWallet();
+        spawnConfetti();
+        playStonks();
+        showToast('🪩 КЛИК ПО ДИСКО-ШАРУ! +3 R$ и конфетти!');
+        return;
+      }
+      if (hitSpecial && hitSpecial.userData && hitSpecial.userData.isCybertruck) {
+        shiftCashBalance += 5000;
+        updateWallet();
+        playAirhorn();
+        spawnConfetti();
+        showToast('🛻 ГУДОК CYBERTRUCK! +5 000 ₽ в кошелёк смены!');
+        return;
       }
 
       if (hitTable) {
-        if (dragModeActive) {
+        if (hitTable.userData.id === 'SHAWARMA') {
+          showPoi('SHAWARMA', e.clientX, e.clientY);
+        } else if (dragModeActive) {
           draggedObject = hitTable;
           soundDelivery();
         } else {
@@ -3080,6 +4317,14 @@
         const cycle = getEffectiveCycle(op.id);
         const load = Math.round((cycle / 120) * 100);
         const fsm = workbenchFSM[op.id];
+        const tbl = tableMeshes[op.id];
+        const wType = tbl && tbl.userData.workerType;
+        const workerTitle = wType === 'cow' ? '🐄 Корова Зорька (подкинута НЛО!)'
+          : wType === 'dolphin' ? '🐬 Дельфин-сборщик 3 разряда (от НЛО!)'
+          : '👷 Оператор линии';
+        const lunchNote = (tbl && tbl.userData.lunchState && tbl.userData.lunchState !== 'idle')
+          ? ' · <b style="color:#fbbf24;">🌯 На обеде в шаурмечной!</b>'
+          : (tbl && tbl.userData.fullBellyUntil && performance.now() < tbl.userData.fullBellyUntil ? ' · <b style="color:#22c55e;">🌯 Сытый бафф!</b>' : '');
 
         let stateDesc = '💤 Голодание (нет входящих деталей)';
         let inBadgesHtml = '';
@@ -3128,6 +4373,9 @@
 
         title.textContent = `${op.id}: ${op.name}`;
         body.innerHTML = `
+          <div style="margin-bottom: 5px; font-size: 11px; color: #e2e8f0;">
+            <strong>Работник:</strong> ${workerTitle}${lunchNote}
+          </div>
           <div style="margin-bottom: 6px;">
             <strong>Длительность операции:</strong> <span style="font-family: monospace; font-size: 13px; color: var(--accent);">${cycle} сек</span>
             (Загрузка: <strong style="color: ${load > 100 ? 'var(--red)' : (load >= 85 ? 'var(--yellow)' : 'var(--green)')};">${load}%</strong> к такту 120 с)
@@ -3182,7 +4430,15 @@
         body.innerHTML = `
           <div><strong>План выпуска смены:</strong> ${PLAN_UNITS} годных изделий за 20 минут.</div>
           <div style="margin-top: 4px;"><strong>Цена закупки:</strong> 70 000 ₽ / годное изделие.</div>
-          <div style="margin-top: 4px; color: var(--green);"><strong>Факт сдачи:</strong> ${goodUnitsCount} принятых изделий (выручка: ${(goodUnitsCount * 70).toLocaleString('ru-RU')} ₽).</div>
+          <div style="margin-top: 4px; color: var(--green);"><strong>Факт сдачи:</strong> ${goodUnitsCount} принятых изделий (выручка: ${(goodUnitsCount * 70000).toLocaleString('ru-RU')} ₽).</div>
+        `;
+      } else if (id === 'SHAWARMA') {
+        title.textContent = '🌯 Шаурмечная «У Ашота 5S» (24/7)';
+        body.innerHTML = `
+          <div><strong>Меню:</strong> Шаурма «Бережливая» с двойным сыром и калибром 25 мм.</div>
+          <div style="margin-top: 4px;"><strong>Посещений сегодня:</strong> <b style="color:#facc15;">${shawarmaMealsCount}</b> обедов.</div>
+          <div style="margin-top: 4px; color: #86efac;">Работники сами бегают сюда на обед и получают +25% к скорости сборки!</div>
+          <button onclick="sendWorkerToShawarma(true)" style="margin-top:8px;padding:6px 10px;border:none;border-radius:6px;background:linear-gradient(90deg,#f97316,#eab308);color:#05050d;font-weight:900;cursor:pointer;width:100%;">🌯 Отправить случайного рабочего на обед!</button>
         `;
       }
 
@@ -3255,9 +4511,10 @@
       }, 12000 + Math.random() * 28000);
     }
 
-    /* ---------- PHONK LAB: PIANO ROLL + DRUMS ---------- */
-    const LAB_BPM = 143;
-    const LAB_STEP_MS = (60 / LAB_BPM / 4) * 1000; // 16-е доли
+    /* ---------- PIANO STUDIO: PIANO ROLL + DRUMS + ONLY MUSIC SOURCE ---------- */
+    function getLabStepMs() {
+      return (60 / labBpm / 4) * 1000;
+    }
 
     const LAB_MELODY = [
       { id: 'B5',  freq: 987.77 },
@@ -3281,29 +4538,73 @@
       { id: 'snare', label: 'SNARE', color: '#a855f7', drum: true }
     ];
 
-    function makeLabPattern() {
+    function makeEmptyPattern() {
       const p = {};
       LAB_MELODY.forEach(n => { p[n.id] = new Array(16).fill(0); });
       p.kick = new Array(16).fill(0);
       p.hat = new Array(16).fill(0);
       p.snare = new Array(16).fill(0);
-
-      [0, 10].forEach(s => { p['C5'][s] = 1; });
-      [2, 8, 14].forEach(s => { p['D#5'][s] = 1; });
-      [4, 12].forEach(s => { p['G5'][s] = 1; });
-      p['A#5'][6] = 1;
-
-      [0, 3, 6, 10, 12].forEach(s => { p.kick[s] = 1; });
-      [0, 2, 4, 6, 8, 10, 12, 14].forEach(s => { p.hat[s] = 1; });
-      [4, 12].forEach(s => { p.snare[s] = 1; });
       return p;
     }
 
-    let labPattern = makeLabPattern();
+    function makeLabPattern(preset = 'memphis') {
+      const p = makeEmptyPattern();
+      if (preset === 'pirate') {
+        [0, 6, 12].forEach(s => { p['D5'][s] = 1; });
+        [2, 8].forEach(s => { p['F5'][s] = 1; });
+        [4, 10, 14].forEach(s => { p['A5'][s] = 1; });
+        p['G5'][15] = 1;
+        [0, 4, 8, 12].forEach(s => { p.kick[s] = 1; });
+        [2, 6, 10, 14].forEach(s => { p.snare[s] = 1; });
+        [0, 2, 4, 6, 8, 10, 12, 14].forEach(s => { p.hat[s] = 1; });
+      } else if (preset === 'circus') {
+        p['C5'][0] = 1; p['E5'][2] = 1; p['G5'][4] = 1; p['A#5'][6] = 1;
+        p['B5'][8] = 1; p['G5'][10] = 1; p['F#5'][12] = 1; p['D5'][14] = 1;
+        [0, 4, 8, 12].forEach(s => { p.kick[s] = 1; });
+        [2, 6, 10, 14].forEach(s => { p.snare[s] = 1; p.hat[s] = 1; });
+      } else {
+        [0, 10].forEach(s => { p['C5'][s] = 1; });
+        [2, 8, 14].forEach(s => { p['D#5'][s] = 1; });
+        [4, 12].forEach(s => { p['G5'][s] = 1; });
+        p['A#5'][6] = 1;
+        [0, 3, 6, 10, 12].forEach(s => { p.kick[s] = 1; });
+        [0, 2, 4, 6, 8, 10, 12, 14].forEach(s => { p.hat[s] = 1; });
+        [4, 12].forEach(s => { p.snare[s] = 1; });
+      }
+      return p;
+    }
+
+    let labPattern = makeLabPattern('memphis');
     let labPlaying = false;
     let labStep = 0;
     let labTimer = null;
     let labNoiseBuf = null;
+
+    function setLabBpm(val) {
+      labBpm = Math.max(85, Math.min(195, Number(val) || 143));
+      const valEl = document.getElementById('lab-bpm-val');
+      if (valEl) valEl.textContent = String(labBpm);
+      const hdr = document.getElementById('lab-header-title');
+      if (hdr) hdr.textContent = `🎹 ПИАНИНО-СТУДИЯ (ЕДИНСТВЕННАЯ МУЗЫКА ЦЕХА) · ${labBpm} BPM`;
+      if (labPlaying) startLab();
+      if (metronomeOn) {
+        if (metroTimer) clearInterval(metroTimer);
+        metroTimer = setInterval(metroTick, 60000 / labBpm);
+      }
+      syncMusicButtons();
+    }
+
+    function setLabSynth(val) {
+      labSynth = val || 'piano';
+      showToast(`🎛️ Тембр пианино: ${val}`);
+    }
+
+    function loadLabPreset(preset) {
+      labPattern = makeLabPattern(preset);
+      refreshLabCells();
+      showToast(preset === 'pirate' ? '🏴‍☠️ Пиратский мотив загружен!' :
+        preset === 'circus' ? '🤡 Цирковой завод загружен!' : '🔥 Мемфис-фонк загружен!');
+    }
 
     function buildLabGrid() {
       const grid = document.getElementById('lab-grid');
@@ -3355,7 +4656,7 @@
     function clearLab() {
       Object.keys(labPattern).forEach(k => { labPattern[k] = new Array(16).fill(0); });
       refreshLabCells();
-      showToast('🧹 Паттерн очищен');
+      showToast('🧹 Пианино очищено — в цеху тишина!');
     }
 
     function randomizeLab() {
@@ -3374,36 +4675,60 @@
       labPattern.snare[4] = 1;
       if (Math.random() < 0.6) labPattern.snare[12] = 1;
       refreshLabCells();
-      showToast('🎲 Новый фонк сгенерирован!');
+      showToast('🎲 Новая мелодия пианино сгенерирована!');
     }
 
     function loadDefaultLab() {
-      labPattern = makeLabPattern();
-      refreshLabCells();
-      showToast('🎵 Дефолтный мемфис-фонк загружен!');
+      loadLabPreset('memphis');
     }
 
     function playLabNote(freq) {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       const ctx = getAudioContext();
       if (!ctx) return;
       const t = ctx.currentTime;
       const o1 = ctx.createOscillator();
       const o2 = ctx.createOscillator();
       const gain = ctx.createGain();
-      o1.type = 'sawtooth';
-      o2.type = 'square';
-      o1.frequency.setValueAtTime(freq, t);
-      o2.frequency.setValueAtTime(freq * 1.006, t);
-      gain.gain.setValueAtTime(0.085, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+
+      if (labSynth === 'piano') {
+        o1.type = 'triangle';
+        o2.type = 'sine';
+        o1.frequency.setValueAtTime(freq, t);
+        o2.frequency.setValueAtTime(freq * 2, t);
+        gain.gain.setValueAtTime(0.14, t);
+        gain.gain.exponentialRampToValueAtTime(0.025, t + 0.12);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.36);
+      } else if (labSynth === 'chiptune') {
+        o1.type = 'square';
+        o2.type = 'square';
+        o1.frequency.setValueAtTime(freq, t);
+        o2.frequency.setValueAtTime(freq * 0.5, t);
+        gain.gain.setValueAtTime(0.075, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      } else if (labSynth === 'organ') {
+        o1.type = 'sine';
+        o2.type = 'triangle';
+        o1.frequency.setValueAtTime(freq, t);
+        o2.frequency.setValueAtTime(freq * 1.5, t);
+        gain.gain.setValueAtTime(0.11, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+      } else {
+        o1.type = 'sawtooth';
+        o2.type = 'square';
+        o1.frequency.setValueAtTime(freq, t);
+        o2.frequency.setValueAtTime(freq * 1.006, t);
+        gain.gain.setValueAtTime(0.085, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+      }
+
       o1.connect(gain);
       o2.connect(gain);
       gain.connect(ctx.destination);
       o1.start(t);
       o2.start(t);
-      o1.stop(t + 0.24);
-      o2.stop(t + 0.24);
+      o1.stop(t + 0.38);
+      o2.stop(t + 0.38);
     }
 
     function getLabNoise() {
@@ -3417,7 +4742,7 @@
     }
 
     function playDrum(id) {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       const ctx = getAudioContext();
       if (!ctx) return;
       const t = ctx.currentTime;
@@ -3428,12 +4753,12 @@
         osc.type = 'sine';
         osc.frequency.setValueAtTime(155, t);
         osc.frequency.exponentialRampToValueAtTime(38, t + 0.13);
-        gain.gain.setValueAtTime(0.5, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+        gain.gain.setValueAtTime(0.42, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(t);
-        osc.stop(t + 0.32);
+        osc.stop(t + 0.3);
       } else if (id === 'hat') {
         const src = ctx.createBufferSource();
         src.buffer = getLabNoise();
@@ -3441,7 +4766,7 @@
         hp.type = 'highpass';
         hp.frequency.value = 7600;
         const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0.11, t);
+        gain.gain.setValueAtTime(0.09, t);
         gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
         src.connect(hp);
         hp.connect(gain);
@@ -3455,7 +4780,7 @@
         bp.type = 'bandpass';
         bp.frequency.value = 1800;
         const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0.16, t);
+        gain.gain.setValueAtTime(0.14, t);
         gain.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
         src.connect(bp);
         bp.connect(gain);
@@ -3467,7 +4792,7 @@
         const g2 = ctx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(180, t);
-        g2.gain.setValueAtTime(0.08, t);
+        g2.gain.setValueAtTime(0.07, t);
         g2.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
         osc.connect(g2);
         g2.connect(ctx.destination);
@@ -3497,37 +4822,37 @@
     }
 
     function startLab() {
+      if (!soundEnabled || bossModeActive) return;
       getAudioContext();
       if (labTimer) clearInterval(labTimer);
       labPlaying = true;
+      phonkActive = true;
       labStep = 0;
-      const btn = document.getElementById('lab-play-btn');
-      if (btn) btn.textContent = '⏸ СТОП';
+      syncMusicButtons();
       labTick();
-      labTimer = setInterval(labTick, LAB_STEP_MS);
+      labTimer = setInterval(labTick, getLabStepMs());
     }
 
     function stopLab() {
       labPlaying = false;
+      phonkActive = false;
       if (labTimer) clearInterval(labTimer);
       labTimer = null;
-      const btn = document.getElementById('lab-play-btn');
-      if (btn) btn.textContent = '▶ ИГРАТЬ';
+      syncMusicButtons();
       document.querySelectorAll('#lab-grid .lab-cell.playing').forEach(c => c.classList.remove('playing'));
     }
 
     function toggleLab() {
-      if (labPlaying) stopLab();
-      else startLab();
+      togglePhonk();
     }
 
-    /* ---------- METRONOME 143 BPM ---------- */
+    /* ---------- METRONOME ---------- */
     let metronomeOn = false;
     let metroTimer = null;
     let metroBeat = 0;
 
     function playMetronomeClick(accent) {
-      if (!soundEnabled) return;
+      if (!soundEnabled || bossModeActive) return;
       const ctx = getAudioContext();
       if (!ctx) return;
       const osc = ctx.createOscillator();
@@ -3560,9 +4885,9 @@
         getAudioContext();
         metroBeat = 0;
         metroTick();
-        metroTimer = setInterval(metroTick, 60000 / LAB_BPM);
+        metroTimer = setInterval(metroTick, 60000 / labBpm);
         if (btn) { btn.classList.add('on'); btn.innerHTML = '🥁 МЕТРОНОМ: ВКЛ<span id="metro-dot" class="metro-dot"></span>'; }
-        showToast(`🥁 Метроном ${LAB_BPM} BPM включен`);
+        showToast(`🥁 Метроном ${labBpm} BPM включен`);
       } else {
         if (metroTimer) clearInterval(metroTimer);
         metroTimer = null;
@@ -3577,6 +4902,7 @@
       const lab = document.getElementById('phonk-lab');
       if (lab) lab.classList.add('show');
       getAudioContext();
+      syncMusicButtons();
     }
 
     function closePhonkLab() {
@@ -3591,6 +4917,7 @@
 
       switch (e.code) {
         case 'Space':
+          if (typeof runnerMode !== 'undefined' && runnerMode === 'canvas') return;
           e.preventDefault();
           toggleSim();
           break;
@@ -3598,6 +4925,7 @@
           resetSim();
           break;
         case 'KeyD':
+          if (typeof runnerMode !== 'undefined' && runnerMode === 'canvas') return;
           toggleDragMode();
           break;
         case 'KeyG':
@@ -3609,8 +4937,13 @@
         case 'KeyP':
           openPhonkLab();
           break;
+        case 'KeyB':
+          toggleBossMode();
+          break;
         case 'Escape':
           closePhonkLab();
+          closeShop();
+          if (bossModeActive) toggleBossMode();
           break;
         case 'Digit1':
           setSpeed(1, document.querySelectorAll('.speed-btn')[0]);
@@ -3680,6 +5013,7 @@
       scene.add(discoBall);
 
       buildWorkshop();
+      buildShawarmaStand();
       buildWorkbenches();
       buildTeslaRoadster();
       rebuildSpaghettiLine();
@@ -3700,6 +5034,12 @@
       scheduleAcidFlash();
     }
 
+    const SHAWARMA_POS = { x: -3.75, z: -8.2 };
+    let shawarmaMesh = null;
+    let activeUfo = null;
+    let activePirateShips = [];
+    let activeInspector = null;
+
     function buildWorkshop() {
       const floorGeo = new THREE.PlaneGeometry(6.15, 18.40);
       const floorMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.8, metalness: 0.2 });
@@ -3711,6 +5051,114 @@
       const grid = new THREE.GridHelper(20, 20, 0xec4899, 0x1e293b);
       grid.position.y = 0.01;
       scene.add(grid);
+    }
+
+    function buildShawarmaStand() {
+      const group = new THREE.Group();
+      group.position.set(SHAWARMA_POS.x, 0, SHAWARMA_POS.z);
+      group.userData.id = 'SHAWARMA';
+
+      // Patio floor
+      const patio = new THREE.Mesh(
+        new THREE.BoxGeometry(1.9, 0.04, 1.9),
+        new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.8 })
+      );
+      patio.position.y = 0.02;
+      group.add(patio);
+
+      // Kiosk base & counter
+      const base = new THREE.Mesh(
+        new THREE.BoxGeometry(1.4, 0.85, 1.1),
+        new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.45 })
+      );
+      base.position.y = 0.44;
+      group.add(base);
+
+      const counter = new THREE.Mesh(
+        new THREE.BoxGeometry(1.5, 0.08, 0.4),
+        new THREE.MeshStandardMaterial({ color: 0xfef08a, metalness: 0.3, roughness: 0.4 })
+      );
+      counter.position.set(0, 0.88, 0.48);
+      group.add(counter);
+
+      // Pillars & Roof
+      [-0.64, 0.64].forEach(px => {
+        const post = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.04, 0.04, 1.0, 8),
+          new THREE.MeshStandardMaterial({ color: 0xfacc15, metalness: 0.5 })
+        );
+        post.position.set(px, 1.35, 0.45);
+        group.add(post);
+      });
+
+      const roof = new THREE.Mesh(
+        new THREE.BoxGeometry(1.65, 0.16, 1.35),
+        new THREE.MeshStandardMaterial({ color: 0xeab308, roughness: 0.4 })
+      );
+      roof.position.set(0, 1.9, 0.05);
+      group.add(roof);
+
+      // Neon Sign CanvasTexture
+      const signCanvas = document.createElement('canvas');
+      signCanvas.width = 256;
+      signCanvas.height = 64;
+      const sctx = signCanvas.getContext('2d');
+      sctx.fillStyle = '#09090b';
+      sctx.fillRect(0, 0, 256, 64);
+      sctx.strokeStyle = '#facc15';
+      sctx.lineWidth = 4;
+      sctx.strokeRect(3, 3, 250, 58);
+      sctx.fillStyle = '#fde047';
+      sctx.font = 'bold 28px sans-serif';
+      sctx.textAlign = 'center';
+      sctx.textBaseline = 'middle';
+      sctx.fillText('🌯 ШАУРМА 24/7', 128, 34);
+      const signTex = new THREE.CanvasTexture(signCanvas);
+      const signBoard = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.55, 0.38),
+        new THREE.MeshBasicMaterial({ map: signTex, side: THREE.DoubleSide })
+      );
+      signBoard.position.set(0, 2.18, 0.58);
+      group.add(signBoard);
+
+      // Spinning vertical meat spit inside kiosk
+      const spit = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.16, 0.12, 0.62, 10),
+        new THREE.MeshStandardMaterial({ color: 0x9a3412, roughness: 0.6 })
+      );
+      spit.position.set(0.2, 1.25, 0.1);
+      group.add(spit);
+      group.userData.spit = spit;
+
+      const warmLight = new THREE.PointLight(0xfbbf24, 1.8, 5);
+      warmLight.position.set(0, 1.6, 0.7);
+      group.add(warmLight);
+
+      scene.add(group);
+      shawarmaMesh = group;
+    }
+
+    function sendWorkerToShawarma(force = false) {
+      if (!force && (bossModeActive || activeUfo)) return;
+      const candidates = Object.values(tableMeshes).filter(m =>
+        m.userData.id.startsWith('OP-') &&
+        m.userData.stickman &&
+        (!m.userData.lunchState || m.userData.lunchState === 'idle')
+      );
+      if (!candidates.length) return;
+      const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+      chosen.userData.lunchState = 'to_shawarma';
+      chosen.userData.lunchProgress = 0;
+      shawarmaMealsCount++;
+      unlockAchievement('shawarma_break', '🌯', 'Шаурма-брейк', 'Работник ушёл на обед в шаурмечную в углу цеха!');
+      showToast(`🌯 Оператор ${chosen.userData.id} побежал за шаурмой!`);
+    }
+
+    function scheduleShawarmaTrips() {
+      setTimeout(() => {
+        if (simRunning && Math.random() < 0.75) sendWorkerToShawarma(false);
+        scheduleShawarmaTrips();
+      }, 16000 + Math.random() * 14000);
     }
 
     function buildWorkbenches() {
@@ -3748,6 +5196,8 @@
           stickman.position.set(0, 0.82, -0.22);
           group.add(stickman);
           group.userData.stickman = stickman;
+          group.userData.workerType = 'human';
+          group.userData.lunchState = 'idle';
         }
 
         const bufGroup = new THREE.Group();
@@ -3778,10 +5228,371 @@
       return man;
     }
 
-    function triggerStickmanBackflip(stickman) {
-      if (!stickman) return;
-      stickman.userData.flipProgress = 0;
-      stickman.userData.flipDirection = Math.random() < 0.5 ? -1 : 1;
+    function buildCow() {
+      const cow = new THREE.Group();
+      cow.userData.flipProgress = null;
+      const white = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.6 });
+      const spotMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.7 });
+      const pink = new THREE.MeshStandardMaterial({ color: 0xf472b6, roughness: 0.5 });
+
+      const body = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.22, 0.42), white);
+      body.position.y = 0.22;
+      cow.add(body);
+
+      const spot = new THREE.Mesh(new THREE.BoxGeometry(0.29, 0.11, 0.16), spotMat);
+      spot.position.set(0, 0.24, -0.04);
+      cow.add(spot);
+
+      const head = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.16, 0.18), white);
+      head.position.set(0, 0.3, 0.24);
+      cow.add(head);
+
+      const muzzle = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.09, 0.08), pink);
+      muzzle.position.set(0, 0.26, 0.34);
+      cow.add(muzzle);
+
+      [-0.07, 0.07].forEach(hx => {
+        const horn = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.08, 6), new THREE.MeshStandardMaterial({ color: 0xfacc15 }));
+        horn.position.set(hx, 0.41, 0.24);
+        cow.add(horn);
+      });
+
+      [-0.09, 0.09].forEach(lx => {
+        [-0.14, 0.14].forEach(lz => {
+          const leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.14, 0.06), white);
+          leg.position.set(lx, 0.07, lz);
+          cow.add(leg);
+        });
+      });
+
+      const udder = new THREE.Mesh(new THREE.SphereGeometry(0.06, 8, 8), pink);
+      udder.position.set(0, 0.11, -0.06);
+      cow.add(udder);
+      return cow;
+    }
+
+    function buildDolphin() {
+      const dolphin = new THREE.Group();
+      dolphin.userData.flipProgress = null;
+      const skin = new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.25, roughness: 0.3 });
+      const bellyMat = new THREE.MeshStandardMaterial({ color: 0xe0f2fe, roughness: 0.4 });
+
+      const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 0.44, 10), skin);
+      torso.rotation.x = Math.PI / 2;
+      torso.position.y = 0.24;
+      dolphin.add(torso);
+
+      const snout = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.16, 8), skin);
+      snout.rotation.x = Math.PI / 2;
+      snout.position.set(0, 0.22, 0.27);
+      dolphin.add(snout);
+
+      const dorsal = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.14, 6), skin);
+      dorsal.rotation.x = -0.45;
+      dorsal.position.set(0, 0.37, 0.0);
+      dolphin.add(dorsal);
+
+      const fluke = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.03, 0.1), bellyMat);
+      fluke.position.set(0, 0.24, -0.24);
+      dolphin.add(fluke);
+      return dolphin;
+    }
+
+    /* ---------- 3D UFO ABDUCTION + COW/DOLPHIN REPLACEMENT ---------- */
+    function buildUfoMesh() {
+      const ufo = new THREE.Group();
+      const saucer = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.75, 1.15, 0.26, 20),
+        new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.2 })
+      );
+      ufo.add(saucer);
+
+      const dome = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2),
+        new THREE.MeshStandardMaterial({ color: 0x22d3ee, emissive: 0x06b6d4, emissiveIntensity: 0.7, transparent: true, opacity: 0.8 })
+      );
+      dome.position.y = 0.1;
+      ufo.add(dome);
+
+      const beam = new THREE.Mesh(
+        new THREE.ConeGeometry(0.75, 4.4, 16, 1, true),
+        new THREE.MeshBasicMaterial({ color: 0x39ff14, transparent: true, opacity: 0.32, side: THREE.DoubleSide })
+      );
+      beam.position.y = -2.25;
+      beam.visible = false;
+      ufo.add(beam);
+      ufo.userData.beam = beam;
+
+      scene.add(ufo);
+      return ufo;
+    }
+
+    function triggerUfoAbduction() {
+      if (!settingsEnabled.ufo || activeUfo || !scene) return;
+      const candidates = Object.values(tableMeshes).filter(m =>
+        m.userData.id.startsWith('OP-') &&
+        m.userData.stickman &&
+        (!m.userData.lunchState || m.userData.lunchState === 'idle')
+      );
+      if (!candidates.length) return;
+      const targetTable = candidates[Math.floor(Math.random() * candidates.length)];
+      const replacementType = Math.random() < 0.5 ? 'cow' : 'dolphin';
+      const mesh = buildUfoMesh();
+      mesh.position.set(-7, 4.8, targetTable.position.z);
+
+      activeUfo = {
+        mesh,
+        targetTable,
+        replacementType,
+        phase: 'approach_abduct',
+        timer: 0
+      };
+      playUfoSound();
+      ufoAbductCount++;
+      unlockAchievement('ufo_abduct', '🛸', 'Первый контакт', 'НЛО похитило работника цеха и подменило его!');
+      showToast(`🛸 ВНИМАНИЕ! НЛО летит похищать оператора с ${targetTable.userData.id}!`, true);
+      speakMeme(`Внимание! Летающая тарелка похищает сотрудника ${targetTable.userData.id}`);
+    }
+
+    function updateUfo(dt, now) {
+      if (!activeUfo) return;
+      const u = activeUfo;
+      const tPos = u.targetTable.position;
+      u.mesh.rotation.y += dt * 3.5;
+
+      if (u.phase === 'approach_abduct') {
+        u.mesh.position.x += (tPos.x - u.mesh.position.x) * Math.min(1, dt * 3.5);
+        u.mesh.position.z += (tPos.z - u.mesh.position.z) * Math.min(1, dt * 3.5);
+        if (Math.hypot(tPos.x - u.mesh.position.x, tPos.z - u.mesh.position.z) < 0.15) {
+          u.phase = 'beam_up';
+          u.timer = 0;
+          u.mesh.userData.beam.visible = true;
+          playUfoSound();
+        }
+      } else if (u.phase === 'beam_up') {
+        u.timer += dt;
+        const worker = u.targetTable.userData.stickman;
+        if (worker) {
+          worker.position.y = 0.82 + (u.timer / 1.8) * 3.5;
+          worker.rotation.y += dt * 10;
+        }
+        if (u.timer >= 1.8) {
+          if (worker) u.targetTable.remove(worker);
+          u.targetTable.userData.stickman = null;
+          u.mesh.userData.beam.visible = false;
+          u.phase = 'depart';
+          u.timer = 0;
+        }
+      } else if (u.phase === 'depart') {
+        u.mesh.position.x += dt * 6.5;
+        if (u.mesh.position.x > 8) {
+          u.phase = 'wait_return';
+          u.timer = 0;
+        }
+      } else if (u.phase === 'wait_return') {
+        u.timer += dt;
+        if (u.timer >= 2.6) {
+          u.mesh.position.set(7.5, 4.8, tPos.z);
+          u.phase = 'approach_drop';
+        }
+      } else if (u.phase === 'approach_drop') {
+        u.mesh.position.x += (tPos.x - u.mesh.position.x) * Math.min(1, dt * 3.5);
+        u.mesh.position.z += (tPos.z - u.mesh.position.z) * Math.min(1, dt * 3.5);
+        if (Math.hypot(tPos.x - u.mesh.position.x, tPos.z - u.mesh.position.z) < 0.15) {
+          const animal = u.replacementType === 'cow' ? buildCow() : buildDolphin();
+          animal.position.set(0, 4.3, -0.22);
+          u.targetTable.add(animal);
+          u.targetTable.userData.stickman = animal;
+          u.targetTable.userData.workerType = u.replacementType;
+          u.mesh.userData.beam.visible = true;
+          u.phase = 'beam_down';
+          u.timer = 0;
+          playUfoSound();
+        }
+      } else if (u.phase === 'beam_down') {
+        u.timer += dt;
+        const p = Math.min(1, u.timer / 1.6);
+        const animal = u.targetTable.userData.stickman;
+        if (animal) {
+          animal.position.y = 4.3 - p * (4.3 - 0.82);
+          animal.rotation.y += dt * 6;
+        }
+        if (p >= 1) {
+          if (animal) animal.rotation.y = 0;
+          u.mesh.userData.beam.visible = false;
+          u.phase = 'leave';
+          const label = u.replacementType === 'cow' ? '🐄 Корову Зорьку (МУУУ!)' : '🐬 Дельфина-сборщика!';
+          showToast(`🛸 НЛО вернуло на ${u.targetTable.userData.id} ${label}`);
+          spawnFloatingText(u.replacementType === 'cow' ? '🐄 МУУУ!' : '🐬 ИИ-ИИ!', window.innerWidth / 2, window.innerHeight * 0.35, '#39ff14');
+        }
+      } else if (u.phase === 'leave') {
+        u.mesh.position.x -= dt * 7.5;
+        if (u.mesh.position.x < -9) {
+          scene.remove(u.mesh);
+          activeUfo = null;
+        }
+      }
+    }
+
+    /* ---------- 3D PIRATE INVASION + RAIDERS ---------- */
+    function buildPirateShipMesh() {
+      const ship = new THREE.Group();
+      const wood = new THREE.MeshStandardMaterial({ color: 0x78350f, roughness: 0.7 });
+      const blackSail = new THREE.MeshStandardMaterial({ color: 0x09090b, side: THREE.DoubleSide });
+
+      const hull = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.55, 2.4), wood);
+      hull.position.y = 0.4;
+      ship.add(hull);
+
+      const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 2.0, 8), wood);
+      mast.position.set(0, 1.5, 0);
+      ship.add(mast);
+
+      const sailCanvas = document.createElement('canvas');
+      sailCanvas.width = 128;
+      sailCanvas.height = 128;
+      const sctx = sailCanvas.getContext('2d');
+      sctx.fillStyle = '#09090b';
+      sctx.fillRect(0, 0, 128, 128);
+      sctx.font = '68px sans-serif';
+      sctx.textAlign = 'center';
+      sctx.textBaseline = 'middle';
+      sctx.fillText('☠️', 64, 68);
+      const sailTex = new THREE.CanvasTexture(sailCanvas);
+      const sail = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.3, 1.15),
+        new THREE.MeshBasicMaterial({ map: sailTex, side: THREE.DoubleSide })
+      );
+      sail.position.set(0, 1.65, 0.08);
+      ship.add(sail);
+
+      scene.add(ship);
+      return ship;
+    }
+
+    function triggerPirateInvasion() {
+      if (!settingsEnabled.pirates || bossModeActive || !scene) return;
+      playCannonBoom();
+      const overlay = document.getElementById('pirate-overlay');
+      overlay.classList.add('active');
+
+      const banner = document.getElementById('event-banner');
+      document.getElementById('event-title').textContent = '🏴‍☠️ ПИРАТСКОЕ НАШЕСТВИЕ!';
+      document.getElementById('event-desc').textContent = 'Кликай по пиратам внизу экрана за сокровища (+8 R$)!';
+      banner.classList.add('show');
+      setTimeout(() => banner.classList.remove('show'), 3200);
+      speakMeme('Йо хо хо! Пираты берут завод на абордаж!');
+
+      const ship = buildPirateShipMesh();
+      const dir = Math.random() < 0.5 ? 1 : -1;
+      ship.position.set(dir > 0 ? -6.5 : 6.5, 0.4, (Math.random() - 0.5) * 8);
+      ship.rotation.y = dir > 0 ? Math.PI / 2 : -Math.PI / 2;
+      ship.userData.vx = dir * 2.2;
+      ship.userData.spawned = performance.now();
+      activePirateShips.push(ship);
+
+      const raidersBox = document.getElementById('pirate-raiders-container');
+      const icons = ['🏴‍☠️', '🦜', '💣', '☠️'];
+      for (let i = 0; i < 4; i++) {
+        const raider = document.createElement('div');
+        raider.className = 'pirate-raider';
+        raider.textContent = icons[i];
+        raider.style.left = `${14 + i * 21 + Math.random() * 6}%`;
+        raider.onclick = () => {
+          raider.remove();
+          robuxBalance += 8;
+          updateWallet();
+          playCannonBoom();
+          spawnFloatingText('🏴‍☠️ +8 R$!', window.innerWidth * 0.5, window.innerHeight * 0.7, '#facc15');
+        };
+        raidersBox.appendChild(raider);
+        setTimeout(() => { if (raider.parentNode) raider.remove(); }, 8000);
+      }
+
+      unlockAchievement('pirates_ahoy', '🏴‍☠️', 'Йо-хо-хо на заводе', 'Отразил пиратское нашествие прямо в цеху!');
+      setTimeout(() => overlay.classList.remove('active'), 8000);
+    }
+
+    /* ---------- 3D FCK INSPECTOR WITH STOPWATCH ---------- */
+    function triggerFckInspector() {
+      if (activeInspector || !scene) return;
+      const ops = OPS_METADATA.map(o => o.id);
+      const targetId = ops[Math.floor(Math.random() * ops.length)];
+      const tbl = tableMeshes[targetId];
+      if (!tbl) return;
+
+      const insp = buildStickman();
+      insp.children[2].material = new THREE.MeshStandardMaterial({ color: 0xfacc15, emissive: 0xca8a04 });
+      insp.position.set(-4.5, 0.25, tbl.position.z);
+      scene.add(insp);
+
+      activeInspector = {
+        mesh: insp,
+        targetId,
+        phase: 'walk',
+        timer: 0
+      };
+      playTone(740, 0.15, 'square', 0.1);
+      showToast(`🕵️ Проверяющий ФЦК с секундомером идёт к ${targetId}!`);
+    }
+
+    function updateInspector(dt) {
+      if (!activeInspector) return;
+      const ins = activeInspector;
+      const tbl = tableMeshes[ins.targetId];
+      if (!tbl) { scene.remove(ins.mesh); activeInspector = null; return; }
+
+      if (ins.phase === 'walk') {
+        const tx = tbl.position.x + 0.7;
+        const tz = tbl.position.z;
+        ins.mesh.position.x += (tx - ins.mesh.position.x) * Math.min(1, dt * 3);
+        ins.mesh.position.z += (tz - ins.mesh.position.z) * Math.min(1, dt * 3);
+        if (Math.hypot(tx - ins.mesh.position.x, tz - ins.mesh.position.z) < 0.2) {
+          ins.phase = 'inspect';
+          ins.timer = 0;
+          const k = getKaizenState();
+          if (!k.clean5s || (ins.targetId === 'OP-8' && !k.screwdriver)) {
+            ins.mesh.rotation.z = Math.PI / 2;
+            playVineBoom();
+            showToast(`💀 Проверяющий ФЦК упал в обморок на ${ins.targetId}! Нет 5S!`, true);
+          } else {
+            inspectorOpId = ins.targetId;
+            inspectorBoostUntil = performance.now() + 10000;
+            playStonks();
+            showToast(`🔥 Проверяющий ФЦК в восторге от ${ins.targetId}! Скорость x2!`);
+          }
+        }
+      } else if (ins.phase === 'inspect') {
+        ins.timer += dt;
+        if (ins.timer >= 3.5) {
+          scene.remove(ins.mesh);
+          activeInspector = null;
+        }
+      }
+    }
+
+    /* ---------- POV CAMERA & CHAOS INTENSITY ---------- */
+    function togglePovCamera() {
+      povCameraActive = !povCameraActive;
+      const btn = document.getElementById('btn-pov');
+      if (btn) btn.className = 'ctrl-btn' + (povCameraActive ? ' active-mode' : '');
+      if (controls) controls.enabled = !povCameraActive && !dragModeActive;
+      if (!povCameraActive && camera && controls) {
+        camera.position.set(0, 16, 13);
+        camera.up.set(0, 1, 0);
+        controls.target.set(0, 0, 0);
+        controls.update();
+      }
+      showToast(povCameraActive ? '🎥 Камера POV Tesla Roadster ВКЛ!' : '🎥 Камера вернулась в общий вид');
+    }
+
+    function cycleChaosLevel() {
+      const order = ['chill', 'adhd', 'hell'];
+      const labels = { chill: '😌 Хаос: Чилл', adhd: '⚡ Хаос: СДВГ', hell: '💀 Хаос: АД' };
+      chaosLevel = order[(order.indexOf(chaosLevel) + 1) % order.length];
+      const btn = document.getElementById('btn-chaos-level');
+      if (btn) btn.textContent = labels[chaosLevel];
+      showToast(`Уровень безумия: ${labels[chaosLevel]}`);
     }
 
     function buildTeslaRoadster() {
@@ -3879,6 +5690,7 @@
       truck.add(badgeStem);
 
       truck.userData.hitTargets = new Set();
+      truck.userData.isCybertruck = true;
       scene.add(truck);
       return truck;
     }
@@ -3910,10 +5722,12 @@
         Object.values(tableMeshes).forEach(mesh => {
           const stickman = mesh.userData.stickman;
           if (!stickman || truck.userData.hitTargets.has(mesh.userData.id)) return;
+          if (mesh.userData.lunchState && mesh.userData.lunchState !== 'idle') return;
           const personX = mesh.position.x + stickman.position.x;
           const personZ = mesh.position.z + stickman.position.z;
           if (Math.abs(truck.position.x - personX) < 0.62 && Math.abs(truck.position.z - personZ) < 0.62) {
             truck.userData.hitTargets.add(mesh.userData.id);
+            trucksHitCount++;
             triggerStickmanBackflip(stickman);
           }
         });
@@ -4042,16 +5856,18 @@
         fn: () => {
           playSiren();
           triggerScreenShake();
+          speakMeme('Налоговая проверка в цеху! Прячьте лишние ключи!');
           showToast('🚨 НАЛОГОВАЯ ПРОВЕРКА В ЦЕХЕ!', true);
         }
       },
       {
         title: '⚡ OVERDOSE РЕДБУЛЛА!',
-        desc: 'Логист и операторы выпили ящик энергетика! Скорость x3!',
+        desc: 'Логист и операторы выпили ящик энергетика! GAS GAS GAS!',
         fn: () => {
           playAirhorn();
           const prevSpeed = courierState.speedMps;
           courierState.speedMps *= 2.5;
+          spawnFloatingText('🏎️ GAS GAS GAS!', window.innerWidth * 0.5, window.innerHeight * 0.4, '#22c55e');
           setTimeout(() => { courierState.speedMps = prevSpeed; }, 6000);
           showToast('⚡ СКОРОСТЬ ПОВЫШЕНА НА 6 СЕКУНД! ⚡');
         }
@@ -4079,6 +5895,8 @@
         title: '💸 ДОЖДЬ ИЗ БАКСОВ!',
         desc: 'Клиент так доволен качеством РДГ, что раскидал чаевые!',
         fn: () => {
+          shiftCashBalance += 100000;
+          updateWallet();
           playStonks();
           spawnConfetti();
           showToast('💸 КЛИЕНТ ПЕРЕВЕЛ ЧАЕВЫЕ +100,000 ₽!');
@@ -4086,16 +5904,38 @@
       },
       {
         title: '🕺 ДИСКО-ТЕКТОНИК НА ОП-8!',
-        desc: 'Шуруповёрт Bosch вошел в резонанс и крутится под фонк!',
+        desc: 'Шуруповёрт Bosch вошел в резонанс и крутится!',
         fn: () => {
           playAirhorn();
           triggerCameraBarrelRoll();
           showToast('🕺 ТЕКТОНИК НА ОП-8!');
         }
+      },
+      {
+        title: '🛸 ПОХИЩЕНИЕ НЛО!',
+        desc: 'Пришельцы меняют оператора на корову или дельфина!',
+        fn: () => {
+          triggerUfoAbduction();
+        }
+      },
+      {
+        title: '🏴‍☠️ ПИРАТЫ В ЦЕХЕ!',
+        desc: 'Корабль идёт на абордаж склада комплектующих!',
+        fn: () => {
+          triggerPirateInvasion();
+        }
+      },
+      {
+        title: '🕵️ ПРОВЕРЯЮЩИЙ ФЦК!',
+        desc: 'Начальник с секундомером проверяет стандарт 5S!',
+        fn: () => {
+          triggerFckInspector();
+        }
       }
     ];
 
     function triggerRandomEvent() {
+      if (bossModeActive) return;
       const ev = CHAOS_EVENTS[Math.floor(Math.random() * CHAOS_EVENTS.length)];
       const banner = document.getElementById('event-banner');
       document.getElementById('event-title').textContent = ev.title;
@@ -4106,28 +5946,34 @@
     }
 
     /* ========================================================
-       8. AUTOMATED SOUND & CHAOS LOOP (Every 1 to 4 Seconds)
+       8. AUTOMATED SOUND & CHAOS LOOP (ADAPTIVE INTENSITY)
        ======================================================== */
     function scheduleNextChaosAction() {
-      const delayMs = 1000 + Math.random() * 3000; // Random 1.0s to 4.0s
-      const indicator = document.getElementById('auto-sound-indicator');
-      if (indicator) {
-        indicator.textContent = `🔊 УДАР ЧЕРЕЗ ${(delayMs/1000).toFixed(1)}с...`;
-      }
+      const ranges = {
+        chill: [16000, 26000],
+        adhd: [6500, 12500],
+        hell: [2200, 4400]
+      };
+      const [minMs, maxMs] = ranges[chaosLevel] || ranges.adhd;
+      const delayMs = minMs + Math.random() * (maxMs - minMs);
 
       setTimeout(() => {
-        const chaosSoundActions = [
-          playAirhorn,
-          playVineBoom,
-          playStonks,
-          playQuack,
-          playBruh,
-          playSiren,
-          triggerCameraBarrelRoll,
-          triggerRandomEvent
-        ];
-        const action = chaosSoundActions[Math.floor(Math.random() * chaosSoundActions.length)];
-        action();
+        if (!bossModeActive && simRunning) {
+          const chaosSoundActions = [
+            playAirhorn,
+            playVineBoom,
+            playStonks,
+            playQuack,
+            playBruh,
+            playSiren,
+            triggerCameraBarrelRoll,
+            triggerRandomEvent,
+            triggerUfoAbduction,
+            triggerFckInspector
+          ];
+          const action = chaosSoundActions[Math.floor(Math.random() * chaosSoundActions.length)];
+          action();
+        }
         scheduleNextChaosAction();
       }, delayMs);
     }
@@ -4143,10 +5989,15 @@
       const dt = Math.min(0.1, (now - lastTimestamp) / 1000);
       lastTimestamp = now;
 
-      if (controls && controls.enabled) controls.update();
+      if (controls && controls.enabled && !povCameraActive) controls.update();
+
+      // Achievement: Disco 90s combo
+      if (phonkActive && metronomeOn && document.body.classList.contains('acid-mode')) {
+        unlockAchievement('disco_90s', '🪩', 'Дискотека 90-х в цеху', 'Музыка с пианино + метроном + кислота одновременно!');
+      }
 
       // CAMERA 360-DEGREE BARREL ROLL (Exact 0.6 seconds)
-      if (isRolling) {
+      if (isRolling && !povCameraActive) {
         const elapsedSec = (now - rollStartTime) / 1000;
         const progress = Math.min(1.0, elapsedSec / (rollDuration / 1000));
         const rollAngle = progress * Math.PI * 2;
@@ -4171,21 +6022,55 @@
         }
       }
 
-      // Courier
+      // Courier + Drift + POV Camera
       if (courierMesh) {
         courierMesh.position.x = courierState.x;
         courierMesh.position.z = courierState.z;
         courierMesh.position.y = 0.62 + (antiGravityActive ? Math.sin(now * 0.003) * 0.2 : Math.sin(now * 0.005) * 0.08);
         const headingX = courierState.targetX - courierState.x;
         const headingZ = courierState.targetZ - courierState.z;
-        if (Math.hypot(headingX, headingZ) > 0.05) courierMesh.rotation.y = Math.atan2(headingX, headingZ);
+        if (Math.hypot(headingX, headingZ) > 0.05) {
+          const targetYaw = Math.atan2(headingX, headingZ);
+          const diff = targetYaw - courierMesh.rotation.y;
+          courierMesh.rotation.y = targetYaw + Math.sin(now * 0.015) * (courierState.speedMps > 2 ? 0.45 : 0.14);
+          courierMesh.rotation.z = Math.max(-0.28, Math.min(0.28, diff * 0.2));
+        }
         if (courierOutline) courierOutline.material.color.setHSL((now % 3600) / 3600, 1, 0.6);
         if (jetFlame) {
           jetFlame.scale.z = 0.8 + Math.random() * 0.6;
         }
+
+        if (povCameraActive) {
+          const dirX = Math.sin(courierMesh.rotation.y);
+          const dirZ = Math.cos(courierMesh.rotation.y);
+          camera.position.lerp(
+            new THREE.Vector3(courierMesh.position.x - dirX * 2.1, courierMesh.position.y + 1.35, courierMesh.position.z - dirZ * 2.1),
+            Math.min(1, dt * 8)
+          );
+          camera.lookAt(courierMesh.position.x + dirX * 3.5, courierMesh.position.y + 0.35, courierMesh.position.z + dirZ * 3.5);
+        }
       }
 
       updateTeslaTrucks(dt, now);
+      updateUfo(dt, now);
+      updateInspector(dt);
+
+      // Shawarma Stand rotating meat spit
+      if (shawarmaMesh && shawarmaMesh.userData.spit) {
+        shawarmaMesh.userData.spit.rotation.y += dt * 3.2;
+      }
+
+      // Pirate Ships sailing
+      for (let i = activePirateShips.length - 1; i >= 0; i--) {
+        const ship = activePirateShips[i];
+        ship.position.x += ship.userData.vx * dt;
+        ship.position.y = 0.45 + Math.sin(now * 0.006 + i) * 0.18;
+        ship.rotation.z = Math.sin(now * 0.004 + i) * 0.08;
+        if (Math.abs(ship.position.x) > 8.5 || now - ship.userData.spawned > 8500) {
+          scene.remove(ship);
+          activePirateShips.splice(i, 1);
+        }
+      }
 
       // Disco Ball & Spotlights
       if (discoBall) {
@@ -4199,9 +6084,15 @@
         });
       }
 
-      // Stickmen Dancing
+      // Stickmen / Animals Dancing + Shawarma Lunch Walks
       const time = now * 0.009;
       Object.values(tableMeshes).forEach(m => {
+        if (antiGravityActive) {
+          m.position.y = Math.sin(time + m.position.x) * 0.5;
+        } else {
+          m.position.y = 0;
+        }
+
         if (m.userData.stickman) {
           const stickman = m.userData.stickman;
           const flipProgress = stickman.userData.flipProgress;
@@ -4213,13 +6104,47 @@
             flipBounce = Math.sin(progress * Math.PI) * 0.45;
             if (progress >= 1) stickman.rotation.x = 0;
           }
-          stickman.position.y = 0.82 + Math.abs(Math.sin(time)) * 0.08 + flipBounce;
-          stickman.rotation.y = Math.sin(time * 0.5) * 0.3;
-        }
-        if (antiGravityActive) {
-          m.position.y = Math.sin(time + m.position.x) * 0.5;
-        } else {
-          m.position.y = 0;
+
+          const ls = m.userData.lunchState;
+          if (ls && ls !== 'idle' && !(activeUfo && activeUfo.targetTable === m)) {
+            const destX = SHAWARMA_POS.x - m.position.x;
+            const destY = 0.16 - m.position.y;
+            const destZ = (SHAWARMA_POS.z + 0.95) - m.position.z;
+
+            if (ls === 'to_shawarma') {
+              m.userData.lunchProgress += dt * 0.42;
+              const p = Math.min(1, m.userData.lunchProgress);
+              stickman.position.set(destX * p, 0.82 + (destY - 0.82) * p + Math.abs(Math.sin(now * 0.018)) * 0.14, -0.22 + (destZ + 0.22) * p);
+              if (p >= 1) {
+                m.userData.lunchState = 'eating';
+                m.userData.lunchProgress = 0;
+              }
+            } else if (ls === 'eating') {
+              m.userData.lunchProgress += dt;
+              stickman.position.set(destX, destY + Math.abs(Math.sin(time * 1.5)) * 0.1, destZ);
+              stickman.rotation.y = Math.PI;
+              if (m.userData.lunchProgress >= 3.2) {
+                m.userData.lunchState = 'returning';
+                m.userData.lunchProgress = 0;
+              }
+            } else if (ls === 'returning') {
+              m.userData.lunchProgress += dt * 0.45;
+              const p = Math.min(1, m.userData.lunchProgress);
+              stickman.position.set(destX * (1 - p), destY + (0.82 - destY) * p + Math.abs(Math.sin(now * 0.018)) * 0.14, destZ + (-0.22 - destZ) * p);
+              if (p >= 1) {
+                m.userData.lunchState = 'idle';
+                m.userData.fullBellyUntil = now + 12000;
+                stickman.position.set(0, 0.82, -0.22);
+                stickman.rotation.y = 0;
+                showToast(`🌯 Оператор ${m.userData.id} поел шаурмы и ускорился!`);
+              }
+            }
+          } else if (!(activeUfo && activeUfo.targetTable === m && (activeUfo.phase === 'beam_up' || activeUfo.phase === 'beam_down'))) {
+            stickman.position.x = 0;
+            stickman.position.z = -0.22;
+            stickman.position.y = 0.82 + Math.abs(Math.sin(time)) * 0.08 + flipBounce;
+            stickman.rotation.y = Math.sin(time * 0.5) * 0.3;
+          }
         }
       });
 
@@ -4324,13 +6249,17 @@
       window.addEventListener('keydown', handleRunnerControls);
       setInterval(spawnBubble, 500);
       maybeShowSpiderWeb();
+      scheduleFoxyPeek();
+      scheduleFakeAds();
+      scheduleFactoryChat();
+      scheduleShawarmaTrips();
       scheduleNextChaosAction();
       startPhonkLoop();
 
       // If running via file:// protocol, notify user about Error 153 bypass
       if (window.location.protocol === 'file:') {
         setTimeout(() => {
-          showToast('💡 При Error 153 нажми [🎮 3D Runner] или открой http://localhost:8080/adhd.html');
+          showToast('💡 При Error 153 нажми [🎮 3D Runner] или открой http://localhost:8080/index.html');
         }, 1200);
       }
     });
