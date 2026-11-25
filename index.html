@@ -172,6 +172,7 @@
     }
     .left-controls {
       left: 14px;
+      top: 142px;
       animation: morphLeftPanel 5.8s ease-in-out infinite alternate, wobbleSkew 6.5s ease-in-out infinite alternate;
     }
     .right-infocenter {
@@ -492,6 +493,159 @@
       background: rgba(2, 6, 23, 0.95);
       display: flex;
       justify-content: space-between;
+    }
+
+    .shift-wallet {
+      position: fixed;
+      top: 90px;
+      left: 14px;
+      z-index: 230;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 1px solid rgba(250, 204, 21, 0.7);
+      border-radius: 10px;
+      background: rgba(8, 12, 26, 0.94);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 14px rgba(250, 204, 21, 0.25);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .shift-wallet button, .shop-buy-btn, .shop-action-btn {
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      padding: 5px 8px;
+      background: rgba(236,72,153,0.35);
+      color: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+    .shift-wallet button:hover, .shop-buy-btn:hover, .shop-action-btn:hover {
+      background: rgba(236,72,153,0.65);
+    }
+    .shop-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 520;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(5px);
+    }
+    .shop-overlay.show { display: flex; }
+    .shop-panel {
+      width: min(520px, 94vw);
+      max-height: 88vh;
+      overflow-y: auto;
+      border: 2px solid #facc15;
+      border-radius: 14px;
+      background: rgba(8, 12, 26, 0.98);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 28px rgba(250,204,21,0.25);
+    }
+    .shop-header, .window-drag-handle {
+      cursor: grab;
+      touch-action: none;
+    }
+    .shop-header:active, .window-drag-handle:active { cursor: grabbing; }
+    .shop-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 14px;
+      background: linear-gradient(90deg, rgba(234,179,8,0.3), rgba(236,72,153,0.25));
+      font-weight: 900;
+    }
+    .shop-content { padding: 12px; }
+    .shop-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 8px 0;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 9px;
+      background: rgba(15,23,42,0.7);
+      font-size: 12px;
+    }
+    .shop-item-desc { color: #cbd5e1; line-height: 1.4; }
+    .mermaid-window {
+      position: fixed;
+      z-index: 180;
+      display: none;
+      width: 280px;
+      height: 190px;
+      overflow: hidden;
+      border: 2px solid #67e8f9;
+      border-radius: 12px;
+      background: radial-gradient(ellipse at 50% 20%, #1d7d9a, #082f49 65%, #041525);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(34,211,238,0.45);
+      text-align: center;
+    }
+    .mermaid-window.show { display: block; }
+    .mermaid-window .window-drag-handle {
+      padding: 7px;
+      background: rgba(3, 105, 161, 0.75);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .mermaid-scene { padding-top: 16px; font-size: 40px; }
+    .mermaid-scene small { display: block; font-size: 11px; color: #cffafe; }
+    .bubble-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 210;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .bubble {
+      position: absolute;
+      bottom: -30px;
+      border: 1px solid rgba(186, 230, 253, 0.75);
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.8), rgba(34,211,238,0.12) 65%);
+      animation: bubbleRise linear forwards;
+    }
+    @keyframes bubbleRise {
+      to { transform: translateY(-110vh) translateX(24px); opacity: 0; }
+    }
+    .scare-peek {
+      position: fixed;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      border-radius: 16px;
+      background: radial-gradient(circle, rgba(127,29,29,0.92), rgba(15,23,42,0.8) 65%, transparent);
+      font-size: clamp(50px, 8vw, 110px);
+      filter: drop-shadow(0 0 20px #ef4444);
+      animation: scarePop 0.55s ease-out both;
+    }
+    .scare-peek.show { display: flex; }
+    @keyframes scarePop {
+      0% { opacity: 0; transform: scale(0.1); }
+      18% { opacity: 1; transform: scale(1.15); }
+      100% { opacity: 0; transform: scale(0.7); }
+    }
+    .spider-web {
+      position: fixed;
+      inset: 0;
+      z-index: 480;
+      display: none;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 0 10%, rgba(255,255,255,0.75) 10.2% 10.45%, transparent 10.7% 20%, rgba(255,255,255,0.65) 20.2% 20.45%, transparent 20.7% 30%, rgba(255,255,255,0.55) 30.2% 30.45%, transparent 30.7%),
+        repeating-conic-gradient(from 7deg at 50% 50%, transparent 0deg 14deg, rgba(255,255,255,0.58) 14.2deg 14.45deg, transparent 14.7deg 30deg);
+      opacity: 0.8;
+    }
+    .spider-web.show { display: block; }
+    @media (max-width: 700px) {
+      .shift-wallet { top: 88px; left: 8px; padding: 6px; font-size: 10px; }
+      .left-controls { top: 140px; }
+      .adhd-pip { left: auto; right: 8px; bottom: 8px; width: min(92vw, 380px); }
     }
 
     /* Bouncing DVD Logo */
@@ -997,7 +1151,7 @@
   </div>
 
   <!-- Header (NO BACK BUTTON, NO TOGGLES!) -->
-  <header class="top-header">
+  <header class="top-header" data-draggable-window>
     <div class="brand-title">
       <i class="fa-solid fa-fire" style="color: #f43f5e;"></i>
       <span>СДВГ-ФАБРИКА 2077</span>
@@ -1034,7 +1188,7 @@
   </header>
 
   <!-- Left Sidebar: Hyper Controls & Kaizen -->
-  <aside class="side-panel left-controls" id="left-panel">
+  <aside class="side-panel left-controls" id="left-panel" data-draggable-window>
     <div class="panel-section-title">
       <i class="fa-solid fa-gauge-high"></i> Гипер-симуляция СДВГ
     </div>
@@ -1145,7 +1299,7 @@
   </aside>
 
   <!-- Right Sidebar: Infocenter Dashboard -->
-  <aside class="side-panel right-infocenter" id="right-panel">
+  <aside class="side-panel right-infocenter" id="right-panel" data-draggable-window>
     <div class="panel-section-title">
       <i class="fa-solid fa-chart-pie"></i> Инфоцентр 2077 (5 блоков)
     </div>
@@ -1251,8 +1405,8 @@
   </aside>
 
   <!-- ENLARGED SUBWAY SURFERS PIP WIDGET WITH YOUTUBE IFRAME + 3D CANVAS FALLBACK -->
-  <div class="adhd-pip" id="adhd-pip">
-    <div class="adhd-pip-header">
+  <div class="adhd-pip" id="adhd-pip" data-draggable-window>
+    <div class="adhd-pip-header window-drag-handle">
       <span id="pip-title">📱 SUBWAY SURFERS HD</span>
       <div style="display:flex;gap:4px;align-items:center;">
         <button id="toggle-source-btn" onclick="toggleVideoSource()" style="background:rgba(236,72,153,0.35);border:1px solid #ec4899;color:#fff;border-radius:4px;padding:2px 7px;font-size:9px;cursor:pointer;font-weight:700;">🎮 3D Runner</button>
@@ -1274,6 +1428,50 @@
       <span id="pip-source-badge" style="color: #38bdf8; font-size: 9px;">ИСТОЧНИК: YOUTUBE</span>
     </div>
   </div>
+
+  <div class="shift-wallet window-drag-handle" data-draggable-window>
+    <span>🪙 ₽ смены: <span id="shift-cash-balance">0</span></span>
+    <span>Робаксс: <span id="robux-balance">0</span></span>
+    <button onclick="openShop()">🛍️ Магазин</button>
+  </div>
+
+  <div id="shop-overlay" class="shop-overlay" onclick="if (event.target === this) closeShop()">
+    <section class="shop-panel" data-draggable-window>
+      <header class="shop-header window-drag-handle">
+        <span>🛍️ Магазин смены — всё за игровые ₽</span>
+        <button class="close-btn" onclick="closeShop()" aria-label="Закрыть магазин">&times;</button>
+      </header>
+      <div class="shop-content">
+        <div class="shop-item">
+          <div><strong>🧜‍♀️ Окно с русалками</strong><div class="shop-item-desc">Открывает переносной подводный вид.</div></div>
+          <button id="buy-mermaid" class="shop-buy-btn" onclick="buyShopItem('mermaid', 70000)">70 000 ₽</button>
+        </div>
+        <div class="shop-item">
+          <div><strong>🫧 Пузырьковый фон</strong><div class="shop-item-desc">Добавляет пузырьки на экран и в водный раннер.</div></div>
+          <button id="buy-bubbles" class="shop-buy-btn" onclick="buyShopItem('bubbles', 35000)">35 000 ₽</button>
+        </div>
+        <div class="shop-item">
+          <div><strong>🧽 Губка-герой</strong><div class="shop-item-desc">Забавный жёлтый спутник для подводного забега.</div></div>
+          <button id="buy-sponge" class="shop-buy-btn" onclick="buyShopItem('sponge', 55000)">55 000 ₽</button>
+        </div>
+        <div class="shop-item">
+          <div><div><strong>Обменять сменные ₽</strong><div class="shop-item-desc">10 игровых Робаксов за 10 000 ₽. Это очки игры, не реальные покупки.</div></div></div>
+          <button class="shop-action-btn" onclick="exchangeForRobux()">Обменять</button>
+        </div>
+        <div id="shop-owned-actions" class="shop-item" style="display:none;">
+          <div><strong>Открыть окно с русалками</strong><div class="shop-item-desc">Перетаскивай его за верхнюю полоску.</div></div>
+          <button class="shop-action-btn" onclick="toggleMermaidWindow()">Открыть</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div id="mermaid-window" class="mermaid-window" data-draggable-window>
+    <div class="window-drag-handle">🌊 ОКНО РУСАЛОК <button class="close-btn" onclick="toggleMermaidWindow()" aria-label="Закрыть окно">&times;</button></div>
+    <div class="mermaid-scene">🧜‍♀️ 🐠 🫧<small>Подводная смена — пузырькиии!</small></div>
+  </div>
+  <div id="bubble-overlay" class="bubble-overlay" aria-hidden="true"></div>
+  <div id="scare-peek" class="scare-peek" aria-hidden="true">🦊🏴‍☠️</div>
+  <div id="spider-web" class="spider-web" aria-hidden="true"></div>
 
   <!-- Bouncing DVD Logo -->
   <div id="dvd-logo" style="color: #06b6d4; border: 2px solid #06b6d4;">DVD</div>
@@ -1297,8 +1495,8 @@
   </div>
 
   <!-- Contextual Workbench Card -->
-  <div id="poi-card" class="poi-drawer">
-    <div class="poi-header">
+  <div id="poi-card" class="poi-drawer" data-draggable-window>
+    <div class="poi-header window-drag-handle">
       <div class="poi-title" id="poi-card-title">Рабочее место</div>
       <button class="close-btn" onclick="closePoi()">&times;</button>
     </div>
@@ -1313,8 +1511,8 @@
 
   <!-- PHONK LAB: piano roll + kick/hat/snare + metronome -->
   <div id="phonk-lab" class="phonk-lab" onclick="if (event.target === this) closePhonkLab()">
-    <div class="phonk-lab-panel">
-      <div class="phonk-lab-header">
+    <div class="phonk-lab-panel" data-draggable-window>
+      <div class="phonk-lab-header window-drag-handle">
         <span>🎹 ФОНК-ЛАБ · 143 BPM · 16 ШАГОВ</span>
         <button class="close-btn" onclick="closePhonkLab()">&times;</button>
       </div>
@@ -1666,6 +1864,158 @@
     let obstacles = [];
     let coins = [];
     let subwayAnimId = null;
+    let shiftCashBalance = 0;
+    let robuxBalance = 0;
+    const shopInventory = { mermaid: false, bubbles: false, sponge: false };
+    let runnerScore = 0;
+    let subScore = 69420;
+
+    function updateWallet() {
+      document.getElementById('shift-cash-balance').textContent = shiftCashBalance.toLocaleString('ru-RU');
+      document.getElementById('robux-balance').textContent = robuxBalance.toLocaleString('ru-RU');
+      document.getElementById('buy-mermaid').textContent = shopInventory.mermaid ? 'Куплено' : '70 000 ₽';
+      document.getElementById('buy-bubbles').textContent = shopInventory.bubbles ? 'Куплено' : '35 000 ₽';
+      document.getElementById('buy-sponge').textContent = shopInventory.sponge ? 'Куплено' : '55 000 ₽';
+      ['mermaid', 'bubbles', 'sponge'].forEach(item => {
+        const button = document.getElementById(`buy-${item}`);
+        button.disabled = shopInventory[item];
+        button.style.opacity = shopInventory[item] ? '0.55' : '1';
+      });
+      document.getElementById('shop-owned-actions').style.display = shopInventory.mermaid ? 'flex' : 'none';
+    }
+
+    function openShop() {
+      updateWallet();
+      document.getElementById('shop-overlay').classList.add('show');
+    }
+
+    function closeShop() {
+      document.getElementById('shop-overlay').classList.remove('show');
+    }
+
+    function buyShopItem(item, price) {
+      if (!Object.prototype.hasOwnProperty.call(shopInventory, item) || shopInventory[item]) return;
+      if (shiftCashBalance < price) {
+        showToast(`Нужно заработать ещё ${(price - shiftCashBalance).toLocaleString('ru-RU')} ₽ за смену`, true);
+        return;
+      }
+      shiftCashBalance -= price;
+      shopInventory[item] = true;
+      updateWallet();
+      showToast(item === 'mermaid' ? '🧜‍♀️ Окно русалок куплено!' :
+        item === 'bubbles' ? '🫧 Пузырьки куплены!' : '🧽 Губка-герой куплен!');
+    }
+
+    function exchangeForRobux() {
+      if (shiftCashBalance < 10000) {
+        showToast('Для обмена нужно 10 000 ₽ смены', true);
+        return;
+      }
+      shiftCashBalance -= 10000;
+      robuxBalance += 10;
+      updateWallet();
+      showToast('🎮 +10 игровых Робаксов (без реальных платежей)');
+    }
+
+    function toggleMermaidWindow() {
+      const mermaidWindow = document.getElementById('mermaid-window');
+      const isOpen = mermaidWindow.classList.toggle('show');
+      if (isOpen) {
+        mermaidWindow.style.left = `${Math.max(12, window.innerWidth / 2 - 140)}px`;
+        mermaidWindow.style.top = `${Math.max(100, window.innerHeight / 2 - 95)}px`;
+      }
+    }
+
+    function initDraggableWindows() {
+      const windows = document.querySelectorAll('[data-draggable-window]');
+      let activeDrag = null;
+      let topZIndex = 550;
+
+      windows.forEach(element => {
+        const handle = element.querySelector('.window-drag-handle') ||
+          (element.classList.contains('window-drag-handle') ? element : null) ||
+          (element.matches('.top-header') ? element : element.querySelector('.panel-section-title'));
+        if (!handle) return;
+        handle.classList.add('window-drag-handle');
+        handle.addEventListener('pointerdown', event => {
+          if (event.target.closest('button, input, select, a')) return;
+          const rect = element.getBoundingClientRect();
+          activeDrag = {
+            element,
+            pointerId: event.pointerId,
+            offsetX: event.clientX - rect.left,
+            offsetY: event.clientY - rect.top,
+            width: rect.width,
+            height: rect.height
+          };
+          element.style.left = `${rect.left}px`;
+          element.style.top = `${rect.top}px`;
+          element.style.right = 'auto';
+          element.style.bottom = 'auto';
+          element.style.zIndex = String(++topZIndex);
+          if (element.classList.contains('side-panel')) element.style.animationPlayState = 'paused';
+          handle.setPointerCapture(event.pointerId);
+          event.preventDefault();
+          if (Math.random() < 0.18) showWindowScare(element, rect);
+        });
+      });
+
+      document.addEventListener('pointermove', event => {
+        if (!activeDrag || event.pointerId !== activeDrag.pointerId) return;
+        const { element, offsetX, offsetY, width, height } = activeDrag;
+        const left = Math.max(0, Math.min(window.innerWidth - width, event.clientX - offsetX));
+        const top = Math.max(0, Math.min(window.innerHeight - height, event.clientY - offsetY));
+        element.style.left = `${left}px`;
+        element.style.top = `${top}px`;
+      });
+
+      document.addEventListener('pointerup', event => {
+        if (activeDrag && event.pointerId === activeDrag.pointerId) activeDrag = null;
+      });
+      document.addEventListener('pointercancel', () => { activeDrag = null; });
+    }
+
+    function showWindowScare(element, rect) {
+      const scare = document.getElementById('scare-peek');
+      const zIndex = Number.parseInt(getComputedStyle(element).zIndex, 10) || 50;
+      scare.style.zIndex = String(Math.max(2, zIndex - 1));
+      scare.style.left = `${Math.max(0, rect.left + rect.width * 0.3)}px`;
+      scare.style.top = `${Math.max(0, rect.top + rect.height * 0.2)}px`;
+      scare.style.width = `${Math.min(190, Math.max(90, rect.width * 0.4))}px`;
+      scare.style.height = `${Math.min(150, Math.max(80, rect.height * 0.5))}px`;
+      scare.classList.remove('show');
+      void scare.offsetWidth;
+      scare.classList.add('show');
+      setTimeout(() => scare.classList.remove('show'), 560);
+    }
+
+    function maybeShowSpiderWeb() {
+      if (Math.floor(Math.random() * 67) === 0) {
+        const web = document.getElementById('spider-web');
+        web.classList.add('show');
+        setTimeout(() => web.classList.remove('show'), 1000);
+      }
+      setTimeout(maybeShowSpiderWeb, 2000);
+    }
+
+    function spawnBubble() {
+      if (!shopInventory.bubbles) return;
+      const overlay = document.getElementById('bubble-overlay');
+      const bubble = document.createElement('span');
+      const size = 8 + Math.random() * 24;
+      bubble.className = 'bubble';
+      bubble.style.left = `${Math.random() * 100}%`;
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.style.animationDuration = `${4 + Math.random() * 5}s`;
+      overlay.appendChild(bubble);
+      bubble.addEventListener('animationend', () => bubble.remove(), { once: true });
+    }
+
+    function moveRunner(direction) {
+      if (runnerMode !== 'canvas') return;
+      runnerLane = Math.max(0, Math.min(2, runnerLane + direction));
+    }
 
     function toggleVideoSource() {
       const iframe = document.getElementById('subway-iframe');
@@ -1680,10 +2030,13 @@
         btn.textContent = '📺 YouTube';
         btn.style.background = 'rgba(6,182,212,0.4)';
         btn.style.borderColor = '#06b6d4';
-        badge.textContent = 'ИСТОЧНИК: 3D RUNNER (OFFLINE)';
+        badge.textContent = 'ИСТОЧНИК: ПОДВОДНЫЙ РАННЕР';
         badge.style.color = '#22c55e';
+        document.getElementById('pip-title').textContent = '🌊 ПОДВОДНЫЙ ЗАБЕГ';
+        subScore = runnerScore;
+        document.getElementById('subway-score').textContent = runnerScore;
         if (!subwayAnimId) updateSubwaySurfers();
-        showToast('🎮 Переключено на 3D Canvas Runner!');
+        showToast('🌊 Подводный раннер запущен! Стрелки или A/D — поворот');
       } else {
         runnerMode = 'youtube';
         canvas.style.display = 'none';
@@ -1693,6 +2046,7 @@
         btn.style.borderColor = '#ec4899';
         badge.textContent = 'ИСТОЧНИК: YOUTUBE';
         badge.style.color = '#38bdf8';
+        document.getElementById('pip-title').textContent = '📱 SUBWAY SURFERS HD';
         if (subwayAnimId) {
           cancelAnimationFrame(subwayAnimId);
           subwayAnimId = null;
@@ -1723,33 +2077,30 @@
         }
       }
 
-      // Auto-jump or change lanes randomly to keep brain engaged!
-      if (Math.random() < 0.04 && runnerY === 0) {
-        runnerJumpVy = 8.5;
-      }
-      if (Math.random() < 0.05) {
-        runnerLane = Math.floor(Math.random() * 3);
-      }
-
       // Spawn obstacles & coins
-      if (Math.random() < 0.05) {
+      if (Math.random() < 0.025) {
         obstacles.push({ z: 1.0, lane: Math.floor(Math.random() * 3) });
       }
-      if (Math.random() < 0.08) {
+      if (Math.random() < 0.045) {
         coins.push({ z: 1.0, lane: Math.floor(Math.random() * 3) });
       }
 
       // Render
       const w = subCanvas.width, h = subCanvas.height;
-      subCtx.fillStyle = '#090d16';
+      const water = subCtx.createLinearGradient(0, 0, 0, h);
+      water.addColorStop(0, '#0e7490');
+      water.addColorStop(0.55, '#075985');
+      water.addColorStop(1, '#082f49');
+      subCtx.fillStyle = water;
       subCtx.fillRect(0, 0, w, h);
 
-      // Rails
-      const horizonY = 32;
-      const bottomY = h;
+      // Three underwater lanes, bubbles, and a distant sea floor.
+      const horizonY = 25;
+      const bottomY = h - 4;
       const lanesX = [w * 0.25, w * 0.5, w * 0.75];
-
-      subCtx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      subCtx.fillStyle = 'rgba(8, 47, 73, 0.7)';
+      subCtx.fillRect(0, h - 12, w, 12);
+      subCtx.strokeStyle = 'rgba(186, 230, 253, 0.35)';
       subCtx.lineWidth = 2;
       for (let i = 0; i <= 3; i++) {
         const xBottom = w * 0.12 + (i * w * 0.25);
@@ -1757,6 +2108,14 @@
         subCtx.beginPath();
         subCtx.moveTo(xTop, horizonY);
         subCtx.lineTo(xBottom, bottomY);
+        subCtx.stroke();
+      }
+      for (let i = 0; i < 10; i++) {
+        const bx = (i * 47 + Math.floor(performance.now() / 30)) % w;
+        const by = (h - (i * 31 + Math.floor(performance.now() / 18)) % h);
+        subCtx.strokeStyle = 'rgba(207,250,254,0.42)';
+        subCtx.beginPath();
+        subCtx.arc(bx, by, 2 + i % 4, 0, Math.PI * 2);
         subCtx.stroke();
       }
 
@@ -1768,15 +2127,21 @@
         const drawX = (w * 0.4 + (c.lane - 1) * 20) + (c.lane - 1) * scale * 50;
         const drawY = horizonY + scale * (bottomY - horizonY);
 
-        subCtx.fillStyle = '#facc15';
+        subCtx.fillStyle = '#fde047';
         subCtx.beginPath();
-        subCtx.arc(drawX, drawY - 10 * scale, 5 * scale, 0, Math.PI * 2);
+        subCtx.arc(drawX, drawY - 10 * scale, 7 * scale, 0, Math.PI * 2);
         subCtx.fill();
 
+        if (c.z <= 0.12 && c.lane === runnerLane) {
+          runnerScore += 25;
+          document.getElementById('subway-score').textContent = runnerScore;
+          coins.splice(i, 1);
+          continue;
+        }
         if (c.z <= 0.05) coins.splice(i, 1);
       }
 
-      // Draw Obstacles (trains/barriers)
+      // Coral obstacles
       for (let i = obstacles.length - 1; i >= 0; i--) {
         const ob = obstacles[i];
         ob.z -= 0.035;
@@ -1784,31 +2149,55 @@
         const drawX = (w * 0.4 + (ob.lane - 1) * 20) + (ob.lane - 1) * scale * 50;
         const drawY = horizonY + scale * (bottomY - horizonY);
 
-        subCtx.fillStyle = '#ef4444';
-        const boxW = 22 * scale;
-        const boxH = 28 * scale;
-        subCtx.fillRect(drawX - boxW/2, drawY - boxH, boxW, boxH);
+        subCtx.fillStyle = '#fb7185';
+        const boxW = 24 * scale;
+        const boxH = 22 * scale;
+        subCtx.beginPath();
+        subCtx.arc(drawX, drawY - boxH / 2, boxW / 2, 0, Math.PI * 2);
+        subCtx.fill();
 
+        if (ob.z <= 0.1 && ob.lane === runnerLane && runnerY === 0) {
+          runnerLane = (runnerLane + 1) % 3;
+          obstacles.splice(i, 1);
+          continue;
+        }
         if (ob.z <= 0.05) obstacles.splice(i, 1);
       }
 
-      // Draw Runner Player (Jake from Subway Surfers style)
+      // Draw a simple diver; a purchased sponge buddy swims beside them.
       const px = lanesX[runnerLane];
       const py = bottomY - 12 - runnerY;
-      // Cap
-      subCtx.fillStyle = '#ef4444';
-      subCtx.fillRect(px - 6, py - 30, 12, 4);
-      // Head
       subCtx.fillStyle = '#fef08a';
       subCtx.beginPath();
-      subCtx.arc(px, py - 23, 6, 0, Math.PI * 2);
+      subCtx.arc(px, py - 18, 7, 0, Math.PI * 2);
       subCtx.fill();
-      // Body / Hoodie
-      subCtx.fillStyle = '#06b6d4';
-      subCtx.fillRect(px - 8, py - 18, 16, 14);
-      // Pants
-      subCtx.fillStyle = '#3b82f6';
-      subCtx.fillRect(px - 7, py - 4, 14, 8);
+      subCtx.strokeStyle = '#e0f2fe';
+      subCtx.lineWidth = 3;
+      subCtx.beginPath();
+      subCtx.moveTo(px, py - 10);
+      subCtx.lineTo(px, py + 1);
+      subCtx.moveTo(px, py - 6);
+      subCtx.lineTo(px - 8, py - 1);
+      subCtx.moveTo(px, py - 6);
+      subCtx.lineTo(px + 8, py - 1);
+      subCtx.moveTo(px, py + 1);
+      subCtx.lineTo(px - 6, py + 7);
+      subCtx.moveTo(px, py + 1);
+      subCtx.lineTo(px + 6, py + 7);
+      subCtx.stroke();
+      if (shopInventory.sponge) {
+        subCtx.fillStyle = '#facc15';
+        subCtx.fillRect(px + 13, py - 14, 17, 17);
+        subCtx.fillStyle = '#0f172a';
+        subCtx.fillRect(px + 17, py - 9, 2, 2);
+        subCtx.fillRect(px + 24, py - 9, 2, 2);
+        subCtx.strokeStyle = '#0f172a';
+        subCtx.lineWidth = 1;
+        subCtx.beginPath();
+        subCtx.moveTo(px + 17, py - 3);
+        subCtx.lineTo(px + 25, py - 3);
+        subCtx.stroke();
+      }
 
       subwayAnimId = requestAnimationFrame(updateSubwaySurfers);
     }
@@ -2368,6 +2757,8 @@
         const finishedItems = courierState.carryingCargo.filter(i => i.to === 'CLIENT');
         if (finishedItems.length > 0) {
           goodUnitsCount += finishedItems.length;
+          shiftCashBalance += 70000 * finishedItems.length;
+          updateWallet();
           triggerStickmanBackflip(tableMeshes['CLIENT'] && tableMeshes['CLIENT'].userData.stickman);
           courierState.carryingCargo = courierState.carryingCargo.filter(i => i.to !== 'CLIENT');
           soundSale();
@@ -3894,18 +4285,45 @@
       requestAnimationFrame(updateDvd);
     }
 
-    // Subway score counter ticker
-    let subScore = 69420;
+    // Keep the decorative ticker only in the embedded video mode.
     setInterval(() => {
+      if (runnerMode === 'canvas') return;
       subScore += 17;
       const el = document.getElementById('subway-score');
       if (el) el.textContent = subScore;
     }, 120);
 
+    function handleRunnerControls(event) {
+      if (runnerMode !== 'canvas' || event.target.closest('input, textarea, select')) return;
+      if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') {
+        event.preventDefault();
+        moveRunner(-1);
+      } else if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') {
+        event.preventDefault();
+        moveRunner(1);
+      } else if ((event.key === 'ArrowUp' || event.code === 'Space') && runnerY === 0) {
+        event.preventDefault();
+        runnerJumpVy = 8.5;
+      }
+    }
+
+    document.getElementById('subway-canvas').addEventListener('pointerdown', event => {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const relativeX = event.clientX - rect.left;
+      if (relativeX < rect.width / 3) moveRunner(-1);
+      else if (relativeX > rect.width * 2 / 3) moveRunner(1);
+      else if (runnerY === 0) runnerJumpVy = 8.5;
+    });
+
     // Startup
     window.addEventListener('DOMContentLoaded', () => {
       init3D();
       updateDvd();
+      initDraggableWindows();
+      updateWallet();
+      window.addEventListener('keydown', handleRunnerControls);
+      setInterval(spawnBubble, 500);
+      maybeShowSpiderWeb();
       scheduleNextChaosAction();
       startPhonkLoop();
 
